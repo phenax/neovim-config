@@ -1,49 +1,54 @@
-o.hidden = true
-o.autoread = true
-o.mouse = 'c'
+local utils = require 'utils'
 
-o.splitbelow = true
-o.splitright = true
+-- Leader keys
+g.mapleader = "\\"
+g.maplocalleader = " "
+
+
+utils.set('hidden', true)
+utils.set('autoread', true)
+utils.set('mouse', 'c')
+
+utils.set('splitbelow', true)
+utils.set('splitright', true)
 
 
 -- TODO: Fix code folding
-o.foldenable = true
-o.foldmethod = 'marker'
-o.foldcolumn = '2'
-o.foldopen = 'mark'
+utils.set('foldenable', true)
+utils.set('foldmethod', 'marker')
+utils.set('foldcolumn', '2')
+utils.set('foldopen', 'mark')
 
+utils.set('autoindent', true)
+utils.set('copyindent', true)
+utils.set('showmatch', true)
+utils.set('ignorecase', true)
+utils.set('smartcase', true)
+utils.set('smarttab', true)
+utils.set('hlsearch', true)
+utils.set('incsearch', true)
+utils.set('history', 800)
+utils.set('undolevels', 1000)
+utils.set('title', true)
+utils.set('visualbell', true)
+utils.set('errorbells', false)
+utils.set('backspace', 'indent,eol,start')
+utils.set('backup', false)
+utils.set('swapfile', false)
+utils.set('noshowmode', true)
 
-o.autoindent = true
-o.copyindent = true
-o.showmatch = true
-o.ignorecase = true
-o.smartcase = true
-o.smarttab = true
-o.hlsearch = true
-o.incsearch = true
-o.history = 800
-o.undolevels = 1000
-o.title = true
-o.visualbell = true
-o.errorbells = false
-o.backspace = 'indent,eol,start'
-o.backup = false
-o.swapfile = false
+utils.set('number', true)
+utils.set('relativenumber', true)
+utils.set('ruler', true)
+utils.set('tabstop', 2)
+utils.set('shiftwidth', 2)
+utils.set('smarttab', true)
+utils.set('expandtab', true)
 
-o.number = true
-o.relativenumber = true
-o.ruler = true
-o.tabstop = 2
-o.shiftwidth = 2
-o.smarttab = true
-o.expandtab = true
-
-
-o.laststatus = 2
-o.cursorline = true
-o.cmdheight = 1
-o.updatetime = 300
-o.shortmess = 'c'
-o.signcolumn = 'yes'
-
+utils.set('laststatus', 2)
+utils.set('cursorline', true)
+utils.set('cmdheight', 1)
+utils.set('updatetime', 300)
+utils.set('shortmess', 'c')
+utils.set('signcolumn', 'yes')
 

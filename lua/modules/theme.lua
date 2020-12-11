@@ -9,8 +9,7 @@ function theme.plugins(use)
   use 'mengelbrecht/lightline-bufferline'
 end
 
-
-function theme.initialize()
+function theme.configure(use)
   exec [[colorscheme palenight]]
 
   o.background = "dark"
@@ -76,6 +75,11 @@ function theme.lightline()
   g["lightline#bufferline#modified"] = ' 🛑 '
   g["lightline#bufferline#enable_devicons"] = 1
   g["lightline#bufferline#filename_modifier"] = ':t'
+end
+
+function theme.init(use)
+  theme.plugins(use)
+  theme.configure()
 end
 
 return theme;
