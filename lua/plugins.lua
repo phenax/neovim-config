@@ -1,9 +1,6 @@
-local execute = vim.api.nvim_command
-local fn = vim.fn
-local theme = require "theme"
+local theme = require 'modules.theme'
 
 vim.cmd [[packadd packer.nvim]]
-
 return require('packer').startup(function()
   -- Packer
   use {'wbthomason/packer.nvim', opt = true}

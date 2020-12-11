@@ -1,8 +1,3 @@
-local exec = vim.api.nvim_command
-local fn = vim.fn
-local o = vim.o
-local g = vim.g
-
 -- TODO: Make colorscheme variable
 local theme = {}
 

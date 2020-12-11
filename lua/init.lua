@@ -1,13 +1,14 @@
-local exec = vim.api.nvim_command
-local fn = vim.fn
-local o = vim.o
-local g = vim.g
+exec = vim.api.nvim_command
+fn = vim.fn
+o = vim.o
+g = vim.g
 
 g.mapleader = "\\"
 g.maplocalleader = " "
 
 g.noshowmode = true
 
+require "settings"
 require "packer-autoload"
 require "plugins"
 
