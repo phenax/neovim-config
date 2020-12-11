@@ -15,4 +15,3 @@ return require('packer').startup(function()
   coc.init(use)
 end)
 
-
