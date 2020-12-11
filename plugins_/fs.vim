@@ -1,0 +1,5 @@
+Plug 'qpkorr/vim-bufkill'
+Plug 'majutsushi/tagbar'
+Plug 'junegunn/fzf.vim'
+Plug 'jeetsukumaran/vim-buffergator'
+Plug 'djoshea/vim-autoread'
