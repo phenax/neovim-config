@@ -1,6 +1,7 @@
 local theme = require 'modules.theme'
 local buffers = require 'modules.buffers'
 local fs = require 'modules.fs'
+local coc = require 'modules.coc'
 
 vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
@@ -11,6 +12,7 @@ return require('packer').startup(function()
   theme.init(use)
   buffers.init(use)
   fs.init(use)
+  coc.init(use)
 end)
 
 
