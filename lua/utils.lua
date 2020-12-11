@@ -12,4 +12,8 @@ function utils.set(k, v)
   end
 end
 
+function utils.fexists(file)
+  return os.rename(file, file) and true or false
+end
+
 return utils
