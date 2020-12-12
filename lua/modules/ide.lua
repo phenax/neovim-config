@@ -9,11 +9,17 @@ function ide.plugins(use)
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
   use 'easymotion/vim-easymotion'
-  -- Hex colors
-  use 'norcalli/nvim-colorizer.lua'
-
-  -- Completions
   -- use 'Shougo/deoplete.nvim'
+
+  -- Syntax
+  use 'sheerun/vim-polyglot' -- All syntax highlighting
+  use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
+  use 'tpope/vim-markdown' -- markdown
+  use 'jtratner/vim-flavored-markdown' -- markdown
+
+  -- Languages
+  use 'dart-lang/dart-vim-plugin'
+  use 'rescript-lang/vim-rescript'
 
   -- Folding
   use 'wellle/context.vim'
@@ -24,8 +30,8 @@ end
 
 function ide.configure()
   g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
-  -- g['deoplete#enable_at_startup'] = 1
   g.context_enabled = 0
+  -- g['deoplete#enable_at_startup'] = 1
 
   -- Colorizer
   require'colorizer'.setup()
