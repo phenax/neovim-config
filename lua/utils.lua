@@ -1,7 +1,16 @@
 local utils = {}
 
+function utils.nmap_options(key, action, options)
+  fn.nvim_set_keymap('n', key, action, options)
+end
 function utils.nmap(key, action)
-  fn.nvim_set_keymap('n', key, action, {})
+  utils.nmap_options(key, action, {})
+end
+function utils.nmap_silent(key, action)
+  utils.nmap_options(key, action, { silent = true })
+end
+function utils.nnoremap(key, action)
+  utils.nmap_options(key, action, { noremap = true })
 end
 
 function utils.set(k, v)
