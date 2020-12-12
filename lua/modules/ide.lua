@@ -26,6 +26,8 @@ function ide.plugins(use)
 
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'
+
+  --use 'puremourning/vimspector'
 end
 
 function ide.configure()
