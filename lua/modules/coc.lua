@@ -7,6 +7,7 @@ local coc = {}
 function coc.plugins(use)
   use 'ludovicchabant/vim-gutentags'
   use { 'neoclide/coc.nvim', branch = 'release' }
+  -- use 'Shougo/deoplete.nvim'
   -- use 'honza/vim-snippets' -- python error so disabled for now
 end
 
@@ -14,12 +15,13 @@ function show_documentation()
   if utils.isOneOf({'vim','help'}, vim.bo.filetype) then
     exec [[execute 'h '.expand('<cword>')]]
   else
-    exec [[call CocAction('doHover')]]
+    exec [[call CocActionAsync('doHover')]]
   end
 end
 
 function coc.configure()
   g.gutentags_enabled = 1
+  -- g['deoplete#enable_at_startup'] = 1
 
   -- Diagnostics
   nmap('K', ':lua show_documentation()<cr>') -- type docs

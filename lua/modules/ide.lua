@@ -9,7 +9,6 @@ function ide.plugins(use)
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
   use 'easymotion/vim-easymotion'
-  -- use 'Shougo/deoplete.nvim'
 
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
@@ -32,7 +31,6 @@ end
 function ide.configure()
   g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
   g.context_enabled = 0
-  -- g['deoplete#enable_at_startup'] = 1
 
   -- Colorizer
   require'colorizer'.setup()

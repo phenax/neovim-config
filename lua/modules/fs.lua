@@ -7,11 +7,27 @@ local fs = {}
 function fs.plugins(use)
   use 'junegunn/fzf.vim'
   use 'djoshea/vim-autoread'
+  --use {
+    --'nvim-telescope/telescope.nvim',
+    --requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+  --}
 end
 
 function fs.configure()
   -- File tree
   nmap_silent('<localleader>nn', ':CocCommand explorer<cr>')
+
+  --require('telescope').setup {
+    --defaults = {
+      --prompt_position = "top",
+      --prompt_prefix = "> ",
+      --sorting_strategy = "ascending",
+      --width = 0.3,
+      --preview_cutoff = 120,
+      --color_devicons = true,
+      --use_less = true,
+    --}
+  --}
 
   -- Fuzzy file finder
   if utils.fexists('.git') then

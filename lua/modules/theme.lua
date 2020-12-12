@@ -30,6 +30,7 @@ function theme.configure(use)
 
   theme.lightline()
   theme.fileexplorer()
+  --theme.telescope()
 end
 
 function theme.fileexplorer()
@@ -38,6 +39,15 @@ function theme.fileexplorer()
     ' | hi CocExplorerGitModified guifg=#E5C07B'..
     ' | hi CocExplorerGitContentChange guifg=#51e980'..
     ' | hi CocExplorerGitUntracked guifg=#51e980'
+  )
+end
+
+function theme.telescope()
+  exec('autocmd ColorScheme *'..
+    ' hi TelescopeBorder guifg=#aaaaaa'..
+    ' | hi TelescopePromptBorder guifg=#4e3aA3'..
+    ' | hi TelescopeResultsBorder guifg=#4e3aA3'..
+    ' | hi TelescopePreviewBorder guifg=#aaaaaa'
   )
 end
 

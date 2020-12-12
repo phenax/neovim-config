@@ -30,7 +30,7 @@ function utils.fexists(file)
   return os.rename(file, file) and true or false
 end
 
-function isOneOf(list, x)
+function utils.isOneOf(list, x)
   for _, v in pairs(list) do
     if v == x then return true end
   end
