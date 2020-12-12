@@ -27,6 +27,9 @@ function ide.configure()
   -- g['deoplete#enable_at_startup'] = 1
   g.context_enabled = 0
 
+  -- Colorizer
+  require'colorizer'.setup()
+
   -- Open term in vim
   nmap('<localleader>tn', ':split term://node<cr>')
   nmap('<localleader>tt', ':split term://zsh<cr>')
