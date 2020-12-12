@@ -20,6 +20,7 @@ function ide.plugins(use)
   -- Languages
   use 'dart-lang/dart-vim-plugin'
   use 'rescript-lang/vim-rescript'
+  use 'preservim/tagbar'
 
   -- Folding
   use 'wellle/context.vim'
@@ -46,6 +47,7 @@ function ide.configure()
   nmap('<leader>sl', ':source .vim.session<cr>')
 
   -- Code navigation/searching
+  nmap('<leader>tc', ':TagbarToggle<cr>')
   nmap('<c-\\>', ':noh<CR>')
   exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
 
