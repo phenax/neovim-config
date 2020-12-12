@@ -5,6 +5,7 @@ local modules = {
   require 'modules.coc',
   require 'modules.git',
   require 'modules.ide',
+  require 'modules.notes',
 }
 
 vim.cmd [[packadd packer.nvim]]
