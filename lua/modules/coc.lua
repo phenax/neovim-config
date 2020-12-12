@@ -53,6 +53,8 @@ function coc.configure()
 
   g.coc_snippet_next = '<c-j>'
   g.coc_snippet_prev = '<c-k>'
+
+  fn.nvim_set_keymap('i', '<C-j>', '<Plug>(coc-snippets-expand-jump)', {})
 end
 
 function coc.init(use)
