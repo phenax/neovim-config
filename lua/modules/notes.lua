@@ -38,6 +38,8 @@ function notes.configure()
     ext = '.md'
   }}
 
+  nmap('<leader>==', ':setlocal spell! spelllang=en_us<CR>')
+
   exec [[au BufRead,BufNewFile *.md set filetype=vimwiki]]
   exec [[autocmd FileType vimwiki lua vimwikiBindings()]]
 
