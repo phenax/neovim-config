@@ -28,8 +28,17 @@ function theme.configure(use)
   end
 
   theme.lightline()
+  theme.fileexplorer()
 end
 
+function theme.fileexplorer()
+  exec('autocmd ColorScheme *'..
+    ' hi CocExplorerGitIgnored guifg=#444444'..
+    ' | hi CocExplorerGitModified guifg=#E5C07B'..
+    ' | hi CocExplorerGitContentChange guifg=#51e980'..
+    ' | hi CocExplorerGitUntracked guifg=#51e980'
+  )
+end
 
 function theme.lightline()
   g.lightline = {
