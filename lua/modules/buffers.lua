@@ -8,8 +8,6 @@ function buffers.plugins(use)
 end
 
 function buffers.configure()
-  nmap('<c-\\>', ':noh<CR>') -- TODO: Move somewhere else as it is not related to buffers
-
   -- Buffer manipulation
   nmap('<C-d>', ':BD<CR>')
 
