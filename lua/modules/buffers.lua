@@ -1,5 +1,6 @@
 local utils = require 'utils'
 local nmap = utils.nmap
+local nnoremap = utils.nnoremap
 
 local buffers = {}
 
@@ -30,6 +31,21 @@ function buffers.configure()
   nmap('<M-l>', '<C-w>l')
   nmap('<M-k>', '<C-w>k')
   nmap('<M-j>', '<C-w>j')
+
+  -- Save
+  nnoremap('S', '<nop>')
+  nnoremap('SS', ':w<CR>')
+
+  -- Clipboard
+  fn.nvim_set_keymap('v', '<C-c>', '"+y', {})
+
+
+  -- Prevent typo issues
+  exec [[map q: <Nop>]]
+  exec [[nnoremap Q <nop>]]
+  exec [[command! W :w]]
+  exec [[command! Q :q]]
+  exec [[command! Qa :qa]]
 end
 
 function buffers.init(use)

@@ -39,6 +39,7 @@ function ide.configure()
   -- Open term in vim
   nmap('<localleader>tn', ':split term://node<cr>')
   nmap('<localleader>tt', ':split term://zsh<cr>')
+  fn.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 
   -- Sessions
   nmap('<leader>sw', ':mksession! .vim.session<cr>')

@@ -5,6 +5,8 @@ local set = utils.set
 g.mapleader = "\\"
 g.maplocalleader = " "
 
+set('compatible', false)
+set('encoding', 'UTF-8')
 
 set('hidden', true)
 set('autoread', true)
