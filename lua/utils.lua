@@ -12,6 +12,9 @@ end
 function utils.nnoremap(key, action)
   utils.nmap_options(key, action, { noremap = true })
 end
+function utils.xmap(key, action)
+  fn.nvim_set_keymap('x', key, action, {})
+end
 
 function utils.set(k, v)
   if v == true or v == false then
@@ -25,6 +28,13 @@ end
 
 function utils.fexists(file)
   return os.rename(file, file) and true or false
+end
+
+function isOneOf(list, x)
+  for _, v in pairs(list) do
+    if v == x then return true end
+  end
+  return false
 end
 
 return utils

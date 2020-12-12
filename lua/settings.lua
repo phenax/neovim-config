@@ -16,7 +16,7 @@ set('splitright', true)
 
 -- TODO: Fix code folding
 set('foldenable', true)
-set('foldmethod', 'marker')
+set('foldmethod', 'manual') -- marker (toggle key bindings for folding)
 set('foldcolumn', '2')
 set('foldopen', 'mark')
 
