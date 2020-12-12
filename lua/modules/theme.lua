@@ -1,5 +1,6 @@
--- TODO: Make colorscheme variable
-local theme = {}
+local theme = {
+  colorscheme = 'palenight'
+}
 
 function theme.plugins(use)
   use 'phenax/palenight.vim'
@@ -10,7 +11,7 @@ function theme.plugins(use)
 end
 
 function theme.configure(use)
-  exec [[colorscheme palenight]]
+  exec('colorscheme ' .. (theme.colorscheme))
 
   o.background = "dark"
   g.base16colorspace = 256
@@ -42,7 +43,7 @@ end
 
 function theme.lightline()
   g.lightline = {
-    colorscheme = "palenight",
+    colorscheme = theme.colorscheme,
     enable = {
       statusline = 1,
       tabline = 1,
