@@ -19,7 +19,6 @@ function ide.plugins(use)
   -- Languages
   use 'dart-lang/dart-vim-plugin'
   use 'rescript-lang/vim-rescript'
-  use 'preservim/tagbar'
 
   -- Folding
   use 'wellle/context.vim'
@@ -27,6 +26,7 @@ function ide.plugins(use)
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'
 
+  use 'preservim/tagbar'
   --use 'puremourning/vimspector'
 end
 
@@ -47,9 +47,9 @@ function ide.configure()
   nmap('<leader>sl', ':source .vim.session<cr>')
 
   -- Code navigation/searching
-  nmap('<leader>tc', ':TagbarToggle<cr>')
-  nmap('<c-\\>', ':noh<CR>')
+  nmap('<localleader>cm', ':TagbarToggle<cr>')
   exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
+  nmap('<c-\\>', ':noh<CR>')
 
   -- Folding
   nmap('<S-Tab>', 'zR')
