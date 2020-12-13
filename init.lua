@@ -14,6 +14,7 @@ local modules = {
   require 'modules.git',
   require 'modules.ide',
   require 'modules.notes',
+  require 'modules.tools',
 }
 
 vim.cmd [[packadd packer.nvim]]
