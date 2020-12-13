@@ -2,13 +2,36 @@ local utils = require 'utils'
 local nmap = utils.nmap
 local nmap_silent = utils.nmap_silent
 
-local coc = {}
+local coc = {
+  extensions = {
+    'coc-actions',
+    'coc-explorer', -- File explorer
+    'coc-git',
+    'coc-import-cost',
+    'coc-snippets',
+
+    -- Languages
+    'coc-eslint',
+    'coc-reason',
+    'coc-rls',
+    'coc-rust-analyzer',
+    'coc-flutter',
+    'coc-json',
+    'coc-python',
+    'coc-html',
+    'coc-css',
+    'coc-cssmodules',
+    'coc-tsserver',
+  }
+}
 
 function coc.plugins(use)
   use 'ludovicchabant/vim-gutentags'
   use { 'neoclide/coc.nvim', branch = 'release' }
   -- use 'Shougo/deoplete.nvim'
   -- use 'honza/vim-snippets' -- python error so disabled for now
+
+  g.coc_global_extensions = coc.extensions
 end
 
 function show_documentation()
