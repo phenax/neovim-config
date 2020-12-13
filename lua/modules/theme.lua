@@ -97,9 +97,4 @@ function theme.lightline()
   g["lightline#bufferline#filename_modifier"] = ':t'
 end
 
-function theme.init(use)
-  theme.plugins(use)
-  theme.configure()
-end
-
 return theme;

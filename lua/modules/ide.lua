@@ -58,10 +58,5 @@ function ide.configure()
   nmap('zf', ':ContextToggle<CR>')
 end
 
-function ide.init(use)
-  ide.plugins(use)
-  ide.configure()
-end
-
 return ide
 

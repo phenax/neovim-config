@@ -44,9 +44,4 @@ function git.configure()
   nmap('<localleader>gpu', ':Gpull<cr>')
 end
 
-function git.init(use)
-  git.plugins(use)
-  git.configure()
-end
-
 return git

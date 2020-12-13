@@ -48,9 +48,4 @@ function buffers.configure()
   exec [[command! Qa :qa]]
 end
 
-function buffers.init(use)
-  buffers.plugins(use)
-  buffers.configure()
-end
-
 return buffers

@@ -22,7 +22,8 @@ return require('packer').startup(function()
   use {'wbthomason/packer.nvim', opt = true} -- Packer
 
   for _, m in pairs(modules) do
-    m.init(use)
+    m.plugins(use)
+    m.configure(use)
   end
 end)
 

@@ -54,9 +54,4 @@ function fs.configure()
   exec [[autocmd FileType coc-explorer setlocal nolist]]
 end
 
-function fs.init(use)
-  fs.plugins(use)
-  fs.configure()
-end
-
 return fs

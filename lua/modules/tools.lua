@@ -8,9 +8,4 @@ function tools.configure()
   --
 end
 
-function tools.init(use)
-  tools.plugins(use)
-  tools.configure()
-end
-
 return tools

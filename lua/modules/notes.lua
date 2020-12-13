@@ -52,10 +52,5 @@ function notes.configure()
   nmap('<localleader>cal', ':Cal<CR>')
 end
 
-function notes.init(use)
-  notes.plugins(use)
-  notes.configure()
-end
-
 return notes
 
