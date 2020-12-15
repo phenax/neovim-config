@@ -28,6 +28,27 @@ function tools.configure()
   exec [[command! W :w]]
   exec [[command! Q :q]]
   exec [[command! Qa :qa]]
+
+  -- Markdown tagbar
+  g.tagbar_type_markdown = tools.get_md_tagbar_config('markdown')
+  g.tagbar_type_vimwiki = tools.get_md_tagbar_config('vimwiki')
+end
+
+function tools.get_md_tagbar_config(ftype)
+  return {
+    ctagstype = ftype,
+    ctagsbin = '~/.config/nvim/scripts/md2ctags.py',
+    ctagsargs = '-f - --sort=yes --sro=»',
+    kinds = {
+      's:sections',
+      'i:images'
+    },
+    sro = '»',
+    kind2scope = {
+      s = 'section',
+    },
+    sort = 0,
+  }
 end
 
 return tools
