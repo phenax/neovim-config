@@ -12,7 +12,7 @@ local coc = {
 
     -- Languages
     'coc-eslint',
-    'coc-reason',
+    --'coc-reason',
     'coc-rls',
     'coc-rust-analyzer',
     'coc-flutter',
@@ -28,8 +28,14 @@ local coc = {
 function coc.plugins(use)
   use 'ludovicchabant/vim-gutentags'
   use { 'neoclide/coc.nvim', branch = 'release' }
+  --use { 'neoclide/coc.nvim', branch = 'master', run = 'yarn install --frozen-lockfile' }
+
   -- use 'Shougo/deoplete.nvim'
   -- use 'honza/vim-snippets' -- python error so disabled for now
+
+  -- Languages
+  use 'dart-lang/dart-vim-plugin'
+  use 'rescript-lang/vim-rescript'
 
   g.coc_global_extensions = coc.extensions
 end

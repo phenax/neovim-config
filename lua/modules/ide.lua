@@ -16,10 +16,6 @@ function ide.plugins(use)
   use 'tpope/vim-markdown' -- markdown
   use 'jtratner/vim-flavored-markdown' -- markdown
 
-  -- Languages
-  use 'dart-lang/dart-vim-plugin'
-  use 'rescript-lang/vim-rescript'
-
   -- Folding
   use 'wellle/context.vim'
 
