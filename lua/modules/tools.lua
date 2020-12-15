@@ -3,9 +3,14 @@ local tools = {}
 
 function tools.plugins(use)
   use 'metakirby5/codi.vim'
+
+  -- Search todo,fixme, etc comments
+  use 'gilsondev/searchtasks.vim'
 end
 
 function tools.configure()
+  g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
+
   -- Move line up and down
   utils.xmap('K', ":move '<-2<cr>gv-gv")
   utils.xmap('J', ":move '<+1<cr>gv-gv")

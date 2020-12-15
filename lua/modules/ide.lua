@@ -23,15 +23,11 @@ function ide.plugins(use)
   -- Folding
   use 'wellle/context.vim'
 
-  -- Search todo,fixme, etc comments
-  use 'gilsondev/searchtasks.vim'
-
   use 'preservim/tagbar'
   --use 'puremourning/vimspector'
 end
 
 function ide.configure()
-  g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
   g.context_enabled = 0
 
   -- Colorizer
