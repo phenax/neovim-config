@@ -48,6 +48,15 @@ function ide.configure()
   nmap('zx', 'zo')
   nmap('zc', 'zc')
   nmap('zf', ':ContextToggle<CR>')
+
+  -- Tagbar
+  exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
+end
+
+-- Bindings for tagbar
+function tagbarKeyBindings()
+  -- Scroll title to top
+  nmap('m', '<enter>zt<C-w><C-w>')
 end
 
 return ide
