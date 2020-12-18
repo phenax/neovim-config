@@ -17,7 +17,7 @@ function tools.configure()
 
   -- Save
   utils.nnoremap('S', '<nop>')
-  utils.nnoremap('SS', ':w<CR>')
+  utils.nmap_options('SS', ':w<CR>', { noremap = true, silent = true })
 
   -- Clipboard
   fn.nvim_set_keymap('v', '<C-c>', '"+y', {})
