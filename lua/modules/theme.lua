@@ -1,10 +1,12 @@
 local theme = {
-  colorscheme = 'palenight'
+  colorscheme = 'material',
+  lightline_theme = 'palenight',
 }
 
 function theme.plugins(use)
   use 'phenax/palenight.vim'
   use 'ryanoasis/vim-devicons'
+  use { 'kaicataldo/material.vim', branch = 'main' }
 
   use 'itchyny/lightline.vim'
   use 'mengelbrecht/lightline-bufferline'
@@ -12,6 +14,8 @@ end
 
 function theme.configure(use)
   exec('colorscheme ' .. (theme.colorscheme))
+  g.material_terminal_italics = 1
+  g.material_theme_style = 'ocean'
 
   o.background = "dark"
   g.base16colorspace = 256
@@ -53,7 +57,7 @@ end
 
 function theme.lightline()
   g.lightline = {
-    colorscheme = theme.colorscheme,
+    colorscheme = theme.lightline_theme,
     enable = {
       statusline = 1,
       tabline = 1,
