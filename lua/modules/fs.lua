@@ -5,6 +5,7 @@ local nmap_silent = utils.nmap_silent
 local fs = {}
 
 function fs.plugins(use)
+  use 'junegunn/fzf'
   use 'junegunn/fzf.vim'
   use 'djoshea/vim-autoread'
   --use {
