@@ -10,6 +10,10 @@
       "filetypes": ["rescript"],
       "rootPatterns": ["bsconfig.json"]
     },
+    "nix": {
+      "command": "rnix-lsp",
+      "filetypes": [ "nix" ]
+    },
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
