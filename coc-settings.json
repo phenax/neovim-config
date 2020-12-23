@@ -14,12 +14,6 @@
       "command": "rnix-lsp",
       "filetypes": [ "nix" ]
     },
-    "bash": {
-      "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh", "bash", "zsh"],
-      "ignoredRootPaths": []
-    },
     "ccls": {
 			"command": "ccls",
 			"filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
