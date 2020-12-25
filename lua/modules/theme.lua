@@ -34,7 +34,14 @@ function theme.configure(use)
 
   theme.lightline()
   theme.fileexplorer()
+  theme.coccolors()
   --theme.telescope()
+end
+
+function theme.coccolors()
+  exec('autocmd ColorScheme *'..
+    ' hi CocCodeLens guifg=#513970'
+  )
 end
 
 function theme.fileexplorer()
