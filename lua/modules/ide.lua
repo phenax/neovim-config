@@ -43,6 +43,8 @@ function ide.configure()
   exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
   nmap('<c-\\>', ':noh<CR>')
 
+  nmap('<localleader>rw', '*:%s//<c-r><c-w>')
+
   -- Folding
   nmap('<S-Tab>', 'zR')
   nmap('zx', 'zo')
