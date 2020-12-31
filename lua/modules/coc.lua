@@ -1,4 +1,5 @@
 local utils = require 'utils'
+local set = utils.set
 local nmap = utils.nmap
 local nmap_silent = utils.nmap_silent
 
@@ -50,6 +51,8 @@ end
 
 function coc.configure()
   g.gutentags_enabled = 1
+  set('tags', 'tags')
+  set('path', '.')
   -- g['deoplete#enable_at_startup'] = 1
 
   -- Diagnostics

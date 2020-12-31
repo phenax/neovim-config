@@ -1,3 +1,6 @@
+local utils = require 'utils'
+local updateScheme = utils.updateScheme
+
 local theme = {
   colorscheme = 'material',
   lightline_theme = 'palenight',
@@ -6,6 +9,7 @@ local theme = {
 function theme.plugins(use)
   use 'phenax/palenight.vim'
   use 'ryanoasis/vim-devicons'
+  --use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
 
   use 'itchyny/lightline.vim'
@@ -22,8 +26,7 @@ function theme.configure(use)
 
   o.t_Co = "256"
 
-  --hi Normal guibg=NONE ctermbg=NONE
-  o.showtabline = 2
+  updateScheme({ 'Normal guibg=NONE ctermbg=NONE' })
 
   -- g['$NVIM_TUI_ENABLE_TRUE_COLOR'] = 1
   if fn.has("termguicolors") then
@@ -33,33 +36,35 @@ function theme.configure(use)
   end
 
   theme.lightline()
+  theme.tabs()
   theme.fileexplorer()
   theme.coccolors()
-  --theme.telescope()
 end
 
 function theme.coccolors()
-  exec('autocmd ColorScheme *'..
-    ' hi CocCodeLens guifg=#513970'
-  )
+  updateScheme({
+    'CocCodeLens guifg=#513970',
+  })
 end
 
 function theme.fileexplorer()
-  exec('autocmd ColorScheme *'..
-    ' hi CocExplorerGitIgnored guifg=#444444'..
-    ' | hi CocExplorerGitModified guifg=#E5C07B'..
-    ' | hi CocExplorerGitContentChange guifg=#51e980'..
-    ' | hi CocExplorerGitUntracked guifg=#51e980'
-  )
+  updateScheme({
+    'CocExplorerGitIgnored guifg=#444444',
+    'CocExplorerGitModified guifg=#E5C07B',
+    'CocExplorerGitContentChange guifg=#51e980',
+    'CocExplorerGitUntracked guifg=#51e980',
+  })
 end
 
-function theme.telescope()
-  exec('autocmd ColorScheme *'..
-    ' hi TelescopeBorder guifg=#aaaaaa'..
-    ' | hi TelescopePromptBorder guifg=#4e3aA3'..
-    ' | hi TelescopeResultsBorder guifg=#4e3aA3'..
-    ' | hi TelescopePreviewBorder guifg=#aaaaaa'
-  )
+function theme.tabs()
+  o.showtabline = 2
+
+  g["lightline#bufferline#show_number"] = 2
+  g["lightline#bufferline#number_separator"] = ': '
+  g["lightline#bufferline#read_only"] = ' 🔒 '
+  g["lightline#bufferline#modified"] = ' 🛑 '
+  g["lightline#bufferline#enable_devicons"] = 1
+  g["lightline#bufferline#filename_modifier"] = ':t'
 end
 
 function theme.lightline()
@@ -99,13 +104,6 @@ function theme.lightline()
       buffers = 'lightline#bufferline#buffers'
     }
   };
-
-  g["lightline#bufferline#show_number"] = 2
-  g["lightline#bufferline#number_separator"] = ': '
-  g["lightline#bufferline#read_only"] = ' 🔒 '
-  g["lightline#bufferline#modified"] = ' 🛑 '
-  g["lightline#bufferline#enable_devicons"] = 1
-  g["lightline#bufferline#filename_modifier"] = ':t'
 end
 
 return theme;

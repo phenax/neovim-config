@@ -26,6 +26,20 @@ function utils.set(k, v)
   end
 end
 
+function utils.mapList(func, array)
+  local new_array = {}
+  for i,v in ipairs(array) do
+    new_array[i] = func(v)
+  end
+  return new_array
+end
+
+function utils.updateScheme(schemes)
+  local toHl = function(str) return "hi "..str; end;
+  local highlights = table.concat(utils.mapList(toHl, schemes), " | ")
+  return 'autocmd ColorScheme * '..highlights
+end
+
 function utils.fexists(file)
   return os.rename(file, file) and true or false
 end
