@@ -1,5 +1,6 @@
 local utils = require 'utils'
 local set = utils.set
+local append = utils.append
 
 -- Leader keys
 g.mapleader = "\\"
@@ -52,6 +53,8 @@ set('laststatus', 2)
 set('cursorline', true)
 set('cmdheight', 1)
 set('updatetime', 300)
-set('shortmess', 'c')
 set('signcolumn', 'yes')
+
+-- Short messages
+append('shortmess', 'TIFc')
 

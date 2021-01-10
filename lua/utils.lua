@@ -16,14 +16,22 @@ function utils.xmap(key, action)
   fn.nvim_set_keymap('x', key, action, {})
 end
 
-function utils.set(k, v)
+function utils.set_opt(k, v, opt)
   if v == true or v == false then
     key = k
     if not v then key = 'no'..k end
     vim.api.nvim_command('set ' .. key)
   else
-    vim.api.nvim_command('set ' .. k .. '=' .. v)
+    vim.api.nvim_command('set ' .. k .. opt .. v)
   end
+end
+
+function utils.set(k, v)
+  utils.set_opt(k, v, '=')
+end
+
+function utils.append(k, v)
+  utils.set_opt(k, v, '+=')
 end
 
 function utils.mapList(func, array)
@@ -37,7 +45,7 @@ end
 function utils.updateScheme(schemes)
   local toHl = function(str) return "hi "..str; end;
   local highlights = table.concat(utils.mapList(toHl, schemes), " | ")
-  return 'autocmd ColorScheme * '..highlights
+  exec('autocmd ColorScheme * '..highlights)
 end
 
 function utils.fexists(file)
