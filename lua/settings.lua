@@ -48,6 +48,8 @@ set('tabstop', 2)
 set('shiftwidth', 2)
 set('smarttab', true)
 set('expandtab', true)
+set('scrolloff', 15)
+set('colorcolumn', 120)
 
 set('laststatus', 2)
 set('cursorline', true)

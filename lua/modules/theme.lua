@@ -26,7 +26,10 @@ function theme.configure(use)
 
   o.t_Co = "256"
 
-  updateScheme({ 'Normal guibg=NONE ctermbg=NONE' })
+  updateScheme({
+    'Normal guibg=NONE ctermbg=NONE',
+    'ColorColumn guibg=#15121f',
+  })
 
   -- g['$NVIM_TUI_ENABLE_TRUE_COLOR'] = 1
   if fn.has("termguicolors") then
