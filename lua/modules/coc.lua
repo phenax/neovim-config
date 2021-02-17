@@ -23,6 +23,7 @@ local coc = {
     'coc-css',
     'coc-cssmodules',
     'coc-tsserver',
+    'coc-go',
   }
 }
 
@@ -37,6 +38,7 @@ function coc.plugins(use)
   -- Languages
   use 'dart-lang/dart-vim-plugin'
   use 'rescript-lang/vim-rescript'
+  use 'edwinb/idris2-vim'
 
   g.coc_global_extensions = coc.extensions
 end
