@@ -18,10 +18,11 @@ set('splitright', true)
 
 
 -- TODO: Fix code folding
-set('foldenable', true)
-set('foldmethod', 'manual') -- marker (toggle key bindings for folding)
-set('foldcolumn', '2')
-set('foldopen', 'mark')
+--set('foldmethod', 'expr')
+--set('foldexpr', 'nvim_treesitter#foldexpr()')
+--exec [[set foldmethod=expr]]
+--exec [[set foldexpr=nvim_treesitter#foldexpr()]]
+
 
 set('autoindent', true)
 set('copyindent', true)

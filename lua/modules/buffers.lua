@@ -13,6 +13,7 @@ function buffers.configure()
   nmap('<C-d>', ':BD<CR>')
 
   -- Buffer navigation
+  nmap('<localleader>bb', ':Telescope buffers<cr>')
   nmap('<localleader><tab>', ':b#<cr>') -- Toggle between buffers
   nmap('<C-k>', ':bp<CR>')
   nmap('<C-j>', ':bn<CR>')
@@ -33,23 +34,5 @@ function buffers.configure()
   nmap('<M-k>', '<C-w>k')
   nmap('<M-j>', '<C-w>j')
 end
-
--- Juss fockin araoond
---function writeBufferLog()
-  --local currentBuf = fn.nvim_get_current_buf()
-  --local bufs = fn.nvim_list_bufs()
-  --local file = io.open("/home/imsohexy/dump/nvim_log", "a")
-  --io.output(file)
-
-  --for _, b in pairs(bufs) do
-    --if currentBuf == b then
-      --fn.nvim_set_current_buf()
-    --end
-  --end
-
-  --io.write('CURRENT:'..currentBuf)
-
-  --io.close(file)
---end
 
 return buffers

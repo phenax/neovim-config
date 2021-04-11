@@ -8,7 +8,7 @@ function ide.plugins(use)
   use 'Townk/vim-autoclose'
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
-  use 'easymotion/vim-easymotion'
+  --use 'easymotion/vim-easymotion'
 
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
@@ -19,7 +19,8 @@ function ide.plugins(use)
   -- Folding
   use 'wellle/context.vim'
 
-  use 'preservim/tagbar'
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  --use 'preservim/tagbar'
   --use 'puremourning/vimspector'
 end
 
@@ -28,6 +29,16 @@ function ide.configure()
 
   -- Colorizer
   require'colorizer'.setup()
+
+  require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained", -- "all" | "maintained" | list of languages
+    highlight = {
+      enable = true,
+      --disable = { "c", "rust" },
+    },
+    --custom_captures = { ["foo.bar"] = "Identifier", },
+    --indent = { enable = true }
+  }
 
   -- Open term in vim
   nmap('<localleader>tn', ':split term://node<cr>')
@@ -39,8 +50,8 @@ function ide.configure()
   nmap('<leader>sl', ':source .vim.session<cr>')
 
   -- Code navigation/searching
-  nmap('<localleader>cm', ':TagbarToggle<cr>')
-  exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
+  --nmap('<localleader>cm', ':TagbarToggle<cr>')
+  --exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
   nmap('<c-\\>', ':noh<CR>')
 
   nmap('<localleader>rw', '*:%s//<c-r><c-w>')
@@ -52,7 +63,7 @@ function ide.configure()
   nmap('zf', ':ContextToggle<CR>')
 
   -- Tagbar
-  exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
+  --exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
 end
 
 -- Bindings for tagbar

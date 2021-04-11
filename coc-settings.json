@@ -1,6 +1,6 @@
 {
   "coc.preferences.jumpCommand": "drop",
-  "coc.preferences.formatOnSaveFiletypes": ["rescript", "reason", "haskell"],
+  "coc.preferences.formatOnSaveFiletypes": ["rescript", "ocaml", "reason", "haskell", "elm", "purescript", "dhall", "nix"],
   "eslint.autoFixOnSave": false,
   "languageserver": {
     "rescript": {
@@ -13,6 +13,28 @@
     "nix": {
       "command": "rnix-lsp",
       "filetypes": [ "nix" ]
+    },
+    "dhall": {
+      "command": "dhall-lsp-server",
+      "filetypes": [
+        "dhall"
+      ]
+    },
+    "ocaml": {
+      "command": "ocaml-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["ocaml", "reason"]
+    },
+    "purescript": {
+      "command": "purescript-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["purescript"],
+      "rootPatterns": ["bower.json", "psc-package.json", "spago.dhall"]
+    },
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": ["elm"],
+      "rootPatterns": ["elm.json"]
     },
     "ccls": {
 			"command": "ccls",
