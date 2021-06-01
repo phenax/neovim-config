@@ -18,10 +18,9 @@ set('splitright', true)
 
 
 -- TODO: Fix code folding
---set('foldmethod', 'expr')
---set('foldexpr', 'nvim_treesitter#foldexpr()')
---exec [[set foldmethod=expr]]
---exec [[set foldexpr=nvim_treesitter#foldexpr()]]
+exec [[set foldmethod=expr]]
+exec [[set foldexpr=nvim_treesitter#foldexpr()]]
+exec [[set foldlevel=100]]
 
 
 set('autoindent', true)

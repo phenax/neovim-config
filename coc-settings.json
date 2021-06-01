@@ -1,6 +1,6 @@
 {
   "coc.preferences.jumpCommand": "drop",
-  "coc.preferences.formatOnSaveFiletypes": ["rescript", "ocaml", "reason", "haskell", "elm", "purescript", "dhall", "nix"],
+  "coc.preferences.formatOnSaveFiletypes": ["rescript", "ocaml", "reason", "haskell", "elm", "purescript", "dhall", "nix", "rust"],
   "eslint.autoFixOnSave": false,
   "languageserver": {
     "rescript": {
