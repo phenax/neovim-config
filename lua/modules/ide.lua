@@ -3,6 +3,12 @@ local nmap = utils.nmap
 local nmap_options = utils.nmap_options
 
 local ide = {
+  lsp_format_on_save = {
+    "*.rs",
+    "*.nix",
+    "*.elm",
+    "*.hs",
+  },
   lsp_servers = {
     rust_analyzer = {},
     tsserver = {},
@@ -91,6 +97,10 @@ function ide.configure()
   local nvim_lsp = require 'lspconfig'
   for name, options in pairs(ide.lsp_servers) do
     nvim_lsp[name].setup(utils.merge({ on_attach = ide.on_lsp_attached }, options))
+  end
+
+  for _, filetype in pairs(ide.lsp_format_on_save) do
+    exec("autocmd BufWritePre "..filetype.." lua vim.lsp.buf.formatting_sync(nil, 100)")
   end
 
   -- Completions
