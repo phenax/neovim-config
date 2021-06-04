@@ -6,7 +6,27 @@ local ide = {
   lsp_servers = {
     rust_analyzer = {},
     tsserver = {},
-  }
+    rnix = {},
+    ocamlls = {},
+    jsonls = {
+      commands = {
+        Format = {
+          function()
+            vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+          end
+        }
+      }
+    },
+    elmls = {},
+    hls = {
+      settings = {
+        languageServerHaskell = {
+          hlintOn = true,
+        },
+      },
+    },
+    -- gdscript = {},
+  },
 }
 
 function ide.plugins(use)
