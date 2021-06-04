@@ -1,7 +1,13 @@
 local utils = require 'utils'
 local nmap = utils.nmap
+local nmap_options = utils.nmap_options
 
-local ide = {}
+local ide = {
+  lsp_servers = {
+    rust_analyzer = {},
+    tsserver = {},
+  }
+}
 
 function ide.plugins(use)
   use 'scrooloose/nerdcommenter'
@@ -10,6 +16,9 @@ function ide.plugins(use)
   use 'wellle/targets.vim'
   --use 'easymotion/vim-easymotion'
 
+  use 'neovim/nvim-lspconfig'
+  use 'nvim-lua/completion-nvim'
+
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
   use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
@@ -17,11 +26,39 @@ function ide.plugins(use)
   use 'jtratner/vim-flavored-markdown' -- markdown
 
   -- Folding
-  use 'wellle/context.vim'
-
+  -- use 'wellle/context.vim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   --use 'preservim/tagbar'
   --use 'puremourning/vimspector'
+end
+
+function ide.on_lsp_attached(client, bufnr)
+  --Enable completion triggered by <c-x><c-o>
+  -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  local opts = { noremap=true, silent=true }
+
+  -- Navigation
+  nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+
+  -- Refactor actions
+  nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+
+  -- Diagnostics
+  nmap_options('<localleader>d', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  nmap_options('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  nmap_options(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  nmap_options('<localleader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  -- nmap_options('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  -- nmap_options('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- nmap_options('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  -- nmap_options('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  -- nmap_options('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 end
 
 function ide.configure()
@@ -30,11 +67,27 @@ function ide.configure()
   -- Colorizer
   require'colorizer'.setup()
 
+  -- Lsp
+  local nvim_lsp = require 'lspconfig'
+  for name, options in pairs(ide.lsp_servers) do
+    nvim_lsp[name].setup(utils.merge({ on_attach = ide.on_lsp_attached }, options))
+  end
+
+  -- Completions
+  exec [[autocmd BufEnter * lua require'completion'.on_attach()]]
+  utils.set('completeopt', 'menuone,noinsert,noselect')
+  g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
+  g.completion_matching_smart_case = 1
+  exec [[
+    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  ]]
+
+  -- Treesitter
   require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained", -- "all" | "maintained" | list of languages
     highlight = {
       enable = true,
-      --disable = { "c", "rust" },
     },
     --custom_captures = { ["foo.bar"] = "Identifier", },
     --indent = { enable = true }

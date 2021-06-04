@@ -15,6 +15,9 @@ end
 function utils.xmap(key, action)
   fn.nvim_set_keymap('x', key, action, {})
 end
+function utils.imap(key, action)
+  fn.nvim_set_keymap('i', key, action, { silent = true })
+end
 
 function utils.set_opt(k, v, opt)
   if v == true or v == false then
@@ -57,6 +60,13 @@ function utils.isOneOf(list, x)
     if v == x then return true end
   end
   return false
+end
+
+function utils.merge(a, b)
+  for k, v in ipairs(b) do
+    a[k] = v
+  end
+  return a
 end
 
 return utils
