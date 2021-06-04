@@ -58,33 +58,20 @@ function ide.plugins(use)
   --use 'puremourning/vimspector'
 end
 
-function ide.on_lsp_attached(client, bufnr)
-  --Enable completion triggered by <c-x><c-o>
-  -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  local opts = { noremap=true, silent=true }
-
-  -- Navigation
-  nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-
-  -- Refactor actions
-  nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-
-  -- Diagnostics
-  nmap_options('<localleader>d', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  nmap_options('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  nmap_options(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  nmap_options('<localleader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  -- nmap_options('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  -- nmap_options('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  -- nmap_options('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  -- nmap_options('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  -- nmap_options('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+-- Autoformatting hooks
+is_autoformat_enabled = true;
+function ide__lsp_toggle_autoformat()
+  is_autoformat_enabled = not is_autoformat_enabled
+  if is_autoformat_enabled then
+    print "[Autoformat enabled]"
+  else
+    print "[Autoformat disabled]"
+  end
+end
+function ide__lsp_on_save()
+  if is_autoformat_enabled then
+    vim.lsp.buf.formatting_sync(nil, 100)
+  end
 end
 
 function ide.configure()
@@ -99,8 +86,10 @@ function ide.configure()
     nvim_lsp[name].setup(utils.merge({ on_attach = ide.on_lsp_attached }, options))
   end
 
+  -- Autoformatting
+  nmap("<leader>df", ":lua ide__lsp_toggle_autoformat()<CR>")
   for _, filetype in pairs(ide.lsp_format_on_save) do
-    exec("autocmd BufWritePre "..filetype.." lua vim.lsp.buf.formatting_sync(nil, 100)")
+    exec("autocmd BufWritePre "..filetype.." lua ide__lsp_on_save()")
   end
 
   -- Completions
@@ -147,6 +136,32 @@ function ide.configure()
 
   -- Tagbar
   --exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
+end
+
+function ide.on_lsp_attached(client, bufnr)
+  local opts = { noremap=true, silent=true }
+
+  -- Navigation
+  nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+
+  -- Refactor actions
+  nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+
+  -- Diagnostics
+  nmap_options('<localleader>d', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  nmap_options('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  nmap_options(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  nmap_options('<localleader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  -- nmap_options('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  -- nmap_options('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- nmap_options('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  -- nmap_options('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  -- nmap_options('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 end
 
 -- Bindings for tagbar
