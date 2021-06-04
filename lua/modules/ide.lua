@@ -86,6 +86,8 @@ function ide.configure()
     nvim_lsp[name].setup(utils.merge({ on_attach = ide.on_lsp_attached }, options))
   end
 
+  exec [[ autocmd ColorScheme * :lua require('vim.lsp.diagnostic')._define_default_signs_and_highlights() ]]
+
   -- Autoformatting
   nmap("<leader>df", ":lua ide__lsp_toggle_autoformat()<CR>")
   for _, filetype in pairs(ide.lsp_format_on_save) do
