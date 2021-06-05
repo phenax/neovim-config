@@ -1,5 +1,4 @@
 exec = vim.api.nvim_command
-fn = vim.fn
 o = vim.o
 g = vim.g
 

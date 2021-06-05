@@ -20,7 +20,7 @@ function tools.configure()
   utils.nmap_options('SS', ':w<CR>', { noremap = true, silent = true })
 
   -- Clipboard
-  fn.nvim_set_keymap('v', '<C-c>', '"+y', {})
+  vim.api.nvim_set_keymap('v', '<C-c>', '"+y', {})
 
   -- Prevent typo issues
   exec [[map q: <Nop>]]

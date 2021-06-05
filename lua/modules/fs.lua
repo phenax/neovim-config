@@ -28,7 +28,7 @@ function fs.configure()
   local tree_cmd = require'nvim-tree.config'.nvim_tree_callback
   vim.g.nvim_tree_bindings = {
     ["R"]              = tree_cmd("refresh"),
-    ["q"]              = ":q<CR>", -- tree_cmd("close")
+    ["q"]              = tree_cmd("close"),
 
     ["<CR>"]           = tree_cmd("edit"),
     ["h"]              = tree_cmd("close_node"),
