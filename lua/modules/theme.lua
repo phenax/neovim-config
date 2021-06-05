@@ -9,7 +9,7 @@ local theme = {
 function theme.plugins(use)
   use 'phenax/palenight.vim'
   use 'ryanoasis/vim-devicons'
-  --use 'kyazdani42/nvim-web-devicons'
+  use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
 
   use 'itchyny/lightline.vim'

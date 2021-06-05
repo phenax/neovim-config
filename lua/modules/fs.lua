@@ -5,9 +5,10 @@ local nmap_silent = utils.nmap_silent
 local fs = {}
 
 function fs.plugins(use)
-  use 'junegunn/fzf'
-  use 'junegunn/fzf.vim'
+  -- use 'junegunn/fzf'
+  -- use 'junegunn/fzf.vim'
   use 'djoshea/vim-autoread'
+  use 'kyazdani42/nvim-tree.lua'
   use {
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
@@ -16,7 +17,46 @@ end
 
 function fs.configure()
   -- File tree
-  nmap_silent('<localleader>nn', ':CocCommand explorer<cr>')
+  nmap_silent('<localleader>nn', ':NvimTreeToggle<CR>')
+  nmap_silent('<localleader>nr', ':NvimTreeRefresh<CR>')
+  g.nvim_tree_git_hl = 1
+  g.nvim_tree_lsp_diagnostics = 1
+  g.nvim_tree_add_trailing = 1
+  g.nvim_tree_auto_close = 1
+  g.nvim_tree_width = 40
+
+  local tree_cmd = require'nvim-tree.config'.nvim_tree_callback
+  vim.g.nvim_tree_bindings = {
+    ["R"]              = tree_cmd("refresh"),
+    ["q"]              = ":q<CR>", -- tree_cmd("close")
+
+    ["<CR>"]           = tree_cmd("edit"),
+    ["h"]              = tree_cmd("close_node"),
+    ["l"]              = tree_cmd("edit"),
+
+    ["<C-h>"]          = tree_cmd("dir_up"),
+    ["<C-l>"]          = tree_cmd("cd"),
+
+    ["<C-v>"]          = tree_cmd("vsplit"),
+    ["<C-s>"]          = tree_cmd("split"),
+
+    ["<"]              = tree_cmd("prev_sibling"),
+    [">"]              = tree_cmd("next_sibling"),
+
+    ["<Tab>"]          = tree_cmd("preview"),
+    ["."]              = tree_cmd("toggle_ignored"),
+
+    ["a"]              = tree_cmd("create"),
+    ["d"]              = tree_cmd("remove"),
+    ["r"]              = tree_cmd("rename"),
+
+    ["x"]              = tree_cmd("cut"),
+    ["y"]              = tree_cmd("copy"),
+    ["p"]              = tree_cmd("paste"),
+    ["Y"]              = tree_cmd("copy_path"),
+  }
+  -- g.nvim_tree_gitignore = 1
+  -- g.nvim_tree_auto_open = 1
 
   require('telescope').setup {
     defaults = {
