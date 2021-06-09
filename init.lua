@@ -22,6 +22,8 @@ return require('packer').startup(function()
 
   for _, m in pairs(modules) do
     m.plugins(use)
+  end
+  for _, m in pairs(modules) do
     m.configure(use)
   end
 end)

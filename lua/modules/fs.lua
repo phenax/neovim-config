@@ -19,6 +19,7 @@ function fs.configure()
   -- File tree
   nmap_silent('<localleader>nn', ':NvimTreeToggle<CR>')
   nmap_silent('<localleader>nr', ':NvimTreeRefresh<CR>')
+  nmap_silent('<localleader>nf', ':NvimTreeFindFile<CR>')
   g.nvim_tree_git_hl = 1
   g.nvim_tree_lsp_diagnostics = 1
   g.nvim_tree_add_trailing = 1
