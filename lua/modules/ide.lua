@@ -43,10 +43,14 @@ function ide.plugins(use)
   use 'Townk/vim-autoclose'
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
-  --use 'easymotion/vim-easymotion'
+  -- justinmk/vim-sneak
 
   use 'neovim/nvim-lspconfig'
+  use 'glepnir/lspsaga.nvim'
   use 'nvim-lua/completion-nvim'
+  use 'simrat39/symbols-outline.nvim'
+  -- use 'ray-x/lsp_signature.nvim'
+  -- use 'jubnzv/virtual-types.nvim'
 
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
@@ -57,6 +61,7 @@ function ide.plugins(use)
   -- Folding
   -- use 'wellle/context.vim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  -- use 'p00f/nvim-ts-rainbow'
   --use 'preservim/tagbar'
   --use 'puremourning/vimspector'
 end
@@ -68,7 +73,8 @@ function ide.on_lsp_attached(client, bufnr)
   nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  -- nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  nmap_options('K', ':Lspsaga hover_doc<CR>', opts)
 
   -- Refactor actions
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -85,6 +91,18 @@ function ide.on_lsp_attached(client, bufnr)
   -- nmap_options('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   -- nmap_options('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   -- nmap_options('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+
+  -- Signature on typing
+  -- require "lsp_signature".on_attach({
+  --   bind = true,
+  --   use_lspsaga = true,
+  --   handler_opts = {
+  --     border = "single"
+  --   }
+  -- })
+
+  -- Enable virtual types
+  -- require'virtualtypes'.on_attach(client, bufnr)
 end
 
 -- Autoformatting hooks
@@ -122,6 +140,11 @@ function ide.configure()
   exec("autocmd FileType "
     ..table.concat(ide.lsp_format_on_save, ",")
     .." autocmd  BufWritePre <buffer> silent! :lua ide__lsp_on_save()")
+
+  -- LSP saga
+  local saga = require 'lspsaga'
+  saga.init_lsp_saga()
+
 
   -- Completions
   exec [[autocmd BufEnter * lua require'completion'.on_attach()]]

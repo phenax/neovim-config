@@ -2,7 +2,7 @@ local utils = require 'utils'
 local tools = {}
 
 function tools.plugins(use)
-  use 'metakirby5/codi.vim'
+  -- use 'metakirby5/codi.vim'
 
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'

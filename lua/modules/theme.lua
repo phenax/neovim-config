@@ -2,7 +2,7 @@ local utils = require 'utils'
 local updateScheme = utils.updateScheme
 
 local theme = {
-  colorscheme = 'material',
+  colorscheme = 'material', -- xresources
   lightline_theme = 'palenight',
 }
 
@@ -11,6 +11,7 @@ function theme.plugins(use)
   use 'ryanoasis/vim-devicons'
   use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
+  -- use 'nekonako/xresources-nvim'
 
   use 'itchyny/lightline.vim'
   use 'mengelbrecht/lightline-bufferline'
