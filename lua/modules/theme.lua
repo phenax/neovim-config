@@ -13,6 +13,7 @@ function theme.plugins(use)
   use { 'kaicataldo/material.vim', branch = 'main' }
   -- use 'nekonako/xresources-nvim'
 
+  use 'folke/lsp-colors.nvim'
   use 'itchyny/lightline.vim'
   use 'mengelbrecht/lightline-bufferline'
 end
@@ -41,22 +42,16 @@ function theme.configure(use)
 
   theme.lightline()
   theme.tabs()
-  theme.fileexplorer()
-  theme.coccolors()
+  theme.lsptheme()
 end
 
-function theme.coccolors()
-  updateScheme({
-    'CocCodeLens guifg=#513970',
-  })
-end
-
-function theme.fileexplorer()
-  updateScheme({
-    'CocExplorerGitIgnored guifg=#444444',
-    'CocExplorerGitModified guifg=#E5C07B',
-    'CocExplorerGitContentChange guifg=#51e980',
-    'CocExplorerGitUntracked guifg=#51e980',
+function theme.lsptheme()
+  -- virtual text colors
+  require("lsp-colors").setup({
+    Error = "#db4b4b",
+    Warning = "#e0af68",
+    Information = "#513970",
+    Hint = "#513970"
   })
 end
 

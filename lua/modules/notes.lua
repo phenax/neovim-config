@@ -18,7 +18,7 @@ function onNewLine(text)
   exec [[startinsert!]]
 end
 
-function vimwikiBindings()
+function notes__onvimwiki()
   -- Diary
   nmap('<localleader>da',  ':VimwikiMakeDiaryNote<CR>')
   nmap('<localleader>dx',  ':VimwikiDiaryGenerateLinks<CR>')
@@ -28,6 +28,12 @@ function vimwikiBindings()
   nmap('<localleader>cc',  ':VimwikiToggleListItem<CR>')
   nmap('<localleader>li',  ':lua onNewLine("  * ")<CR>')
   nmap('<localleader>cn',  ':lua onNewLine("  - [ ] ")<CR>')
+
+  -- g.vimwiki_folding = 'expr'
+  -- exec [[set foldenable]]
+  -- exec [[set foldmethod=expr]]
+  -- exec [[set foldexpr&]]
+  -- exec [[set foldlevel=2]]
 end
 
 function notes.configure()
@@ -41,7 +47,7 @@ function notes.configure()
   nmap('<leader>==', ':setlocal spell! spelllang=en_us<CR>')
 
   exec [[au BufRead,BufNewFile *.md set filetype=vimwiki]]
-  exec [[autocmd FileType vimwiki lua vimwikiBindings()]]
+  exec [[autocmd FileType vimwiki lua notes__onvimwiki()]]
 
   -- URL editor commands
   nmap('<localleader>hts', ':s/http/https/g<CR>') -- http to https

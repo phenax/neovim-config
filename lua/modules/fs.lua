@@ -90,9 +90,6 @@ function fs.configure()
 
   exec [[autocmd StdinReadPre * let s:std_in=1autocmd StdinReadPre * let s:std_in=1]]
   exec [[autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exec 'bd' | endif]]
-  
-  exec [[autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif]]
-  exec [[autocmd FileType coc-explorer setlocal nolist]]
 end
 
 return fs
