@@ -3,6 +3,8 @@ local tools = {}
 
 function tools.plugins(use)
   -- use 'metakirby5/codi.vim'
+  use 'ciaranm/detectindent'
+  --use 'editorconfig/editorconfig-vim'
 
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'
@@ -11,6 +13,8 @@ end
 function tools.configure()
   g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
 
+  exec [[autocmd BufEnter * :DetectIndent]]
+
   -- Move line up and down
   utils.xmap('K', ":move '<-2<cr>gv-gv")
   utils.xmap('J', ":move '<+1<cr>gv-gv")
@@ -18,6 +22,7 @@ function tools.configure()
   -- Save
   utils.nnoremap('S', '<nop>')
   utils.nmap_options('SS', ':w<CR>', { noremap = true, silent = true })
+  utils.nmap_options('<C-s>', ':w<CR>', { noremap = true, silent = true })
 
   -- Clipboard
   vim.api.nvim_set_keymap('v', '<C-c>', '"+y', {})

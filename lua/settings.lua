@@ -1,4 +1,5 @@
 local utils = require 'utils'
+local nmap = utils.nmap
 local set = utils.set
 local append = utils.append
 
@@ -16,19 +17,14 @@ set('mouse', 'c')
 set('splitbelow', true)
 set('splitright', true)
 
-
 -- TODO: Fix code folding
-exec [[set foldmethod=expr]]
-exec [[set foldexpr=nvim_treesitter#foldexpr()]]
-exec [[set foldlevel=100]]
+set('foldmethod', 'expr')
+set('foldexpr', 'nvim_treesitter#foldexpr()')
+set('foldlevel', 50)
 
-
-set('autoindent', true)
-set('copyindent', true)
 set('showmatch', true)
 set('ignorecase', true)
 set('smartcase', true)
-set('smarttab', true)
 set('hlsearch', true)
 set('incsearch', true)
 set('history', 800)
@@ -44,18 +40,23 @@ set('noshowmode', true)
 set('number', true)
 set('relativenumber', true)
 set('ruler', true)
-set('tabstop', 2)
-set('shiftwidth', 2)
-set('smarttab', true)
-set('expandtab', true)
 set('scrolloff', 15)
 set('colorcolumn', 120)
 
+-- Indent
+set('autoindent', true)
+set('copyindent', true)
+set('shiftwidth', 2)
+set('tabstop', 2)
+set('smarttab', true)
+set('expandtab', true)
+
 set('laststatus', 2)
-set('cursorline', true)
 set('cmdheight', 1)
 set('updatetime', 300)
 set('signcolumn', 'yes')
+set('cursorline', true)
+set('cursorcolumn', true)
 
 -- Short messages
 append('shortmess', 'TIFc')

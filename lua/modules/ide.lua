@@ -14,10 +14,55 @@ local ide = {
     "typescriptreact",
   },
   lsp_servers = {
-    rust_analyzer = {},
+    rust_analyzer = {
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = {
+            autoreload = true,
+            allFeatures = true,
+          },
+          procMacro = {
+            enable = true,
+          },
+          checkOnSave = {
+            command = "clippy",
+          },
+          diagnostics = {
+            enable = true,
+            disabled = {"unresolved-proc-macro"},
+            enableExperimental = true,
+          },
+        },
+      },
+    },
+
     tsserver = {},
+    vuels = {},
+
+    efm = {
+      init_options = {
+        documentFormatting = true
+      },
+      filetypes = {"javascript", "typescript"},
+      root_dir = function(fname)
+        local lspconfig = require 'lspconfig'
+
+        return lspconfig.util.root_pattern("tsconfig.json")(fname) or
+          lspconfig.util.root_pattern(".eslintrc.js", ".git")(fname);
+      end,
+      settings = {
+        rootMarkers = {".eslintrc.js", ".git/"},
+        languages = {
+          typescript = {eslint},
+          javascript = {eslint},
+        }
+      }
+    },
+
     rnix = {},
+
     ocamlls = {},
+
     jsonls = {
       commands = {
         Format = {
@@ -27,7 +72,9 @@ local ide = {
         }
       }
     },
+
     elmls = {},
+
     hls = {
       settings = {
         languageServerHaskell = {
@@ -49,6 +96,7 @@ function ide.plugins(use)
   use 'glepnir/lspsaga.nvim'
   use 'nvim-lua/completion-nvim'
   use 'simrat39/symbols-outline.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
   -- use 'ray-x/lsp_signature.nvim'
   -- use 'jubnzv/virtual-types.nvim'
 
@@ -58,9 +106,15 @@ function ide.plugins(use)
   use 'tpope/vim-markdown' -- markdown
   use 'jtratner/vim-flavored-markdown' -- markdown
 
+  -- Languages
+  --use 'dart-lang/dart-vim-plugin'
+  --use 'rescript-lang/vim-rescript'
+  --use 'edwinb/idris2-vim'
+
   -- Folding
   -- use 'wellle/context.vim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use 'nvim-treesitter/playground'
   -- use 'p00f/nvim-ts-rainbow'
   --use 'preservim/tagbar'
   --use 'puremourning/vimspector'
@@ -86,11 +140,6 @@ function ide.on_lsp_attached(client, bufnr)
   nmap_options('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   nmap_options(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   nmap_options('<localleader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  -- nmap_options('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  -- nmap_options('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  -- nmap_options('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  -- nmap_options('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  -- nmap_options('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
   -- Signature on typing
   -- require "lsp_signature".on_attach({
@@ -126,6 +175,12 @@ function ide.configure()
 
   -- Colorizer
   require'colorizer'.setup()
+  g.indent_blankline_char = '┊'
+  g.indent_blankline_space_char = ' '
+  utils.updateScheme({
+    'IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine',
+    'IndentBlanklineChar guifg=#1f1c29 gui=nocombine',
+  })
 
   -- Lsp
   local nvim_lsp = require 'lspconfig'
@@ -156,17 +211,10 @@ function ide.configure()
 
   -- Treesitter
   require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained", -- "all" | "maintained" | list of languages
-    highlight = {
-      enable = true,
-    },
-    -- rainbow = {
-    --   enable = true,
-    --   extended_mode = true,
-    --   max_file_lines = 1000,
-    -- },
-    --custom_captures = { ["foo.bar"] = "Identifier", },
-    --indent = { enable = true }
+    ensure_installed = "all", -- "all" | "maintained" | list of languages
+    highlight = { enable = true, },
+    indent = { enable = true },
+    textobjects = { enable = true },
   }
 
   -- Symbols

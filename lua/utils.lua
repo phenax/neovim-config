@@ -63,9 +63,10 @@ function utils.isOneOf(list, x)
 end
 
 function utils.merge(a, b)
-  for k, v in ipairs(b) do
+  for k, v in pairs(b) do
     a[k] = v
   end
+
   return a
 end
 

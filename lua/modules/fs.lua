@@ -28,44 +28,46 @@ function fs.configure()
 
   local tree_cmd = require'nvim-tree.config'.nvim_tree_callback
   vim.g.nvim_tree_bindings = {
-    ["R"]              = tree_cmd("refresh"),
-    ["q"]              = tree_cmd("close"),
+    { key = "R",              cb = tree_cmd("refresh") },
+    { key = "q",              cb = tree_cmd("close") },
 
-    ["<CR>"]           = tree_cmd("edit"),
-    ["h"]              = tree_cmd("close_node"),
-    ["l"]              = tree_cmd("edit"),
+    { key = "<CR>",           cb = tree_cmd("edit") },
+    { key = "h",              cb = tree_cmd("close_node") },
+    { key = "l",              cb = tree_cmd("edit") },
 
-    ["<C-h>"]          = tree_cmd("dir_up"),
-    ["<C-l>"]          = tree_cmd("cd"),
+    { key = "<C-h>",          cb = tree_cmd("dir_up") },
+    { key = "<C-l>",          cb = tree_cmd("cd") },
 
-    ["<C-v>"]          = tree_cmd("vsplit"),
-    ["<C-s>"]          = tree_cmd("split"),
+    { key = "<C-v>",          cb = tree_cmd("vsplit") },
+    { key = "<C-s>",          cb = tree_cmd("split") },
 
-    ["<"]              = tree_cmd("prev_sibling"),
-    [">"]              = tree_cmd("next_sibling"),
+    { key = "<",              cb = tree_cmd("prev_sibling") },
+    { key = ">",              cb = tree_cmd("next_sibling") },
 
-    ["<Tab>"]          = tree_cmd("preview"),
-    ["."]              = tree_cmd("toggle_ignored"),
+    { key = "<Tab>",          cb = tree_cmd("preview") },
+    { key = ".",              cb = tree_cmd("toggle_ignored") },
 
-    ["a"]              = tree_cmd("create"),
-    ["d"]              = tree_cmd("remove"),
-    ["r"]              = tree_cmd("rename"),
+    { key = "a",              cb = tree_cmd("create") },
+    { key = "d",              cb = tree_cmd("remove") },
+    { key = "r",              cb = tree_cmd("rename") },
 
-    ["x"]              = tree_cmd("cut"),
-    ["y"]              = tree_cmd("copy"),
-    ["p"]              = tree_cmd("paste"),
-    ["Y"]              = tree_cmd("copy_path"),
+    { key = "x",              cb = tree_cmd("cut") },
+    { key = "y",              cb = tree_cmd("copy") },
+    { key = "p",              cb = tree_cmd("paste") },
+    { key = "Y",              cb = tree_cmd("copy_path") },
   }
   -- g.nvim_tree_gitignore = 1
   -- g.nvim_tree_auto_open = 1
 
   require('telescope').setup {
     defaults = {
-      prompt_position = "top",
       prompt_prefix = "λ ",
       sorting_strategy = "ascending",
-      width = 0.3,
-      preview_cutoff = 120,
+      layout_config = {
+        width = 0.8,
+        prompt_position = "top",
+        preview_cutoff = 120,
+      },
       color_devicons = true,
       use_less = true,
     }
