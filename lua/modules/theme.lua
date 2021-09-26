@@ -11,7 +11,6 @@ function theme.plugins(use)
   use 'ryanoasis/vim-devicons'
   use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
-  -- use 'nekonako/xresources-nvim'
 
   use 'folke/lsp-colors.nvim'
   use 'itchyny/lightline.vim'
@@ -19,7 +18,7 @@ function theme.plugins(use)
 end
 
 function theme.configure(use)
-  exec('colorscheme ' .. (theme.colorscheme))
+  --exec('colorscheme ' .. (theme.colorscheme))
   g.material_terminal_italics = 1
   g.material_theme_style = 'ocean'
 
@@ -43,6 +42,8 @@ function theme.configure(use)
   theme.lightline()
   theme.tabs()
   theme.lsptheme()
+
+  exec('colorscheme ' .. (theme.colorscheme))
 end
 
 function theme.lsptheme()

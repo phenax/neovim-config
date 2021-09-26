@@ -2,6 +2,21 @@ local utils = require 'utils'
 local nmap = utils.nmap
 local nmap_options = utils.nmap_options
 
+function disableFormatting()
+  local cap = vim.lsp.protocol.make_client_capabilities()
+  cap.textDocument.formatting = false
+  return cap
+end
+
+local eslint = {
+  lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+  lintStdin = true,
+  lintFormats = {"%f:%l:%c: %m"},
+  lintIgnoreExitCode = true,
+  formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+  formatStdin = true
+}
+
 local ide = {
   lsp_format_on_save = {
     "haskell",
@@ -14,6 +29,27 @@ local ide = {
     "typescriptreact",
   },
   lsp_servers = {
+    efm = {
+      filetypes = {"javascript", "typescript", "javascriptreact", "typescriptreact"},
+      init_options = {
+        documentFormatting = true,
+        hover = true,
+        documentSymbol = true,
+        codeAction = true,
+      },
+      settings = {
+        rootMarkers = {".eslintrc.js", ".eslintrc.json"},
+        languages = {
+          typescript = { eslint },
+          javascript = { eslint },
+        }
+      }
+    },
+    tsserver = {
+      capabilities = disableFormatting(),
+    },
+    vuels = {},
+
     rust_analyzer = {
       settings = {
         ["rust-analyzer"] = {
@@ -36,33 +72,6 @@ local ide = {
       },
     },
 
-    tsserver = {},
-    vuels = {},
-
-    efm = {
-      init_options = {
-        documentFormatting = true
-      },
-      filetypes = {"javascript", "typescript"},
-      root_dir = function(fname)
-        local lspconfig = require 'lspconfig'
-
-        return lspconfig.util.root_pattern("tsconfig.json")(fname) or
-          lspconfig.util.root_pattern(".eslintrc.js", ".git")(fname);
-      end,
-      settings = {
-        rootMarkers = {".eslintrc.js", ".git/"},
-        languages = {
-          typescript = {eslint},
-          javascript = {eslint},
-        }
-      }
-    },
-
-    rnix = {},
-
-    ocamlls = {},
-
     jsonls = {
       commands = {
         Format = {
@@ -74,7 +83,8 @@ local ide = {
     },
 
     elmls = {},
-
+    rnix = {},
+    ocamlls = {},
     hls = {
       settings = {
         languageServerHaskell = {
@@ -127,8 +137,8 @@ function ide.on_lsp_attached(client, bufnr)
   nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  -- nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  nmap_options('K', ':Lspsaga hover_doc<CR>', opts)
+  nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  --nmap_options('K', ':Lspsaga hover_doc<CR>', opts)
 
   -- Refactor actions
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -140,18 +150,6 @@ function ide.on_lsp_attached(client, bufnr)
   nmap_options('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   nmap_options(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   nmap_options('<localleader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-
-  -- Signature on typing
-  -- require "lsp_signature".on_attach({
-  --   bind = true,
-  --   use_lspsaga = true,
-  --   handler_opts = {
-  --     border = "single"
-  --   }
-  -- })
-
-  -- Enable virtual types
-  -- require'virtualtypes'.on_attach(client, bufnr)
 end
 
 -- Autoformatting hooks
@@ -166,7 +164,7 @@ function ide__lsp_toggle_autoformat()
 end
 function ide__lsp_on_save()
   if is_autoformat_enabled then
-    vim.lsp.buf.formatting_sync(nil, 300)
+    vim.lsp.buf.formatting_seq_sync(nil, 300)
   end
 end
 
