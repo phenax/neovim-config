@@ -9,12 +9,17 @@ function disableFormatting()
 end
 
 local eslint = {
-  lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+  lintCommand = "eslint_d -f visualstudio --stdin --stdin-filename ${INPUT}", -- -f unix
   lintStdin = true,
-  lintFormats = {"%f:%l:%c: %m"},
+  --lintFormats = {"%f:%l:%c: %m"},
+  lintFormats = {"%f(%l,%c): %tarning %m", "%f(%l,%c): %rror %m"},
   lintIgnoreExitCode = true,
+
   formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
-  formatStdin = true
+  formatStdin = true,
+
+  --hoverCommand = ""
+  --hoverStdin = true,
 }
 
 local ide = {
@@ -23,14 +28,27 @@ local ide = {
     "nix",
     "rust",
     "elm",
+    "vue",
     "javascript",
     "javascriptreact",
     "typescript",
     "typescriptreact",
   },
+
+  --lsp_installables = {
+    --"eslintls",
+  --},
+
   lsp_servers = {
+    --eslintls = {},
     efm = {
-      filetypes = {"javascript", "typescript", "javascriptreact", "typescriptreact"},
+      filetypes = {
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact",
+        "vue",
+      },
       init_options = {
         documentFormatting = true,
         hover = true,
@@ -42,13 +60,30 @@ local ide = {
         languages = {
           typescript = { eslint },
           javascript = { eslint },
-        }
-      }
+          vue = { eslint },
+        },
+      },
+    },
+    vuels = {
+      settings = {
+        vetur = {
+          format = {
+            enable = false,
+          },
+          validation = {
+            style = true,
+            script = true,
+            interpolation = true,
+          },
+          completion = {
+            autoImport = true,
+          },
+        },
+      },
     },
     tsserver = {
       capabilities = disableFormatting(),
     },
-    vuels = {},
 
     rust_analyzer = {
       settings = {
@@ -103,6 +138,7 @@ function ide.plugins(use)
   -- justinmk/vim-sneak
 
   use 'neovim/nvim-lspconfig'
+  --use { 'williamboman/nvim-lsp-installer', commit = "a1431f1f1c9750806760dfbe7b8b1a5435d3a277" }
   use 'glepnir/lspsaga.nvim'
   use 'nvim-lua/completion-nvim'
   use 'simrat39/symbols-outline.nvim'
@@ -179,6 +215,17 @@ function ide.configure()
     'IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine',
     'IndentBlanklineChar guifg=#1f1c29 gui=nocombine',
   })
+
+  ---- Lsp installation
+  --local lsp_installer_servers = require 'nvim-lsp-installer.servers'
+  --for _, name in ipairs(ide.lsp_installables) do
+    --local ok, lsp = lsp_installer_servers.get_server(name)
+    --if ok then
+      --if not lsp:is_installed() then
+        --lsp:install()
+      --end
+    --end
+  --end
 
   -- Lsp
   local nvim_lsp = require 'lspconfig'
