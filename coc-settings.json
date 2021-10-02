@@ -1,0 +1,93 @@
+{
+  "coc.preferences.jumpCommand": "drop",
+
+  // formatting
+  "eslint.autoFixOnSave": true,
+  "eslint.format.enable": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "rescript",
+    "ocaml",
+    "reason",
+    "haskell",
+    "elm",
+    "nix",
+    "rust",
+    "vue"
+  ],
+
+  // LSP
+  "eslint.packageManager": "yarn",
+  "languageserver": {
+    "rescript": {
+      "enable": true,
+      "module": "~/.local/share/nvim/site/pack/packer/start/vim-rescript/rescript-vscode/extension/server/out/server.js",
+      "args": [
+        "--node-ipc"
+      ],
+      "filetypes": [
+        "rescript"
+      ],
+      "rootPatterns": [
+        "bsconfig.json"
+      ]
+    },
+    "nix": {
+      "command": "rnix-lsp",
+      "filetypes": [
+        "nix"
+      ]
+    },
+    "ocaml": {
+      "command": "ocaml-language-server",
+      "args": [
+        "--stdio"
+      ],
+      "filetypes": [
+        "ocaml",
+        "reason"
+      ]
+    },
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": [
+        "elm"
+      ],
+      "rootPatterns": [
+        "elm.json"
+      ]
+    },
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": [
+        "--lsp"
+      ],
+      "rootPatterns": [
+        "*.cabal",
+        "stack.yaml",
+        "cabal.project",
+        "package.yaml",
+        "hie.yaml"
+      ],
+      "filetypes": [
+        "haskell",
+        "lhaskell"
+      ],
+      "initializationOptions": {
+        "languageServerHaskell": {
+          "hlintOn": true
+        }
+      }
+    }
+  },
+
+
+  // others
+  "codeLens.enable": true,
+  "typescript.showUnused": true,
+  "hover.floatConfig": {
+    "border": true
+  },
+  "snippets.userSnippetsDirectory": "~/.config/nvim/snippets"
+  // "importCost.bundleSizeDecoration": "both",
+  // "importCost.showCalculatingDecoration": true,
+}

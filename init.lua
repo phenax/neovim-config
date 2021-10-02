@@ -10,7 +10,9 @@ local modules = {
   require 'modules.buffers',
   require 'modules.fs',
   require 'modules.git',
-  require 'modules.ide',
+  require 'modules.coc',
+  -- require 'modules.lsp',
+  require 'modules.editor',
   require 'modules.notes',
   require 'modules.tools',
 }

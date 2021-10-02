@@ -22,7 +22,7 @@ local eslint = {
   --hoverStdin = true,
 }
 
-local ide = {
+local lsp = {
   lsp_format_on_save = {
     "haskell",
     "nix",
@@ -125,43 +125,14 @@ local ide = {
   },
 }
 
-function ide.plugins(use)
-  use 'scrooloose/nerdcommenter'
-  use 'Townk/vim-autoclose'
-  use 'tpope/vim-surround'
-  use 'wellle/targets.vim'
-  -- justinmk/vim-sneak
-
+function lsp.plugins(use)
   use 'neovim/nvim-lspconfig'
   use 'glepnir/lspsaga.nvim'
   use 'nvim-lua/completion-nvim'
   use 'nvim-treesitter/completion-treesitter'
-  use 'simrat39/symbols-outline.nvim'
-  use 'lukas-reineke/indent-blankline.nvim'
-  -- use 'ray-x/lsp_signature.nvim'
-  -- use 'jubnzv/virtual-types.nvim'
-
-  -- Syntax
-  use 'sheerun/vim-polyglot' -- All syntax highlighting
-  use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
-  use 'tpope/vim-markdown' -- markdown
-  use 'jtratner/vim-flavored-markdown' -- markdown
-
-  -- Languages
-  --use 'dart-lang/dart-vim-plugin'
-  --use 'rescript-lang/vim-rescript'
-  --use 'edwinb/idris2-vim'
-
-  -- Folding
-  -- use 'wellle/context.vim'
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'nvim-treesitter/playground'
-  -- use 'p00f/nvim-ts-rainbow'
-  --use 'preservim/tagbar'
-  --use 'puremourning/vimspector'
 end
 
-function ide.on_lsp_attached(client, bufnr)
+function lsp.on_lsp_attached(client, bufnr)
   local opts = { noremap=true, silent=true }
 
   -- Navigation
@@ -185,7 +156,7 @@ end
 
 -- Autoformatting hooks
 is_autoformat_enabled = true;
-function ide__lsp_toggle_autoformat()
+function lsp___toggle_autoformat()
   is_autoformat_enabled = not is_autoformat_enabled
   if is_autoformat_enabled then
     print "[Autoformat enabled]"
@@ -193,39 +164,27 @@ function ide__lsp_toggle_autoformat()
     print "[Autoformat disabled]"
   end
 end
-function ide__lsp_on_save()
+function lsp___on_save()
   if is_autoformat_enabled then
     vim.lsp.buf.formatting_seq_sync(nil, 300)
   end
 end
 
-function ide.configure()
-  g.context_enabled = 0
-
-  -- Colorizer
-  require'colorizer'.setup()
-  g.indent_blankline_char = '┊'
-  g.indent_blankline_space_char = ' '
-  utils.updateScheme({
-    'IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine',
-    'IndentBlanklineChar guifg=#1f1c29 gui=nocombine',
-  })
-
+function lsp.configure()
   -- Lsp
   local nvim_lsp = require 'lspconfig'
-  for name, options in pairs(ide.lsp_servers) do
-    nvim_lsp[name].setup(utils.merge({ on_attach = ide.on_lsp_attached }, options))
+  for name, options in pairs(lsp.lsp_servers) do
+    nvim_lsp[name].setup(utils.merge({ on_attach = lsp.on_lsp_attached }, options))
   end
 
   -- Autoformatting
-  nmap("<leader>df", ":lua ide__lsp_toggle_autoformat()<CR>")
+  nmap("<leader>df", ":lua lsp___toggle_autoformat()<CR>")
   exec("autocmd FileType "
-    ..table.concat(ide.lsp_format_on_save, ",")
-    .." autocmd  BufWritePre <buffer> silent! :lua ide__lsp_on_save()")
+    ..table.concat(lsp.lsp_format_on_save, ",")
+    .." autocmd  BufWritePre <buffer> silent! :lua lsp___on_save()")
 
   -- LSP saga
-  local saga = require 'lspsaga'
-  saga.init_lsp_saga()
+  require 'lspsaga'.init_lsp_saga()
 
 
   -- Completions
@@ -237,64 +196,7 @@ function ide.configure()
     inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
   ]]
-
-  -- Treesitter
-  require'nvim-treesitter.configs'.setup {
-    ensure_installed = "all", -- "all" | "maintained" | list of languages
-    highlight = { enable = true, },
-    indent = { enable = true },
-    textobjects = { enable = true },
-  }
-
-  -- Symbols
-  nmap('<localleader>ns', ':SymbolsOutline<cr>')
-  g.symbols_outline = {
-    highlight_hovered_item = true,
-    show_guides = true,
-    auto_preview = false,
-    position = 'right',
-    keymaps = {
-        close = "q",
-        goto_location = "<CR>",
-        focus_location = "o",
-        hover_symbol = "K",
-        rename_symbol = "r",
-        code_actions = "a",
-    },
-    lsp_blacklist = {},
-  }
-
-  -- Open term in vim
-  nmap('<localleader>tn', ':split term://node<cr>')
-  nmap('<localleader>tt', ':split term://zsh<cr>')
-  vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
-
-  -- Sessions
-  nmap('<leader>sw', ':mksession! .vim.session<cr>')
-  nmap('<leader>sl', ':source .vim.session<cr>')
-
-  -- Code navigation/searching
-  --nmap('<localleader>cm', ':TagbarToggle<cr>')
-  --exec [[map <localleader> <Plug>(easymotion-prefix)]] -- <space>c
-  nmap('<c-\\>', ':noh<CR>')
-
-  nmap('<localleader>rw', '*:%s//<c-r><c-w>')
-
-  -- Folding
-  nmap('<S-Tab>', 'zR')
-  nmap('zx', 'zo')
-  nmap('zc', 'zc')
-  nmap('zf', ':ContextToggle<CR>')
-
-  -- Tagbar
-  --exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
 end
 
--- Bindings for tagbar
-function tagbarKeyBindings()
-  -- Scroll title to top
-  nmap('m', '<enter>zt<C-w><C-w>')
-end
-
-return ide
+return lsp
 
