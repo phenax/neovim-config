@@ -35,12 +35,7 @@ local ide = {
     "typescriptreact",
   },
 
-  --lsp_installables = {
-    --"eslintls",
-  --},
-
   lsp_servers = {
-    --eslintls = {},
     efm = {
       filetypes = {
         "javascript",
@@ -138,9 +133,9 @@ function ide.plugins(use)
   -- justinmk/vim-sneak
 
   use 'neovim/nvim-lspconfig'
-  --use { 'williamboman/nvim-lsp-installer', commit = "a1431f1f1c9750806760dfbe7b8b1a5435d3a277" }
   use 'glepnir/lspsaga.nvim'
   use 'nvim-lua/completion-nvim'
+  use 'nvim-treesitter/completion-treesitter'
   use 'simrat39/symbols-outline.nvim'
   use 'lukas-reineke/indent-blankline.nvim'
   -- use 'ray-x/lsp_signature.nvim'
@@ -215,17 +210,6 @@ function ide.configure()
     'IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine',
     'IndentBlanklineChar guifg=#1f1c29 gui=nocombine',
   })
-
-  ---- Lsp installation
-  --local lsp_installer_servers = require 'nvim-lsp-installer.servers'
-  --for _, name in ipairs(ide.lsp_installables) do
-    --local ok, lsp = lsp_installer_servers.get_server(name)
-    --if ok then
-      --if not lsp:is_installed() then
-        --lsp:install()
-      --end
-    --end
-  --end
 
   -- Lsp
   local nvim_lsp = require 'lspconfig'

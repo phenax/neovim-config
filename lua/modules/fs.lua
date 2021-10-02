@@ -8,7 +8,7 @@ function fs.plugins(use)
   -- use 'junegunn/fzf'
   -- use 'junegunn/fzf.vim'
   use 'djoshea/vim-autoread'
-  use 'kyazdani42/nvim-tree.lua'
+  use { 'kyazdani42/nvim-tree.lua', commit = '71122d798482e30c599d78aa7ae4a756c6e81a79' }
   use {
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
