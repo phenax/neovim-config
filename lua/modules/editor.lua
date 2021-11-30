@@ -98,6 +98,9 @@ function editor.configure()
   nmap('zc', 'zc')
   nmap('zf', ':ContextToggle<CR>')
 
+  nmap('<C-n>', '10j')
+  nmap('<C-m>', '10k')
+
   -- Tagbar
   --exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
 end
