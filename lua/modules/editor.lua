@@ -23,8 +23,8 @@ function editor.plugins(use)
   -- use 'jtratner/vim-flavored-markdown' -- markdown
 
   -- Languages
+  use 'rescript-lang/vim-rescript'
   --use 'dart-lang/dart-vim-plugin'
-  --use 'rescript-lang/vim-rescript'
   --use 'edwinb/idris2-vim'
 
   -- Folding
@@ -36,6 +36,10 @@ end
 
 function editor.configure()
   g.context_enabled = 0
+
+  g.rescript_bsb_exe = "bsb"
+  g.rescript_bsc_exe = "bsc"
+  g.rescript_legacy_mode = 1
 
   -- Colorizer
   require'colorizer'.setup()

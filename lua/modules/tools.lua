@@ -3,7 +3,7 @@ local tools = {}
 
 function tools.plugins(use)
   -- use 'metakirby5/codi.vim'
-  use 'ciaranm/detectindent'
+  -- use 'ciaranm/detectindent'
   --use 'editorconfig/editorconfig-vim'
 
   -- Search todo,fixme, etc comments
@@ -13,7 +13,7 @@ end
 function tools.configure()
   g.searchtasks_list = {"TODO", "FIXME"} -- :SearchTasks
 
-  exec [[autocmd BufEnter * :DetectIndent]]
+  -- exec [[autocmd BufEnter * :DetectIndent]]
 
   -- Move line up and down
   utils.xmap('K', ":move '<-2<cr>gv-gv")
@@ -37,6 +37,10 @@ function tools.configure()
   -- Markdown tagbar
   g.tagbar_type_markdown = tools.get_md_tagbar_config('markdown')
   g.tagbar_type_vimwiki = tools.get_md_tagbar_config('vimwiki')
+end
+
+function SetIndent(indent)
+  exec(":set shiftwidth=".. indent .." expandtab")
 end
 
 function tools.get_md_tagbar_config(ftype)

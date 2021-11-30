@@ -20,7 +20,7 @@
   "languageserver": {
     "rescript": {
       "enable": true,
-      "module": "~/.local/share/nvim/site/pack/packer/start/vim-rescript/rescript-vscode/extension/server/out/server.js",
+      "module": "/home/imsohexy/.local/share/nvim/site/pack/packer/start/vim-rescript/server/out/server.js",
       "args": [
         "--node-ipc"
       ],
@@ -82,7 +82,7 @@
 
 
   // others
-  "codeLens.enable": true,
+  "codeLens.enable": false,
   "typescript.showUnused": true,
   "hover.floatConfig": {
     "border": true
