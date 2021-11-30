@@ -35,13 +35,14 @@ function git.configure()
   nmap('<localleader>gm', ':GitMessenger<cr>')
 
   -- Add
-  nmap('<localleader>ga.', ':G add .<cr>')
-  nmap('<localleader>gaf', ':G add %<cr>')
+  nmap('<localleader>ga.', ':Git add .<cr>')
+  nmap('<localleader>gaf', ':Git add %<cr>')
 
   -- Add/Commit/Push/Pull
-  nmap('<localleader>gc', ':Gcommit<cr>')
-  nmap('<localleader>gpp', ':Gpush<cr>')
-  nmap('<localleader>gpu', ':Gpull<cr>')
+  nmap('<localleader>gcc', ':Git commit<cr>')
+  nmap('<localleader>gca', ':Git commit --amend<cr>')
+  nmap('<localleader>gpp', ':Git push<cr>')
+  nmap('<localleader>gpu', ':Git pull<cr>')
 end
 
 return git
