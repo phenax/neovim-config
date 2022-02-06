@@ -12,7 +12,6 @@ function theme.plugins(use)
   use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
 
-  use 'folke/lsp-colors.nvim'
   use 'itchyny/lightline.vim'
   use 'mengelbrecht/lightline-bufferline'
 end
@@ -47,12 +46,21 @@ function theme.configure(use)
 end
 
 function theme.lsptheme()
-  -- virtual text colors
-  require("lsp-colors").setup({
+  local diagnosticColors = {
     Error = "#db4b4b",
-    Warning = "#e0af68",
-    Information = "#513970",
+    Warn = "#e0af68",
+    Info = "#513970",
     Hint = "#513970"
+  }
+  updateScheme({
+    'DiagnosticError guifg=' .. diagnosticColors.Error,
+    'DiagnosticWarn guifg=' .. diagnosticColors.Warn,
+    'DiagnosticInfo guifg=' .. diagnosticColors.Info,
+    'DiagnosticHint guifg=' .. diagnosticColors.Hint,
+    'DiagnosticUnderlineError guifg=' .. diagnosticColors.Error,
+    'DiagnosticUnderlineWarn guifg=' .. diagnosticColors.Warn,
+    'DiagnosticUnderlineInfo guifg=' .. diagnosticColors.Info,
+    'DiagnosticUnderlineHint guifg=' .. diagnosticColors.Hint,
   })
 end
 

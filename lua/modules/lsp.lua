@@ -144,7 +144,6 @@ local lsp = {
 
 function lsp.plugins(use)
   use 'neovim/nvim-lspconfig'
-  use 'glepnir/lspsaga.nvim'
 
   -- completion
   use 'hrsh7th/nvim-cmp'
@@ -161,22 +160,28 @@ function lsp.on_lsp_attached(client, bufnr)
   local opts = { noremap=true, silent=true }
 
   -- Navigation
-  nmap_options('<localleader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  nmap_options('<localleader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  nmap_options('<localleader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   nmap_options('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  --nmap_options('K', ':Lspsaga hover_doc<CR>', opts)
+
+  nmap_options('gr', '<cmd>Telescope lsp_references<cr>', opts)
+  nmap_options('<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+
+  nmap_options('gd', '<cmd>Telescope lsp_definitions<cr>', opts)
+  nmap_options('<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+
+  nmap_options('gt', '<cmd>Telescope lsp_type_definitions<cr>', opts)
+  nmap_options('<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 
   -- Refactor actions
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  nmap_options('<localleader>aa', '<cmd>Telescope lsp_code_actions<cr>', opts)
+  nmap_options('<leader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
   -- Diagnostics
-  nmap_options('<localleader>d', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
+  nmap_options('<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  nmap_options('<localleader>d', '<cmd>Telescope diagnostics<cr>', opts)
   nmap_options('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   nmap_options(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  nmap_options('<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 end
 
 -- function lsp__code_action_listener()
@@ -205,6 +210,21 @@ function lsp.configure()
   exec("autocmd FileType "
     ..table.concat(lsp.lsp_format_on_save, ",")
     .." autocmd  BufWritePre <buffer> silent! :lua lsp___on_save()")
+
+
+  -- diagnostics config
+  vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    severity_sort = false,
+    virtual_text = {
+      prefix = '■',
+    },
+    float = {
+      source = "always",
+    },
+  })
 
   -- LSP saga
   -- require 'lspsaga'.init_lsp_saga()
