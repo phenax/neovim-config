@@ -14,6 +14,8 @@
     "rust",
     "vue"
   ],
+  "rust-client.disableRustup": true,
+  "rust.show_warnings": true,
 
   // LSP
   "eslint.packageManager": "yarn",
@@ -54,7 +56,10 @@
       ],
       "rootPatterns": [
         "elm.json"
-      ]
+      ],
+      "initializationOptions": {
+        "elmReviewDiagnostics": "warning"
+      }
     },
     "haskell": {
       "command": "haskell-language-server-wrapper",
