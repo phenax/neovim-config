@@ -46,21 +46,23 @@ function theme.configure(use)
 end
 
 function theme.lsptheme()
-  local diagnosticColors = {
+  local lensColors = {
     Error = "#db4b4b",
-    Warn = "#e0af68",
-    Info = "#513970",
-    Hint = "#513970"
+    Warn = "#ffaf68",
+    Info = "#d0bf78",
+    Hint = "#513970",
+    Lens = "#513970",
   }
   updateScheme({
-    'DiagnosticError guifg=' .. diagnosticColors.Error,
-    'DiagnosticWarn guifg=' .. diagnosticColors.Warn,
-    'DiagnosticInfo guifg=' .. diagnosticColors.Info,
-    'DiagnosticHint guifg=' .. diagnosticColors.Hint,
-    'DiagnosticUnderlineError guifg=' .. diagnosticColors.Error,
-    'DiagnosticUnderlineWarn guifg=' .. diagnosticColors.Warn,
-    'DiagnosticUnderlineInfo guifg=' .. diagnosticColors.Info,
-    'DiagnosticUnderlineHint guifg=' .. diagnosticColors.Hint,
+    'DiagnosticError guifg=' .. lensColors.Error,
+    'DiagnosticWarn guifg=' .. lensColors.Warn,
+    'DiagnosticInfo guifg=' .. lensColors.Info,
+    'DiagnosticHint guifg=' .. lensColors.Hint,
+    'DiagnosticUnderlineError guifg=' .. lensColors.Error,
+    'DiagnosticUnderlineWarn guifg=' .. lensColors.Warn,
+    'DiagnosticUnderlineInfo guifg=' .. lensColors.Info,
+    'DiagnosticUnderlineHint guifg=' .. lensColors.Hint,
+    'LspCodeLens guifg=' .. lensColors.Lens,
   })
 end
 

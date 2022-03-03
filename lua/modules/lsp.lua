@@ -8,20 +8,6 @@ function capabilityDisableFormatting()
   return cap
 end
 
--- local eslint = {
---   lintCommand = "eslint_d -f visualstudio --stdin --stdin-filename ${INPUT}", -- -f unix
---   lintStdin = true,
---   --lintFormats = {"%f:%l:%c: %m"},
---   lintFormats = {"%f(%l,%c): %tarning %m", "%f(%l,%c): %rror %m"},
---   lintIgnoreExitCode = true,
--- 
---   formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
---   formatStdin = true,
--- 
---   --hoverCommand = ""
---   --hoverStdin = true,
--- }
-
 local lsp = {
   lsp_format_on_save = {
     "haskell",
@@ -36,30 +22,6 @@ local lsp = {
   },
 
   lsp_servers = {
-    -- efm = {
-    --   filetypes = {
-    --     "javascript",
-    --     "typescript",
-    --     "javascriptreact",
-    --     "typescriptreact",
-    --     "vue",
-    --   },
-    --   init_options = {
-    --     documentFormatting = true,
-    --     hover = true,
-    --     documentSymbol = true,
-    --     codeAction = true,
-    --   },
-    --   settings = {
-    --     rootMarkers = {".eslintrc.js", ".eslintrc.json"},
-    --     languages = {
-    --       typescript = { eslint },
-    --       javascript = { eslint },
-    --       vue = { eslint },
-    --     },
-    --   },
-    -- },
-
     eslint = {},
 
     tsserver = {
@@ -77,14 +39,11 @@ local lsp = {
             script = true,
             interpolation = true,
             template = true,
-            templateProps = true,
+            templateProps = false,
           },
           completion = {
             autoImport = true,
             tagCasing = "kebab",
-          },
-          experimental = {
-            templateInterpolationService = true,
           },
         },
       },
@@ -136,6 +95,7 @@ local lsp = {
       settings = {
         languageServerHaskell = {
           hlintOn = true,
+          completionSnippetsOn = true,
         },
       },
     },
@@ -182,16 +142,25 @@ function lsp.on_lsp_attached(client, bufnr)
   nmap_options('<localleader>d', '<cmd>Telescope diagnostics<cr>', opts)
   nmap_options('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   nmap_options(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+
+  -- Refresh code lenses
+  if client.resolved_capabilities.code_lens then
+    vim.lsp.codelens.refresh()
+    exec [[ autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh() ]]
+  end
 end
 
--- function lsp__code_action_listener()
---   local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }
---   local params = lsp_util.make_range_params()
---   params.context = context
---   vim.lsp.buf_request(0, 'textDocument/codeAction', params, function(err, _, result)
---     -- do something with result - e.g. check if empty and show some indication such as a sign
---   end)
--- end
+function check_capability(feature)
+  local clients = vim.lsp.get_active_clients()
+
+  for _, client in pairs(clients) do
+    if client.resolved_capabilities[feature] then
+      return true
+    end
+  end
+
+  return false
+end
 
 function lsp.configure()
   -- Lsp
@@ -210,7 +179,6 @@ function lsp.configure()
   exec("autocmd FileType "
     ..table.concat(lsp.lsp_format_on_save, ",")
     .." autocmd  BufWritePre <buffer> silent! :lua lsp___on_save()")
-
 
   -- diagnostics config
   vim.diagnostic.config({
@@ -273,8 +241,6 @@ function lsp.configure()
       end,
     }
   }
-
-  -- exec [[ autocmd CursorHold,CursorHoldI * lua lsp__code_action_listener() ]]
 end
 
 -- Autoformatting hooks

@@ -37,6 +37,14 @@ function utils.append(k, v)
   utils.set_opt(k, v, '+=')
 end
 
+function print_keys(tbl)
+  local res = ""
+  for key,_ in pairs(tbl) do
+    res = res .. "," .. key
+  end
+  print(res)
+end
+
 function utils.mapList(func, array)
   local new_array = {}
   for i,v in ipairs(array) do

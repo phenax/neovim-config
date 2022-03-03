@@ -24,6 +24,7 @@ function editor.plugins(use)
 
   -- Languages
   use 'rescript-lang/vim-rescript'
+  use 'ashinkarov/nvim-agda'
   --use 'dart-lang/dart-vim-plugin'
   --use 'edwinb/idris2-vim'
 
@@ -47,6 +48,10 @@ function editor.configure()
   g.rescript_bsb_exe = "bsb"
   g.rescript_bsc_exe = "bsc"
   g.rescript_legacy_mode = 1
+
+  g.nvim_agda_settings = {
+    agda = 'agda',
+  }
 
   -- Colorizer
   require'colorizer'.setup()
