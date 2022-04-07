@@ -5,7 +5,8 @@ local nmap_options = utils.nmap_options
 local editor = {}
 
 function editor.plugins(use)
-  use 'scrooloose/nerdcommenter'
+  -- use 'scrooloose/nerdcommenter'
+  use 'numToStr/Comment.nvim'
   use 'Townk/vim-autoclose'
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
@@ -87,6 +88,18 @@ function editor.configure()
     },
     lsp_blacklist = {},
   }
+
+  require('Comment').setup({
+    padding = true,
+    toggler = {
+        line = '<leader>cc',
+        block = '<leader>bc',
+    },
+    opleader = {
+      line = '<leader>c',
+      block = '<leader>b',
+    },
+  })
 
   -- Open term in vim
   nmap('<localleader>tn', ':split term://node<cr>')
