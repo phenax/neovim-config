@@ -5,7 +5,6 @@ local nmap_options = utils.nmap_options
 local editor = {}
 
 function editor.plugins(use)
-  -- use 'scrooloose/nerdcommenter'
   use 'numToStr/Comment.nvim'
   use 'Townk/vim-autoclose'
   use 'tpope/vim-surround'

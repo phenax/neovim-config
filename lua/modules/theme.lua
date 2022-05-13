@@ -102,7 +102,7 @@ function theme.lightline()
       total_lines = '[%L]',
     },
     component_function = {
-      gitbranch = 'fugitive#head',
+      gitbranch = 'FugitiveHead',
     },
     component_type = { buffers = 'tabsel' },
     tabline = { left = { {'buffers'} }, right = { {} } },
