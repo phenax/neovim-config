@@ -2,65 +2,127 @@ local utils = require 'utils'
 local nmap = utils.nmap
 
 local notes = {
-  path = '~/.config/vimwiki/',
+  path = '~/nixos/extras/notes',
   max_fold_level = 20,
   min_fold_level = 1,
 }
 
 function notes.plugins(use)
+  use 'vimwiki/vimwiki'
+  use 'folke/zen-mode.nvim'
   use {
     'nvim-neorg/neorg',
-    -- requires = {
-    --   {'nvim-lua/plenary.nvim'},
-    --   {'nvim-telescope/telescope.nvim'},
-    --   {'nvim-treesitter/nvim-treesitter'},
-    -- }
+    requires = {
+      {'nvim-neorg/neorg-telescope'},
+      {'nvim-lua/plenary.nvim'},
+      {'nvim-telescope/telescope.nvim'},
+      {'nvim-treesitter/nvim-treesitter'},
+      {'folke/zen-mode.nvim'},
+    }
   }
-  use 'vimwiki/vimwiki'
-  use 'itchyny/calendar.vim'
 end
 
 function notes.neorg_config()
-  local notes_dir = "~/nixos/extras/notes"
+  function space(key)
+    return "<localleader>" .. key
+  end
+  function leader(key)
+    return "<leader>" .. key
+  end
+
   return {
     load = {
-      ["core.defaults"] = {},
-      ["core.export"] = {},
-      ["core.export.markdown"] = {},
-      ["core.norg.completion"] = {
-        config = { engine = "nvim-cmp" }
+      ['core.defaults'] = {},
+      ['core.export'] = {},
+      ['core.export.markdown'] = {},
+      ['core.integrations.telescope'] = {},
+      ['core.norg.qol.toc'] = {},
+      ['core.norg.completion'] = {
+        config = {
+          engine = 'nvim-cmp',
+        }
       },
-      ["core.norg.qol.toc"] = {},
-      -- ["core.presenter"] = {},
-      ["core.norg.dirman"] = {
+
+      ['core.presenter'] = {
+        config = {
+          zen_mode = 'zen-mode'
+        },
+      },
+
+      ['core.norg.dirman'] = {
         config = {
           workspaces = {
-            personal = notes_dir .. "/personal",
-            work = notes_dir .. "/work",
+            personal = notes.path .. '/personal',
+            work = notes.path .. '/work',
           },
-          default_workspace = "personal",
+          default_workspace = 'personal',
         }
       },
-      ["core.norg.journal"] = {
+
+      ['core.norg.journal'] = {
         config = {
-          workspace = "personal"
+          workspace = 'personal'
         }
       },
-      ["core.gtd.base"] = {
+
+      ['core.gtd.base'] = {
         config = {
-          workspace = "work",
+          workspace = 'work',
         }
       },
-      -- ["core.norg.concealer"] = {
-      --   config = {
-      --     icons = {
-      --       todo = { enabled = false },
-      --       list = { enabled = false },
-      --       link = { enabled = false },
-      --       ordered = { enabled = false },
-      --     }
-      --   },
-      -- },
+
+      ['core.norg.concealer'] = {
+        config = {
+          icons = {
+            enabled = false,
+          }
+        },
+      },
+
+      ['core.keybinds'] = {
+        config = {
+          hook = function(keybinds)
+            keybinds.unmap('norg', 'n', space 'nn')
+
+            keybinds.map_event_to_mode('norg', {
+              n = {
+                -- Tasks
+                { space 'cu', 'core.norg.qol.todo_items.todo.task_undone' },
+                { space 'cp', 'core.norg.qol.todo_items.todo.task_pending' },
+                { space 'cd', 'core.norg.qol.todo_items.todo.task_done' },
+                { space 'ci', 'core.norg.qol.todo_items.todo.task_important' },
+                { space 'ch', 'core.norg.qol.todo_items.todo.task_on_hold' },
+                { space 'cc', 'core.norg.qol.todo_items.todo.task_cancelled' },
+                { space 'cr', 'core.norg.qol.todo_items.todo.task_recurring' },
+
+                -- GTD views
+                { leader 'tv', 'core.gtd.base.views' },
+                { leader 'te', 'core.gtd.base.edit' },
+
+                -- Notes
+                { space 'na', 'core.norg.dirman.new.note' },
+              },
+            }, {
+              silent = true,
+              noremap = true,
+            })
+
+            keybinds.map_to_mode('norg', {
+              n = {
+                { space 'cn', '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
+                { leader 'jn',  '<cmd>Neorg journal today<cr>' },
+                { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
+                { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
+                { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
+                { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
+              },
+            }, {
+              silent = true,
+              noremap = true,
+            })
+          end,
+        }
+      }
     }
   }
 end
@@ -87,6 +149,21 @@ end
 
 function notes.configure()
   require('neorg').setup(notes.neorg_config())
+  require("zen-mode").setup {
+    window = {
+      width = .50,
+      height = .80,
+      options = {
+        signcolumn = "no",
+        number = false,
+        relativenumber = false,
+        cursorline = false,
+        cursorcolumn = false,
+        foldcolumn = "0",
+        list = false,
+      },
+    },
+  }
 
   g.vimwiki_folding = 'expr'
   g.vimwiki_fold_blank_lines = 0
@@ -106,11 +183,6 @@ function notes.configure()
 
   -- URL editor commands
   nmap('<localleader>hts', ':s/http:/https:/g<CR>') -- http to https
-
-  -- Calender/clock
-  exec [[command! Cal :Calendar -split=vertical]]
-  exec [[command! Clock :Calendar -split=horizontal -view=clock]]
-  nmap('<localleader>cal', ':Cal<CR>')
 end
 
 function notes__toggle_foldlevel()
