@@ -13,10 +13,10 @@ function notes.plugins(use)
   use {
     'nvim-neorg/neorg',
     requires = {
-      {'nvim-neorg/neorg-telescope'},
       {'nvim-lua/plenary.nvim'},
-      {'nvim-telescope/telescope.nvim'},
       {'nvim-treesitter/nvim-treesitter'},
+      {'nvim-telescope/telescope.nvim'},
+      {'nvim-neorg/neorg-telescope'},
       {'folke/zen-mode.nvim'},
     }
   }
@@ -68,6 +68,7 @@ function notes.neorg_config()
       ['core.gtd.base'] = {
         config = {
           workspace = 'work',
+          inbox = 'index.norg',
         }
       },
 
@@ -81,52 +82,59 @@ function notes.neorg_config()
 
       ['core.keybinds'] = {
         config = {
-          hook = function(keybinds)
-            keybinds.unmap('norg', 'n', space 'nn')
-
-            keybinds.map_event_to_mode('norg', {
-              n = {
-                -- Tasks
-                { space 'cu', 'core.norg.qol.todo_items.todo.task_undone' },
-                { space 'cp', 'core.norg.qol.todo_items.todo.task_pending' },
-                { space 'cd', 'core.norg.qol.todo_items.todo.task_done' },
-                { space 'ci', 'core.norg.qol.todo_items.todo.task_important' },
-                { space 'ch', 'core.norg.qol.todo_items.todo.task_on_hold' },
-                { space 'cc', 'core.norg.qol.todo_items.todo.task_cancelled' },
-                { space 'cr', 'core.norg.qol.todo_items.todo.task_recurring' },
-
-                -- GTD views
-                { leader 'tv', 'core.gtd.base.views' },
-                { leader 'te', 'core.gtd.base.edit' },
-
-                -- Notes
-                { space 'na', 'core.norg.dirman.new.note' },
-              },
-            }, {
-              silent = true,
-              noremap = true,
-            })
-
-            keybinds.map_to_mode('norg', {
-              n = {
-                { space 'cn', '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
-                { leader 'jn',  '<cmd>Neorg journal today<cr>' },
-                { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
-                { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
-                { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
-                { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
-              },
-            }, {
-              silent = true,
-              noremap = true,
-            })
-          end,
+          hook = notes.neorg_keybindings,
         }
       }
     }
   }
 end
 
+function notes.neorg_keybindings(keybinds)
+  keybinds.unmap('norg', 'n', space 'nn')
+
+  keybinds.map_event_to_mode('norg',
+    {
+      n = {
+        -- Tasks
+        { space 'cu', 'core.norg.qol.todo_items.todo.task_undone' },
+        { space 'cp', 'core.norg.qol.todo_items.todo.task_pending' },
+        { space 'cd', 'core.norg.qol.todo_items.todo.task_done' },
+        { space 'ci', 'core.norg.qol.todo_items.todo.task_important' },
+        { space 'ch', 'core.norg.qol.todo_items.todo.task_on_hold' },
+        { space 'cc', 'core.norg.qol.todo_items.todo.task_cancelled' },
+        { space 'cr', 'core.norg.qol.todo_items.todo.task_recurring' },
+
+        -- GTD views
+        { leader 'tv', 'core.gtd.base.views' },
+        { leader 'te', 'core.gtd.base.edit' },
+
+        -- Notes
+        { space 'na', 'core.norg.dirman.new.note' },
+      },
+    },
+    {
+      silent = true,
+      noremap = true,
+    }
+  )
+
+  keybinds.map_to_mode('norg',
+    {
+      n = {
+        { space 'cn', '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
+        { leader 'jn',  '<cmd>Neorg journal today<cr>' },
+        { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
+        { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
+        { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
+        { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
+      },
+    },
+    {
+      silent = true,
+      noremap = true,
+    }
+  )
+end
 
 function notes__onNewLine(text)
   -- TODO: Refactor to lua sometime maybe?
@@ -140,7 +148,6 @@ function notes__onvimwiki()
   nmap('<localleader>da',  ':VimwikiMakeDiaryNote<CR>')
   nmap('<localleader>dx',  ':VimwikiDiaryGenerateLinks<CR>')
   nmap('<localleader>di',  '<leader>wi')
-
   -- Checklist
   nmap('<localleader>cc',  ':VimwikiToggleListItem<CR>')
   nmap('<localleader>li',  ':lua notes__onNewLine("  * ")<CR>')
@@ -148,7 +155,6 @@ function notes__onvimwiki()
 end
 
 function notes.configure()
-  require('neorg').setup(notes.neorg_config())
   require("zen-mode").setup {
     window = {
       width = .50,
@@ -164,6 +170,7 @@ function notes.configure()
       },
     },
   }
+  require('neorg').setup(notes.neorg_config())
 
   g.vimwiki_folding = 'expr'
   g.vimwiki_fold_blank_lines = 0
