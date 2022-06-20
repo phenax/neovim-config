@@ -11,6 +11,7 @@ end
 local lsp = {
   lsp_format_on_save = {
     "haskell",
+    "purescript",
     "nix",
     "rust",
     "elm",
@@ -99,6 +100,8 @@ local lsp = {
         },
       },
     },
+
+    purescriptls = {},
   },
 }
 
