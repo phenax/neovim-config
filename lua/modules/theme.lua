@@ -63,6 +63,7 @@ function theme.lsptheme()
     'DiagnosticUnderlineInfo guifg=' .. lensColors.Info,
     'DiagnosticUnderlineHint guifg=' .. lensColors.Hint,
     'LspCodeLens guifg=' .. lensColors.Lens,
+    'LspSignatureActiveParameter guifg=' .. lensColors.Info,
   })
 end
 

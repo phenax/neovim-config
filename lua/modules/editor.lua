@@ -19,20 +19,18 @@ function editor.plugins(use)
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
   use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
-  -- use 'tpope/vim-markdown' -- markdown
-  -- use 'jtratner/vim-flavored-markdown' -- markdown
 
   -- Languages
-  use 'rescript-lang/vim-rescript'
-  use 'ashinkarov/nvim-agda'
-  --use 'dart-lang/dart-vim-plugin'
-  --use 'edwinb/idris2-vim'
+  -- use 'rescript-lang/vim-rescript'
+  -- use 'ashinkarov/nvim-agda'
+  -- use 'dart-lang/dart-vim-plugin'
+  -- use 'edwinb/idris2-vim'
 
   -- Folding
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'nvim-treesitter/playground'
-  -- use 'p00f/nvim-ts-rainbow'
-  --use 'preservim/tagbar'
+  use 'p00f/nvim-ts-rainbow'
+  -- use 'preservim/tagbar'
   -- use {
   --   'ThePrimeagen/refactoring.nvim',
   --   requires = {
@@ -78,12 +76,12 @@ function editor.configure()
     auto_preview = false,
     position = 'right',
     keymaps = {
-        close = "q",
-        goto_location = "<CR>",
-        focus_location = "o",
-        hover_symbol = "K",
-        rename_symbol = "r",
-        code_actions = "a",
+      close = "q",
+      goto_location = "<CR>",
+      focus_location = "o",
+      hover_symbol = "K",
+      rename_symbol = "r",
+      code_actions = "a",
     },
     lsp_blacklist = {},
   }

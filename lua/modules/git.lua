@@ -7,7 +7,7 @@ function git.plugins(use)
   use 'tpope/vim-fugitive'
   use 'airblade/vim-gitgutter'
   use 'rhysd/git-messenger.vim'
-  use 'rbong/vim-flog'
+  -- use 'rbong/vim-flog'
 end
 
 function git.configure()
@@ -33,6 +33,7 @@ function git.configure()
   nmap('<localleader>gll', ':Commits<cr>')
   nmap('<localleader>glf', ':BCommits<cr>')
   nmap('<localleader>gm', ':GitMessenger<cr>')
+  nmap('<localleader>gbb', ':Telescope git_branches<cr>')
 
   -- Add
   nmap('<localleader>ga.', ':Git add .<cr>')

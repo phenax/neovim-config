@@ -9,7 +9,6 @@ local notes = {
 
 function notes.plugins(use)
   use 'vimwiki/vimwiki'
-  use 'folke/zen-mode.nvim'
   use {
     'nvim-neorg/neorg',
     requires = {
@@ -181,15 +180,13 @@ function notes.configure()
     ext = '.md'
   }}
 
-  nmap('<localleader><Tab>', ':lua notes__toggle_foldlevel()<CR>')
+  nmap('<leader><Tab>', ':lua notes__toggle_foldlevel()<CR>')
 
   nmap('<leader>==', ':setlocal spell! spelllang=en_us<CR>')
+  nmap('z=', ':Telescope spell_suggest<CR>')
 
   exec [[au BufRead,BufNewFile *.md set filetype=vimwiki]]
   exec [[autocmd FileType vimwiki,markdown lua notes__onvimwiki()]]
-
-  -- URL editor commands
-  nmap('<localleader>hts', ':s/http:/https:/g<CR>') -- http to https
 end
 
 function notes__toggle_foldlevel()

@@ -107,11 +107,20 @@ local lsp = {
 
 function lsp.plugins(use)
   use 'neovim/nvim-lspconfig'
+  use 'ray-x/lsp_signature.nvim'
+  -- use 'glepnir/lspsaga.nvim'
 
   -- completion
-  use 'hrsh7th/nvim-cmp'
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'ray-x/cmp-treesitter'
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-buffer',
+      'ray-x/cmp-treesitter',
+      'onsails/lspkind-nvim',
+    }
+  }
 
   -- snippets
   use 'L3MON4D3/LuaSnip'
@@ -151,18 +160,12 @@ function lsp.on_lsp_attached(client, bufnr)
     vim.lsp.codelens.refresh()
     exec [[ autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh() ]]
   end
-end
 
-function check_capability(feature)
-  local clients = vim.lsp.get_active_clients()
-
-  for _, client in pairs(clients) do
-    if client.resolved_capabilities[feature] then
-      return true
-    end
-  end
-
-  return false
+  local config = {
+    bind = true,
+    hi_parameter = 'LspSignatureActiveParameter',
+  }
+  require 'lsp_signature'.on_attach(config, bufnr)
 end
 
 function lsp.configure()
@@ -206,11 +209,32 @@ function lsp.configure()
 
   require("luasnip.loaders.from_vscode").load()
 
+  local cmpDown = function(fallback)
+    if cmp.visible() then
+      cmp.select_next_item()
+    elseif luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    else
+      fallback()
+    end
+  end
+  local cmpUp = function(fallback)
+    if cmp.visible() then
+      cmp.select_prev_item()
+    elseif luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    else
+      fallback()
+    end
+  end
+
   cmp.setup {
     sources = {
       { name = 'nvim_lsp' },
       { name = 'treesitter' },
       { name = 'luasnip' },
+      { name = 'path' },
+      { name = 'buffer' },
     },
     snippet = {
       expand = function(args)
@@ -218,33 +242,38 @@ function lsp.configure()
       end,
     },
     mapping = {
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
       ['<CR>'] = cmp.mapping.confirm {
         behavior = cmp.ConfirmBehavior.Replace,
         select = true,
       },
-      ['<Tab>'] = function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
-        else
-          fallback()
-        end
-      end,
-      ['<S-Tab>'] = function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        elseif luasnip.jumpable(-1) then
-          luasnip.jump(-1)
-        else
-          fallback()
-        end
-      end,
-    }
+      ['<down>'] = cmpDown,
+      ['<up>'] = cmpUp,
+      ['<C-j>'] = cmpDown,
+      ['<C-k>'] = cmpUp,
+      ['<Tab>'] = cmpDown,
+      ['<S-Tab>'] = cmpUp,
+    },
+    -- formatting = {
+    --   format = require('lspkind').cmp_format {
+    --     mode = 'text_symbol',
+    --     maxwidth = 50,
+    --   }
+    -- }
   }
 end
+
+-- function check_capability(feature)
+--   local clients = vim.lsp.get_active_clients()
+--
+--   for _, client in pairs(clients) do
+--     if client.resolved_capabilities[feature] then
+--       return true
+--     end
+--   end
+--
+--   return false
+-- end
 
 -- Autoformatting hooks
 is_autoformat_enabled = true;

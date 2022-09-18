@@ -5,8 +5,6 @@ local nmap_silent = utils.nmap_silent
 local fs = {}
 
 function fs.plugins(use)
-  -- use 'junegunn/fzf'
-  -- use 'junegunn/fzf.vim'
   use 'djoshea/vim-autoread'
   use { 'kyazdani42/nvim-tree.lua', commit = '71122d798482e30c599d78aa7ae4a756c6e81a79' }
   use {
@@ -72,6 +70,8 @@ function fs.configure()
       use_less = true,
     }
   }
+  -- Resume last search
+  nmap('<leader>tr', ':Telescope resume<CR>')
 
   -- Fuzzy file finder
   if utils.fexists('.git') then

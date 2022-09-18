@@ -37,7 +37,7 @@ function utils.append(k, v)
   utils.set_opt(k, v, '+=')
 end
 
-function print_keys(tbl)
+function utils.print_keys(tbl)
   local res = ""
   for key,_ in pairs(tbl) do
     res = res .. "," .. key
