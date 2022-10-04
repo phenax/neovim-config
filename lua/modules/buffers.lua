@@ -17,16 +17,18 @@ function buffers.configure()
   nmap('<localleader><tab>', ':b#<cr>') -- Toggle between buffers
   nmap('<C-k>', ':bp<CR>')
   nmap('<C-j>', ':bn<CR>')
-  nmap('<localleader>1', '<Plug>lightline#bufferline#go(1)') -- Go to nth buffer
-  nmap('<localleader>2', '<Plug>lightline#bufferline#go(2)')
-  nmap('<localleader>3', '<Plug>lightline#bufferline#go(3)')
-  nmap('<localleader>4', '<Plug>lightline#bufferline#go(4)')
-  nmap('<localleader>5', '<Plug>lightline#bufferline#go(5)')
-  nmap('<localleader>6', '<Plug>lightline#bufferline#go(6)')
-  nmap('<localleader>7', '<Plug>lightline#bufferline#go(7)')
-  nmap('<localleader>8', '<Plug>lightline#bufferline#go(8)')
-  nmap('<localleader>9', '<Plug>lightline#bufferline#go(9)')
-  nmap('<localleader>0', '<Plug>lightline#bufferline#go(10)')
+
+  -- Go to nth buffer
+  nmap('<localleader>1', ':LualineBuffersJump! 1<CR>') 
+  nmap('<localleader>2', ':LualineBuffersJump! 2<CR>')
+  nmap('<localleader>3', ':LualineBuffersJump! 3<CR>')
+  nmap('<localleader>4', ':LualineBuffersJump! 4<CR>')
+  nmap('<localleader>5', ':LualineBuffersJump! 5<CR>')
+  nmap('<localleader>6', ':LualineBuffersJump! 6<CR>')
+  nmap('<localleader>7', ':LualineBuffersJump! 7<CR>')
+  nmap('<localleader>8', ':LualineBuffersJump! 8<CR>')
+  nmap('<localleader>9', ':LualineBuffersJump! 9<CR>')
+  nmap('<localleader>0', ':LualineBuffersJump! 10<CR>')
 
   -- Split window navigation
   nmap('<M-h>', '<C-w>h')

@@ -10,6 +10,7 @@ vim.cmd [[packadd packer.nvim]]
 local packer = require('packer')
 return packer.startup(function()
   use {'wbthomason/packer.nvim', opt = true} -- Packer
+  -- use 'dstein64/vim-startuptime'
 
   local modules = {
     require 'modules.theme',
@@ -17,8 +18,8 @@ return packer.startup(function()
     require 'modules.fs',
     require 'modules.git',
     -- require 'modules.coc',
-    require 'modules.lsp',
     require 'modules.editor',
+    require 'modules.lsp',
     require 'modules.notes',
     require 'modules.tools',
   }

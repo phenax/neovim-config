@@ -27,17 +27,9 @@ function editor.plugins(use)
   -- use 'edwinb/idris2-vim'
 
   -- Folding
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '5dfbbcc' }
   use 'nvim-treesitter/playground'
   use 'p00f/nvim-ts-rainbow'
-  -- use 'preservim/tagbar'
-  -- use {
-  --   'ThePrimeagen/refactoring.nvim',
-  --   requires = {
-  --     {'nvim-lua/plenary.nvim'},
-  --     {'nvim-treesitter/nvim-treesitter'}
-  --   }
-  -- }
 end
 
 function editor.configure()
@@ -50,6 +42,8 @@ function editor.configure()
   g.nvim_agda_settings = {
     agda = 'agda',
   }
+
+  exec [[autocmd BufRead,BufEnter *.astro set filetype=astro]]
 
   -- Colorizer
   require'colorizer'.setup()
@@ -121,12 +115,6 @@ function editor.configure()
 
   nmap('<C-n>', '10j')
   nmap('<C-m>', '10k')
-
-  -- Tagbar
-  --exec [[autocmd FileType tagbar lua tagbarKeyBindings()]]
-
-  -- local refactor = require("refactoring")
-  -- refactor.setup({})
 end
 
 -- local function refactor(prompt_bufnr)

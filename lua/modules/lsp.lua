@@ -20,6 +20,7 @@ local lsp = {
     "javascriptreact",
     "typescript",
     "typescriptreact",
+    "astro",
   },
 
   lsp_servers = {
@@ -28,6 +29,8 @@ local lsp = {
     tsserver = {
       capabilities = capabilityDisableFormatting(),
     },
+
+    astro = {},
 
     vuels = {
       settings = {
@@ -108,6 +111,7 @@ local lsp = {
 function lsp.plugins(use)
   use 'neovim/nvim-lspconfig'
   use 'ray-x/lsp_signature.nvim'
+  use 'jubnzv/virtual-types.nvim'
   -- use 'glepnir/lspsaga.nvim'
 
   -- completion
@@ -161,11 +165,15 @@ function lsp.on_lsp_attached(client, bufnr)
     exec [[ autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh() ]]
   end
 
+  -- Show function signature
   local config = {
     bind = true,
     hi_parameter = 'LspSignatureActiveParameter',
   }
   require 'lsp_signature'.on_attach(config, bufnr)
+
+  -- Show types as virtual text
+  require'virtualtypes'.on_attach(client, bufnr)
 end
 
 function lsp.configure()

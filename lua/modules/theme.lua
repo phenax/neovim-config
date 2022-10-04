@@ -2,18 +2,19 @@ local utils = require 'utils'
 local updateScheme = utils.updateScheme
 
 local theme = {
-  colorscheme = 'material', -- xresources
-  lightline_theme = 'palenight',
+  colorscheme = 'material',
 }
 
 function theme.plugins(use)
-  use 'phenax/palenight.vim'
+  -- use 'phenax/palenight.vim'
   use 'ryanoasis/vim-devicons'
   use 'kyazdani42/nvim-web-devicons'
   use { 'kaicataldo/material.vim', branch = 'main' }
 
-  use 'itchyny/lightline.vim'
-  use 'mengelbrecht/lightline-bufferline'
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
 end
 
 function theme.configure(use)
@@ -38,9 +39,8 @@ function theme.configure(use)
     vim.go.termguicolors = true
   end
 
-  theme.lightline()
-  theme.tabs()
   theme.lsptheme()
+  theme.lualine()
 
   exec('colorscheme ' .. (theme.colorscheme))
 end
@@ -53,6 +53,7 @@ function theme.lsptheme()
     Hint = "#513970",
     Lens = "#513970",
   }
+
   updateScheme({
     'DiagnosticError guifg=' .. lensColors.Error,
     'DiagnosticWarn guifg=' .. lensColors.Warn,
@@ -67,54 +68,77 @@ function theme.lsptheme()
   })
 end
 
-function theme.tabs()
-  o.showtabline = 2
+function theme.lualine()
+  local lualine = require'lualine'
+  local theme = require'lualine.themes.iceberg_dark'
 
-  g["lightline#bufferline#show_number"] = 2
-  g["lightline#bufferline#number_separator"] = ': '
-  g["lightline#bufferline#read_only"] = ' 🔒 '
-  g["lightline#bufferline#modified"] = ' 🛑 '
-  g["lightline#bufferline#enable_devicons"] = 1
-  g["lightline#bufferline#filename_modifier"] = ':t'
-end
-
-function theme.lightline()
-  g.lightline = {
-    colorscheme = theme.lightline_theme,
-    enable = {
-      statusline = 1,
-      tabline = 1,
+  local colors = {
+    dark = {
+      '#0f0c19',
+      '#15121f',
     },
-    active = {
-      left = {
-         { 'mode' },
-         { 'gitbranch', 'readonly' },
-         { 'filename', 'dir' },
-      },
-      right = {
-         { 'lineinfo' },
-         { 'total_lines' },
-         { 'filetype' },
-      },
-    },
-    component = {
-      lineinfo = 'L %3l:%-2v',
-      dir = '%F',
-      total_lines = '[%L]',
-    },
-    component_function = {
-      gitbranch = 'FugitiveHead',
-    },
-    component_type = { buffers = 'tabsel' },
-    tabline = { left = { {'buffers'} }, right = { {} } },
-    tab = {
-      active = { 'tabnum', 'filename', 'modified' },
-      inactive = { 'tabnum', 'filename', 'modified' },
-    },
-    component_expand = {
-      buffers = 'lightline#bufferline#buffers'
+    purple = '#4e3aA3',
+    white = '#ffffff',
+    fadedwhite = '#bbc0d9',
+    gray = {
+      '#7b8099',
+      '#3e445e',
     }
-  };
+  }
+
+  theme.normal.a = { bg = colors.purple, fg = colors.white, gui = 'bold' }
+  theme.inactive.a = { bg = colors.dark[2], fg = colors.gray[1] }
+
+  local bline = { bg = colors.dark[2], fg = colors.gray[1] }
+  theme.normal.b = bline
+  theme.insert.b = bline
+  theme.visual.b = bline
+  theme.replace.b = bline
+  theme.inactive.b = bline
+
+  local cline = { bg = colors.dark[1], fg = colors.gray[2] }
+  theme.normal.c = cline
+  theme.insert.c = cline
+  theme.visual.c = cline
+  theme.replace.c = cline
+  theme.inactive.c = cline
+
+  lualine.setup {
+    options = {
+      icons_enabled = true,
+      theme = theme,
+      component_separators = { left = '', right = ''},
+      section_separators = { left = '', right = ''},
+      always_divide_middle = false,
+      globalstatus = true,
+    },
+
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'filename'},
+      lualine_c = {'%f'},
+      lualine_x = {'%r', 'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'},
+    },
+
+    tabline = {
+      lualine_a = {
+        {
+          'buffers',
+          mode = 2,
+          symbols = {
+            alternate_file = '',
+          },
+        },
+      },
+      lualine_b = {},
+      lualine_c = {},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
+    },
+  }
 end
 
 return theme;

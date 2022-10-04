@@ -8,6 +8,9 @@ function tools.plugins(use)
 
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'
+
+  -- Interactive scratchpad
+  use 'metakirby5/codi.vim'
 end
 
 function tools.configure()
@@ -18,6 +21,10 @@ function tools.configure()
   -- Move line up and down
   utils.xmap('K', ":move '<-2<cr>gv-gv")
   utils.xmap('J', ":move '<+1<cr>gv-gv")
+
+  -- Copy file path
+  exec [[command! CpPath :let @+=expand("%")]]
+  exec [[command! CpPathAbs :let @+=expand("%:p")]]
 
   -- Save
   utils.nnoremap('S', '<nop>')

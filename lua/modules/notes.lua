@@ -11,6 +11,8 @@ function notes.plugins(use)
   use 'vimwiki/vimwiki'
   use {
     'nvim-neorg/neorg',
+    commit = 'b66bbbf',
+    -- tag = '0.0.12',
     requires = {
       {'nvim-lua/plenary.nvim'},
       {'nvim-treesitter/nvim-treesitter'},
@@ -32,6 +34,7 @@ function notes.neorg_config()
   return {
     load = {
       ['core.defaults'] = {},
+      -- ['core.highlights'] = {},
       ['core.export'] = {},
       ['core.export.markdown'] = {},
       ['core.integrations.telescope'] = {},
