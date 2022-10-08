@@ -6,7 +6,10 @@ local fs = {}
 
 function fs.plugins(use)
   use 'djoshea/vim-autoread'
-  use { 'kyazdani42/nvim-tree.lua', commit = '71122d798482e30c599d78aa7ae4a756c6e81a79' }
+  use {
+    'kyazdani42/nvim-tree.lua',
+    -- commit = '71122d798482e30c599d78aa7ae4a756c6e81a79',
+  }
   use {
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
@@ -16,46 +19,69 @@ end
 function fs.configure()
   -- File tree
   nmap_silent('<localleader>nn', ':NvimTreeToggle<CR>')
-  nmap_silent('<localleader>nr', ':NvimTreeRefresh<CR>')
-  nmap_silent('<localleader>nf', ':NvimTreeFindFile<CR>')
-  g.nvim_tree_git_hl = 1
-  g.nvim_tree_lsp_diagnostics = 1
-  g.nvim_tree_add_trailing = 1
-  g.nvim_tree_auto_close = 1
-  g.nvim_tree_width = 40
+  nmap_silent('<localleader>nf', ':NvimTreeFindFileToggle<CR>')
 
-  local tree_cmd = require'nvim-tree.config'.nvim_tree_callback
-  vim.g.nvim_tree_bindings = {
-    { key = "R",              cb = tree_cmd("refresh") },
-    { key = "q",              cb = tree_cmd("close") },
+  -- g.nvim_tree_auto_close = 1
+  -- g.nvim_tree_width = 40
 
-    { key = "<CR>",           cb = tree_cmd("edit") },
-    { key = "h",              cb = tree_cmd("close_node") },
-    { key = "l",              cb = tree_cmd("edit") },
+  require('nvim-tree').setup({
+    create_in_closed_folder = true,
+    hijack_cursor = true,
+    view = {
+      adaptive_size = true,
+      centralize_selection = true,
+      -- float = {
+      --   enable = true,
+      --   open_win_config = {
+      --     border = 'single',
+      --     height = 40,
+      --   },
+      -- },
+      mappings = {
+        custom_only = true,
+        list = {
+          { key = "R",              action = "refresh" },
+          { key = "q",              action = "close" },
 
-    { key = "<C-h>",          cb = tree_cmd("dir_up") },
-    { key = "<C-l>",          cb = tree_cmd("cd") },
+          { key = "<CR>",           action = "edit" },
+          { key = "h",              action = "close_node" },
+          { key = "l",              action = "edit" },
 
-    { key = "<C-v>",          cb = tree_cmd("vsplit") },
-    { key = "<C-s>",          cb = tree_cmd("split") },
+          { key = "<C-h>",          action = "dir_up" },
+          { key = "<C-l>",          action = "cd" },
 
-    { key = "<",              cb = tree_cmd("prev_sibling") },
-    { key = ">",              cb = tree_cmd("next_sibling") },
+          { key = "<C-v>",          action = "vsplit" },
+          { key = "<C-s>",          action = "split" },
 
-    { key = "<Tab>",          cb = tree_cmd("preview") },
-    { key = ".",              cb = tree_cmd("toggle_ignored") },
+          { key = "<",              action = "prev_sibling" },
+          { key = ">",              action = "next_sibling" },
 
-    { key = "a",              cb = tree_cmd("create") },
-    { key = "d",              cb = tree_cmd("remove") },
-    { key = "r",              cb = tree_cmd("rename") },
+          { key = "<Tab>",          action = "preview" },
+          { key = ".",              action = "toggle_dotfiles" },
 
-    { key = "x",              cb = tree_cmd("cut") },
-    { key = "y",              cb = tree_cmd("copy") },
-    { key = "p",              cb = tree_cmd("paste") },
-    { key = "Y",              cb = tree_cmd("copy_path") },
-  }
-  -- g.nvim_tree_gitignore = 1
-  -- g.nvim_tree_auto_open = 1
+          { key = "a",              action = "create" },
+          { key = "d",              action = "remove" },
+          { key = "r",              action = "rename" },
+
+          { key = "x",              action = "cut" },
+          { key = "y",              action = "copy" },
+          { key = "p",              action = "paste" },
+          { key = "Y",              action = "copy_path" },
+        },
+      },
+    },
+    renderer = {
+      group_empty = true,
+      add_trailing = true,
+      highlight_git = true,
+      indent_width = 2,
+    },
+    actions = {
+      open_file = {
+        quit_on_open = true,
+      },
+    },
+  })
 
   require('telescope').setup {
     defaults = {
@@ -83,9 +109,6 @@ function fs.configure()
   -- Global content search
   nmap_silent('<c-f>', ':Telescope live_grep<cr>')
   nmap_silent('<leader>mm', ':Telescope marks<cr>')
-
-  -- Tag navigation
-  nmap_silent('<c-c>', ':Telescope tags<cr>')
 
   -- Set buffer file type
   nmap_silent('<leader>cf', ':Telescope filetypes<cr>')

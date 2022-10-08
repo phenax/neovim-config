@@ -27,7 +27,10 @@ function editor.plugins(use)
   -- use 'edwinb/idris2-vim'
 
   -- Folding
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '5dfbbcc' }
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+  }
   use 'nvim-treesitter/playground'
   use 'p00f/nvim-ts-rainbow'
 end

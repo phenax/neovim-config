@@ -11,7 +11,7 @@ function notes.plugins(use)
   use 'vimwiki/vimwiki'
   use {
     'nvim-neorg/neorg',
-    commit = 'b66bbbf',
+    -- commit = 'b66bbbf',
     -- tag = '0.0.12',
     requires = {
       {'nvim-lua/plenary.nvim'},
