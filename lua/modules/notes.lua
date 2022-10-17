@@ -23,18 +23,17 @@ function notes.plugins(use)
   }
 end
 
-function notes.neorg_config()
-  function space(key)
-    return "<localleader>" .. key
-  end
-  function leader(key)
-    return "<leader>" .. key
-  end
+local function space(key)
+  return "<LocalLeader>" .. key
+end
+local function leader(key)
+  return "<leader>" .. key
+end
 
+function notes.neorg_config()
   return {
     load = {
       ['core.defaults'] = {},
-      -- ['core.highlights'] = {},
       ['core.export'] = {},
       ['core.export.markdown'] = {},
       ['core.integrations.telescope'] = {},
@@ -92,8 +91,6 @@ function notes.neorg_config()
 end
 
 function notes.neorg_keybindings(keybinds)
-  keybinds.unmap('norg', 'n', space 'nn')
-
   keybinds.map_event_to_mode('norg',
     {
       n = {
@@ -112,6 +109,11 @@ function notes.neorg_keybindings(keybinds)
 
         -- Notes
         { space 'na', 'core.norg.dirman.new.note' },
+
+        -- Navigation
+        { '<Tab>',    'core.integrations.treesitter.next.link' },
+        { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
+        -- { '<cr>',     'core.norg.esupports.hop.hop-link' },
       },
     },
     {
@@ -123,8 +125,8 @@ function notes.neorg_keybindings(keybinds)
   keybinds.map_to_mode('norg',
     {
       n = {
-        { space 'cn', '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
-        { leader 'jn',  '<cmd>Neorg journal today<cr>' },
+        { space 'cn',  '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
+        { leader 'jn', '<cmd>Neorg journal today<cr>' },
         { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
         { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
         { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
@@ -136,6 +138,8 @@ function notes.neorg_keybindings(keybinds)
       noremap = true,
     }
   )
+
+  keybinds.unmap('norg', 'n', '<LocalLeader>nn')
 end
 
 function notes__onNewLine(text)
