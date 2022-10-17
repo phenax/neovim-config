@@ -2,3 +2,4 @@ plugged
 plugin
 autoload
 .netrwhist
+.luarc.json

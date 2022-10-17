@@ -25,8 +25,6 @@ function theme.configure(use)
   o.background = "dark"
   g.base16colorspace = 256
 
-  -- vim.go.t_Co = "256"
-
   updateScheme({
     'Normal guibg=NONE ctermbg=NONE',
     'ColorColumn guibg=#15121f',
@@ -70,7 +68,7 @@ end
 
 function theme.lualine()
   local lualine = require'lualine'
-  local theme = require'lualine.themes.iceberg_dark'
+  local thm = require'lualine.themes.iceberg_dark'
 
   local colors = {
     dark = {
@@ -86,27 +84,27 @@ function theme.lualine()
     }
   }
 
-  theme.normal.a = { bg = colors.purple, fg = colors.white, gui = 'bold' }
-  theme.inactive.a = { bg = colors.dark[2], fg = colors.gray[1] }
+  thm.normal.a = { bg = colors.purple, fg = colors.white, gui = 'bold' }
+  thm.inactive.a = { bg = colors.dark[2], fg = colors.gray[1] }
 
   local bline = { bg = colors.dark[2], fg = colors.gray[1] }
-  theme.normal.b = bline
-  theme.insert.b = bline
-  theme.visual.b = bline
-  theme.replace.b = bline
-  theme.inactive.b = bline
+  thm.normal.b = bline
+  thm.insert.b = bline
+  thm.visual.b = bline
+  thm.replace.b = bline
+  thm.inactive.b = bline
 
   local cline = { bg = colors.dark[1], fg = colors.gray[2] }
-  theme.normal.c = cline
-  theme.insert.c = cline
-  theme.visual.c = cline
-  theme.replace.c = cline
-  theme.inactive.c = cline
+  thm.normal.c = cline
+  thm.insert.c = cline
+  thm.visual.c = cline
+  thm.replace.c = cline
+  thm.inactive.c = cline
 
   lualine.setup {
     options = {
       icons_enabled = true,
-      theme = theme,
+      theme = thm,
       component_separators = { left = '', right = ''},
       section_separators = { left = '', right = ''},
       always_divide_middle = false,

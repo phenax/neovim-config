@@ -11,6 +11,11 @@ function tools.plugins(use)
 
   -- Interactive scratchpad
   use 'metakirby5/codi.vim'
+
+  use {
+    'NTBBloodbath/rest.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+  }
 end
 
 function tools.configure()
@@ -44,6 +49,11 @@ function tools.configure()
   -- Markdown tagbar
   g.tagbar_type_markdown = tools.get_md_tagbar_config('markdown')
   g.tagbar_type_vimwiki = tools.get_md_tagbar_config('vimwiki')
+
+  require("rest-nvim").setup({
+    skip_ssl_verification = false,
+  })
+  exec [[command! RunHttpRequest :lua require('rest-nvim').run()]]
 end
 
 function SetIndent(indent)

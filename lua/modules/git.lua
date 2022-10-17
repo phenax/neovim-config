@@ -5,13 +5,25 @@ local git = {}
 
 function git.plugins(use)
   use 'tpope/vim-fugitive'
-  use 'airblade/vim-gitgutter'
+  -- use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+
   use 'rhysd/git-messenger.vim'
   -- use 'rbong/vim-flog'
+
+  use 'airblade/vim-gitgutter'
+  -- Alt use 'lewis6991/gitsigns.nvim'
+
+  use {
+    'ruifm/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+  }
 end
 
 function git.configure()
   g.gitgutter_max_signs = 500
+
+  -- Permalink generation
+  require("gitlinker").setup()
 
   -- Preview hunk inline
   nmap('<localleader>hh', '<Plug>(GitGutterPreviewHunk)')

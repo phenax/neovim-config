@@ -2,7 +2,7 @@ local utils = require 'utils'
 local nmap = utils.nmap
 local nmap_options = utils.nmap_options
 
-function capabilityDisableFormatting()
+local function capabilityDisableFormatting()
   local cap = vim.lsp.protocol.make_client_capabilities()
   cap.textDocument.formatting = false
   return cap
@@ -130,6 +130,8 @@ function lsp.plugins(use)
   use 'L3MON4D3/LuaSnip'
   use 'saadparwaiz1/cmp_luasnip'
   use 'rafamadriz/friendly-snippets'
+
+  use 'tjdevries/nlua.nvim'
 end
 
 function lsp.on_lsp_attached(client, bufnr)
@@ -160,9 +162,12 @@ function lsp.on_lsp_attached(client, bufnr)
   nmap_options(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- Refresh code lenses
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.codeLensProvider ~= nil then
     vim.lsp.codelens.refresh()
     exec [[ autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh() ]]
+
+    -- Show types as virtual text
+    require'virtualtypes'.on_attach(client, bufnr)
   end
 
   -- Show function signature
@@ -171,9 +176,6 @@ function lsp.on_lsp_attached(client, bufnr)
     hi_parameter = 'LspSignatureActiveParameter',
   }
   require 'lsp_signature'.on_attach(config, bufnr)
-
-  -- Show types as virtual text
-  require'virtualtypes'.on_attach(client, bufnr)
 end
 
 function lsp.configure()
@@ -183,10 +185,15 @@ function lsp.configure()
   local nvim_lsp = require 'lspconfig'
   for name, options in pairs(lsp.lsp_servers) do
     local cap = options.capabilities or capabilities
-    cap = require('cmp_nvim_lsp').update_capabilities(cap)
+    cap = require('cmp_nvim_lsp').default_capabilities(cap)
 
     nvim_lsp[name].setup(utils.merge({ on_attach = lsp.on_lsp_attached, capabilities = cap }, options))
   end
+
+  -- lua
+  require('nlua.lsp.nvim').setup(nvim_lsp, {
+    on_attach = lsp.on_lsp_attached,
+  })
 
   -- Autoformatting
   nmap("<leader>df", ":lua lsp___toggle_autoformat()<CR>")
@@ -196,10 +203,9 @@ function lsp.configure()
 
   -- diagnostics config
   vim.diagnostic.config({
-    virtual_text = true,
     signs = true,
     underline = true,
-    severity_sort = false,
+    severity_sort = true,
     virtual_text = {
       prefix = '■',
     },

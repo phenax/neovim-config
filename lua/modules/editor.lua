@@ -1,6 +1,5 @@
 local utils = require 'utils'
 local nmap = utils.nmap
-local nmap_options = utils.nmap_options
 
 local editor = {}
 
@@ -9,6 +8,7 @@ function editor.plugins(use)
   use 'Townk/vim-autoclose'
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
+  use 'ggandor/leap.nvim'
   -- justinmk/vim-sneak
 
   use 'simrat39/symbols-outline.nvim'
@@ -30,9 +30,13 @@ function editor.plugins(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
+    commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0',
   }
   use 'nvim-treesitter/playground'
   use 'p00f/nvim-ts-rainbow'
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
+  use 'nvim-treesitter/nvim-treesitter-context'
+  use 'drybalka/tree-climber.nvim'
 end
 
 function editor.configure()
@@ -59,10 +63,48 @@ function editor.configure()
 
   -- Treesitter
   require'nvim-treesitter.configs'.setup {
-    ensure_installed = "all", -- "all" | "maintained" | list of languages
+    ensure_installed = "all",
     highlight = { enable = true, },
     indent = { enable = true },
-    textobjects = { enable = true },
+    textobjects = {
+      enable = true,
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["aa"] = "@parameter.outer",
+          ["ia"] = "@parameter.inner",
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<M-n>"] = "@parameter.inner",
+          },
+          swap_previous = {
+            ["<M-p>"] = "@parameter.inner",
+          },
+        },
+        move = {
+          enable = true,
+          set_jumps = true,
+          goto_next_start = {
+            ["<leader>rn"] = "@function.outer",
+          },
+          goto_previous_start = {
+            ["<leader>rp"] = "@function.outer",
+          },
+        },
+        lsp_interop = {
+          enable = true,
+          border = 'none',
+          peek_definition_code = {
+            ["<leader>dt"] = "@function.outer",
+          },
+        },
+      },
+    },
   }
 
   -- Symbols
@@ -118,36 +160,31 @@ function editor.configure()
 
   nmap('<C-n>', '10j')
   nmap('<C-m>', '10k')
-end
 
--- local function refactor(prompt_bufnr)
---   local content = require("telescope.actions.state").get_selected_entry(prompt_bufnr)
---   require("telescope.actions").close(prompt_bufnr)
---   require("refactoring").refactor(content.value)
--- end
--- 
--- Refactor = {}
--- Refactor.refactors = function()
---   local opts = require("telescope.themes").get_cursor() -- set personal telescope options
---   require("telescope.pickers").new(opts, {
---     prompt_title = "refactors",
---     finder = require("telescope.finders").new_table({
---       results = require("refactoring").get_refactors(),
---     }),
---     sorter = require("telescope.config").values.generic_sorter(opts),
---     attach_mappings = function(_, map)
---       map("i", "<CR>", refactor)
---       map("n", "<CR>", refactor)
---       return true
---     end
---   }):find()
--- end
+  require'treesitter-context'.setup({
+    enable = false,
+    mode = 'cursor',
+    separator = '―',
+  })
+  nmap('<leader>tc', ':TSContextToggle<CR>')
+
+  local keyopts = { noremap = true, silent = true }
+  vim.keymap.set({'n', 'v', 'o'}, 'H', require('tree-climber').goto_prev, keyopts)
+  vim.keymap.set({'n', 'v', 'o'}, 'L', require('tree-climber').goto_next, keyopts)
+  vim.keymap.set('n', '<c-h>', require('tree-climber').swap_prev, keyopts)
+  vim.keymap.set('n', '<c-l>', require('tree-climber').swap_next, keyopts)
+
+  -- Leap.nvim
+  vim.keymap.set({'n', 'i', 'v'}, '<c-b>', function ()
+    require('leap').leap { target_windows = { vim.fn.win_getid() } }
+  end)
+end
 
 -- Bindings for tagbar
-function tagbarKeyBindings()
-  -- Scroll title to top
-  nmap('m', '<enter>zt<C-w><C-w>')
-end
+-- local function tagbarKeyBindings()
+--   -- Scroll title to top
+--   nmap('m', '<enter>zt<C-w><C-w>')
+-- end
 
 return editor
 
