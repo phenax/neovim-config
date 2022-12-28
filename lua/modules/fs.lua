@@ -25,7 +25,6 @@ function fs.configure()
   -- g.nvim_tree_width = 40
 
   require('nvim-tree').setup({
-    create_in_closed_folder = true,
     hijack_cursor = true,
     view = {
       adaptive_size = true,
@@ -83,9 +82,10 @@ function fs.configure()
     },
   })
 
+  local actions = require('telescope.actions')
   require('telescope').setup {
     defaults = {
-      prompt_prefix = "λ ",
+      prompt_prefix = " λ ",
       sorting_strategy = "ascending",
       layout_config = {
         width = 0.8,
@@ -94,7 +94,16 @@ function fs.configure()
       },
       color_devicons = true,
       use_less = true,
-    }
+
+      mappings = {
+        n = {
+          ['<C-d>'] = actions.delete_buffer,
+        },
+        i = {
+          ['<C-d>'] = actions.delete_buffer,
+        }
+      },
+    },
   }
   -- Resume last search
   nmap('<leader>tr', ':Telescope resume<CR>')

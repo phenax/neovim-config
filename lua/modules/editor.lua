@@ -21,10 +21,21 @@ function editor.plugins(use)
   use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
 
   -- Languages
+  -- use {'koka-lang/koka', { rtp = 'support/vim' }}
+  use 'Nymphium/vim-koka'
+
   -- use 'rescript-lang/vim-rescript'
   -- use 'ashinkarov/nvim-agda'
   -- use 'dart-lang/dart-vim-plugin'
   -- use 'edwinb/idris2-vim'
+  use 'mlochbaum/BQN'
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = { "*.bqn" },
+    callback = function()
+      utils.add_rtp('BQN/editors/vim')
+      exec [[setf bqn]]
+    end,
+  })
 
   -- Folding
   use {
@@ -138,8 +149,8 @@ function editor.configure()
   })
 
   -- Open term in vim
-  nmap('<localleader>tn', ':split term://node<cr>')
-  nmap('<localleader>tt', ':split term://zsh<cr>')
+  -- nmap('<localleader>tn', ':split term://node<cr>')
+  -- nmap('<localleader>tt', ':split term://zsh<cr>')
   vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 
   -- Sessions

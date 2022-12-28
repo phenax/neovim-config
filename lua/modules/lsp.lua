@@ -21,10 +21,25 @@ local lsp = {
     "typescript",
     "typescriptreact",
     "astro",
+    "unison",
+    "scala",
+    -- "crystal"
   },
 
   lsp_servers = {
     eslint = {},
+
+    unison = {
+      settings = {
+        maxCompletions = 100,
+      },
+    },
+
+    -- scala
+    metals = {},
+
+    -- gleam = {},
+    -- crystalline = {},
 
     tsserver = {
       capabilities = capabilityDisableFormatting(),

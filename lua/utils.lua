@@ -1,5 +1,10 @@
 local utils = {}
 
+function utils.add_rtp(path)
+  vim.o.runtimepath =
+    vim.o.runtimepath .. ',' .. vim.fn.expand('$HOME/.local/share/nvim/site/pack/packer/start/' .. path)
+end
+
 function utils.nmap_options(key, action, options)
   vim.api.nvim_set_keymap('n', key, action, options)
 end

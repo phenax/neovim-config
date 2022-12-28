@@ -66,12 +66,12 @@ function notes.neorg_config()
         }
       },
 
-      ['core.gtd.base'] = {
-        config = {
-          workspace = 'work',
-          inbox = 'index.norg',
-        }
-      },
+      -- ['core.gtd.base'] = {
+      --   config = {
+      --     workspace = 'work',
+      --     inbox = 'index.norg',
+      --   }
+      -- },
 
       ['core.norg.concealer'] = {
         config = {
@@ -125,7 +125,7 @@ function notes.neorg_keybindings(keybinds)
   keybinds.map_to_mode('norg',
     {
       n = {
-        { space 'cn',  '<cmd>lua notes__onNewLine("  - [ ] ")<cr>' },
+        { space 'cn',  '<cmd>lua Notes__on_new_line("  - [ ] ")<cr>' },
         { leader 'jn', '<cmd>Neorg journal today<cr>' },
         { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
         { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
@@ -142,27 +142,28 @@ function notes.neorg_keybindings(keybinds)
   keybinds.unmap('norg', 'n', '<LocalLeader>nn')
 end
 
-function notes__onNewLine(text)
+function Notes__on_new_line(text)
   -- TODO: Refactor to lua sometime maybe?
   exec('call append(".", "'..text..'")')
   exec [[normal! j$]]
   exec [[startinsert!]]
 end
 
-function notes__onvimwiki()
+function Notes__onvimwiki()
   -- Diary
   nmap('<localleader>da',  ':VimwikiMakeDiaryNote<CR>')
   nmap('<localleader>dx',  ':VimwikiDiaryGenerateLinks<CR>')
   nmap('<localleader>di',  '<leader>wi')
   -- Checklist
   nmap('<localleader>cc',  ':VimwikiToggleListItem<CR>')
-  nmap('<localleader>li',  ':lua notes__onNewLine("  * ")<CR>')
-  nmap('<localleader>cn',  ':lua notes__onNewLine("  - [ ] ")<CR>')
+  nmap('<localleader>li',  ':lua Notes__on_new_line("  * ")<CR>')
+  nmap('<localleader>cn',  ':lua Notes__on_new_line("  - [ ] ")<CR>')
 end
 
 function notes.configure()
   require("zen-mode").setup {
     window = {
+      backdrop = 1,
       width = .50,
       height = .80,
       options = {
@@ -187,16 +188,16 @@ function notes.configure()
     ext = '.md'
   }}
 
-  nmap('<leader><Tab>', ':lua notes__toggle_foldlevel()<CR>')
+  nmap('<leader><Tab>', ':lua Notes__toggle_foldlevel()<CR>')
 
   nmap('<leader>==', ':setlocal spell! spelllang=en_us<CR>')
   nmap('z=', ':Telescope spell_suggest<CR>')
 
   exec [[au BufRead,BufNewFile *.md set filetype=vimwiki]]
-  exec [[autocmd FileType vimwiki,markdown lua notes__onvimwiki()]]
+  exec [[autocmd FileType vimwiki,markdown lua Notes__onvimwiki()]]
 end
 
-function notes__toggle_foldlevel()
+function Notes__toggle_foldlevel()
   local max_level = notes.max_fold_level
   local min_level = notes.min_fold_level
 

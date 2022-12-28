@@ -40,6 +40,8 @@ function theme.configure(use)
   theme.lsptheme()
   theme.lualine()
 
+  theme.telescope()
+
   exec('colorscheme ' .. (theme.colorscheme))
 end
 
@@ -76,6 +78,7 @@ function theme.lualine()
       '#15121f',
     },
     purple = '#4e3aA3',
+    red = '#7c162e',
     white = '#ffffff',
     fadedwhite = '#bbc0d9',
     gray = {
@@ -122,6 +125,19 @@ function theme.lualine()
 
     tabline = {
       lualine_a = {
+        -- {
+        --   'filename',
+        --   file_status = true,
+        --   newfile_status = true,
+        --   path = 1,
+        --   -- shorting_target = 40,
+        --   symbols = {
+        --     modified = '[+]',
+        --     readonly = '[-]',
+        --     unnamed = '<no name>',
+        --     newfile = '<new>',
+        --   }
+        -- },
         {
           'buffers',
           mode = 2,
@@ -133,10 +149,40 @@ function theme.lualine()
       lualine_b = {},
       lualine_c = {},
       lualine_x = {},
-      lualine_y = {},
+      lualine_y = {
+        'filetype'
+      },
       lualine_z = {},
     },
   }
+end
+
+function theme.telescope()
+  -- local bg = '#0f0c19'
+  local bgfaded = '#110f1b'
+  local bgfaded2 = '#1a1824'
+  local accent = '#4e3aA3'
+
+  local blend = function(c)
+    return 'guibg=' .. c .. ' guifg=' .. c
+  end
+
+  updateScheme({
+    'TelescopeNormal guibg=' .. bgfaded,
+    'TelescopeBorder ' .. blend(bgfaded),
+
+    'TelescopePreviewNormal guibg=' .. bgfaded,
+    'TelescopePreviewTitle guibg=' .. accent .. ' guifg=#ffffff',
+
+    'TelescopeResultsTitle ' .. blend(bgfaded),
+
+    'TelescopePromptNormal guibg=' .. bgfaded2,
+    'TelescopePromptTitle guibg=' .. accent .. ' guifg=#ffffff',
+    'TelescopePromptBorder ' ..  blend(bgfaded2),
+    'TelescopePromptPrefix guibg=' .. bgfaded2,
+  })
+
+  -- vim.api.nvim_command('autocmd FileType buffer_manager highlight Normal guibg=' .. bgfaded2 .. '')
 end
 
 return theme;

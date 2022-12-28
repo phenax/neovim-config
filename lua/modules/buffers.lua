@@ -13,22 +13,16 @@ function buffers.configure()
   nmap('<C-d>', ':BD<CR>')
 
   -- Buffer navigation
-  nmap('<localleader>bb', ':Telescope buffers<cr>')
-  nmap('<localleader><tab>', ':b#<cr>') -- Toggle between buffers
-  nmap('<C-k>', ':bp<CR>')
-  nmap('<C-j>', ':bn<CR>')
+  nmap('<localleader>b', ':Telescope buffers<CR>')
+  nmap('<C-_>', ':Telescope current_buffer_fuzzy_find<CR>')
+  nmap('<localleader><tab>', ':b#<CR>')
+  -- nmap('<C-k>', ':bp<CR>')
+  -- nmap('<C-j>', ':bn<CR>')
 
   -- Go to nth buffer
-  nmap('<localleader>1', ':LualineBuffersJump! 1<CR>') 
-  nmap('<localleader>2', ':LualineBuffersJump! 2<CR>')
-  nmap('<localleader>3', ':LualineBuffersJump! 3<CR>')
-  nmap('<localleader>4', ':LualineBuffersJump! 4<CR>')
-  nmap('<localleader>5', ':LualineBuffersJump! 5<CR>')
-  nmap('<localleader>6', ':LualineBuffersJump! 6<CR>')
-  nmap('<localleader>7', ':LualineBuffersJump! 7<CR>')
-  nmap('<localleader>8', ':LualineBuffersJump! 8<CR>')
-  nmap('<localleader>9', ':LualineBuffersJump! 9<CR>')
-  nmap('<localleader>0', ':LualineBuffersJump! 10<CR>')
+  for i = 1, 9 do
+    nmap('<localleader>' .. i, ':LualineBuffersJump! '.. i ..'<CR>')
+  end
 
   -- Split window navigation
   nmap('<M-h>', '<C-w>h')
