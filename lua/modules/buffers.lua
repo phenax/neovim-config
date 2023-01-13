@@ -20,8 +20,10 @@ function buffers.configure()
   -- nmap('<C-j>', ':bn<CR>')
 
   -- Go to nth buffer
-  for i = 1, 9 do
-    nmap('<localleader>' .. i, ':LualineBuffersJump! '.. i ..'<CR>')
+  for i = 0, 9 do
+    local bidx = i
+    if (i == 0) then bidx = 10 end
+    nmap('<localleader>' .. i, ':LualineBuffersJump! '.. bidx ..'<CR>')
   end
 
   -- Split window navigation

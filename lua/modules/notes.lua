@@ -53,10 +53,10 @@ function notes.neorg_config()
       ['core.norg.dirman'] = {
         config = {
           workspaces = {
-            personal = notes.path .. '/personal',
             work = notes.path .. '/work',
+            personal = notes.path .. '/personal',
           },
-          default_workspace = 'personal',
+          default_workspace = 'default',
         }
       },
 
@@ -75,6 +75,7 @@ function notes.neorg_config()
 
       ['core.norg.concealer'] = {
         config = {
+          enabled = true,
           icons = {
             enabled = false,
           }
@@ -104,8 +105,8 @@ function notes.neorg_keybindings(keybinds)
         { space 'cr', 'core.norg.qol.todo_items.todo.task_recurring' },
 
         -- GTD views
-        { leader 'tv', 'core.gtd.base.views' },
-        { leader 'te', 'core.gtd.base.edit' },
+        { leader 'tt', 'core.integrations.telescope.find_aof_tasks' },
+        { leader 'tc', 'core.integrations.telescope.find_context_tasks' },
 
         -- Notes
         { space 'na', 'core.norg.dirman.new.note' },
@@ -113,6 +114,8 @@ function notes.neorg_keybindings(keybinds)
         -- Navigation
         { '<Tab>',    'core.integrations.treesitter.next.link' },
         { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
+        { ']]',       'core.integrations.treesitter.next.heading' },
+        { '[[',       'core.integrations.treesitter.previous.heading' },
         -- { '<cr>',     'core.norg.esupports.hop.hop-link' },
       },
     },
@@ -125,7 +128,8 @@ function notes.neorg_keybindings(keybinds)
   keybinds.map_to_mode('norg',
     {
       n = {
-        { space 'cn',  '<cmd>lua Notes__on_new_line("  - [ ] ")<cr>' },
+        { space 'cn',  '<cmd>lua Notes__on_new_line("  - ( ) ")<cr>' },
+        { space 'li',  '<cmd>lua Notes__on_new_line("  - ")<cr>' },
         { leader 'jn', '<cmd>Neorg journal today<cr>' },
         { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
         { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },

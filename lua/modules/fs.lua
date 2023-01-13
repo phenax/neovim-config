@@ -110,7 +110,7 @@ function fs.configure()
 
   -- Fuzzy file finder
   if utils.fexists('.git') then
-    nmap_silent('<leader>f', ':Telescope git_files<cr>')
+    nmap_silent('<leader>f', ':Telescope git_files show_untracked=true<cr>')
   else
     nmap_silent('<leader>f', ':Telescope find_files<cr>')
   end
