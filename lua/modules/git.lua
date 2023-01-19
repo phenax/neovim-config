@@ -23,7 +23,7 @@ function git.configure()
   g.gitgutter_max_signs = 500
 
   -- Permalink generation
-  require("gitlinker").setup()
+  require("gitlinker").setup() -- \gy (copy permalink)
 
   -- Preview hunk inline
   nmap('<localleader>hh', '<Plug>(GitGutterPreviewHunk)')

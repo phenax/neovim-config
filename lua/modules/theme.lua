@@ -141,6 +141,13 @@ function theme.lualine()
         {
           'buffers',
           mode = 2,
+          max_length = vim.o.columns * 4 / 5,
+          filetype_names = {
+            TelescopePrompt = '<telescope>',
+            fugitive = '<git>',
+            NvimTree = '<dir>',
+            Trouble = '<diagnostic>',
+          },
           symbols = {
             alternate_file = '',
           },
