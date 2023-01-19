@@ -25,10 +25,14 @@ function editor.plugins(use)
   use 'Nymphium/vim-koka'
 
   -- use 'rescript-lang/vim-rescript'
-  -- use 'ashinkarov/nvim-agda'
+  use 'ashinkarov/nvim-agda'
   -- use 'dart-lang/dart-vim-plugin'
-  -- use 'edwinb/idris2-vim'
+  use 'edwinb/idris2-vim'
+  -- use {'ShinKage/idris2-nvim',
+  --   requires = {'neovim/nvim-lspconfig', 'MunifTanjim/nui.nvim'}}
+
   use 'mlochbaum/BQN'
+  -- Fake add BQN's runtime path for .bqn files
   vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*.bqn" },
     callback = function()
@@ -48,6 +52,9 @@ function editor.plugins(use)
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'nvim-treesitter/nvim-treesitter-context'
   use 'drybalka/tree-climber.nvim'
+
+  use 'hkupty/iron.nvim'
+  use 'Exafunction/codeium.vim'
 end
 
 function editor.configure()
@@ -189,6 +196,12 @@ function editor.configure()
   vim.keymap.set({'n', 'i', 'v'}, '<c-b>', function ()
     require('leap').leap { target_windows = { vim.fn.win_getid() } }
   end)
+
+  editor.iron_repl()
+
+  -- require('idris2').setup({})
+
+  editor.codeium()
 end
 
 -- Bindings for tagbar
@@ -196,6 +209,47 @@ end
 --   -- Scroll title to top
 --   nmap('m', '<enter>zt<C-w><C-w>')
 -- end
+
+function editor.codeium()
+  g.codeium_enabled = false
+  vim.api.nvim_set_keymap('i', '<c-g><c-g>', 'codeium#Accept()', { silent = true, expr = true })
+end
+
+function editor.iron_repl()
+  local iron = require("iron.core")
+
+  iron.setup {
+    config = {
+      scratch_repl = true,
+      repl_definition = {
+        sh = { command = { "zsh" } },
+        haskell = {
+          command = function(meta)
+            local filename = vim.api.nvim_buf_get_name(meta.current_bufnr)
+            return { 'cabal', 'v2-repl', filename}
+          end
+        },
+        idris2 = {
+          command = function(meta)
+            local filename = vim.api.nvim_buf_get_name(meta.current_bufnr)
+            return { 'idris2', filename}
+          end
+        },
+      },
+      repl_open_cmd = require('iron.view').split.horizontal.rightbelow(18),
+    },
+    keymaps = {
+      send_motion = "<leader>sc",
+      visual_send = "<leader>sc",
+      send_file = "<leader>sf",
+      cr = "<leader>s<cr>",
+      interrupt = "<leader>s<space>",
+      exit = "<leader>sq",
+      clear = "<leader>s<C-l>",
+    },
+    ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+  }
+end
 
 return editor
 

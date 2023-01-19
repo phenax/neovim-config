@@ -147,6 +147,11 @@ function lsp.plugins(use)
   use 'rafamadriz/friendly-snippets'
 
   use 'tjdevries/nlua.nvim'
+
+  use {
+    'folke/trouble.nvim',
+    requires = 'nvim-tree/nvim-web-devicons',
+  }
 end
 
 function lsp.on_lsp_attached(client, bufnr)
@@ -175,6 +180,13 @@ function lsp.on_lsp_attached(client, bufnr)
   nmap_options('<localleader>d', '<cmd>Telescope diagnostics<cr>', opts)
   nmap_options('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   nmap_options(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+
+  require('trouble').setup {
+    mode = 'workspace_diagnostics',
+    position = 'bottom',
+    height = 16,
+  }
+  nmap('<leader>xx', ':TroubleToggle workspace_diagnostics<cr>')
 
   -- Refresh code lenses
   if client.server_capabilities.codeLensProvider ~= nil then
