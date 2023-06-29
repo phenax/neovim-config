@@ -24,10 +24,15 @@ local lsp = {
     "unison",
     "scala",
     -- "crystal"
+    "c",
+    "h",
+    "cpp"
   },
 
   lsp_servers = {
     eslint = {},
+
+    clangd = {},
 
     unison = {
       settings = {
@@ -146,7 +151,7 @@ function lsp.plugins(use)
   use 'saadparwaiz1/cmp_luasnip'
   use 'rafamadriz/friendly-snippets'
 
-  use 'tjdevries/nlua.nvim'
+  -- use 'tjdevries/nlua.nvim'
 
   use {
     'folke/trouble.nvim',
@@ -173,7 +178,7 @@ function lsp.on_lsp_attached(client, bufnr)
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   nmap_options('<localleader>aa', '<cmd>Telescope lsp_code_actions<cr>', opts)
   nmap_options('<leader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
 
   -- Diagnostics
   nmap_options('<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -218,9 +223,9 @@ function lsp.configure()
   end
 
   -- lua
-  require('nlua.lsp.nvim').setup(nvim_lsp, {
-    on_attach = lsp.on_lsp_attached,
-  })
+  -- require('nlua.lsp.nvim').setup(nvim_lsp, {
+  --   on_attach = lsp.on_lsp_attached,
+  -- })
 
   -- Autoformatting
   nmap("<leader>df", ":lua lsp___toggle_autoformat()<CR>")
@@ -292,8 +297,6 @@ function lsp.configure()
       ['<up>'] = cmpUp,
       ['<C-j>'] = cmpDown,
       ['<C-k>'] = cmpUp,
-      ['<Tab>'] = cmpDown,
-      ['<S-Tab>'] = cmpUp,
     },
     -- formatting = {
     --   format = require('lspkind').cmp_format {
@@ -328,7 +331,7 @@ function lsp___toggle_autoformat()
 end
 function lsp___on_save()
   if is_autoformat_enabled then
-    vim.lsp.buf.formatting_seq_sync(nil, 300)
+    vim.lsp.buf.format({ async = false })
   end
 end
 

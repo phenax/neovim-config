@@ -11,6 +11,8 @@ end
 function buffers.configure()
   -- Buffer manipulation
   nmap('<C-d>', ':BD<CR>')
+  exec [[ command! CloseAll :%bd|e#|bd#|'" ]] -- Delete all buffers except for the current one
+  nmap('<leader>ca', [[ :CloseAll ]])
 
   -- Buffer navigation
   nmap('<localleader>b', ':Telescope buffers<CR>')

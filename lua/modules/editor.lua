@@ -23,10 +23,11 @@ function editor.plugins(use)
   -- Languages
   -- use {'koka-lang/koka', { rtp = 'support/vim' }}
   use 'Nymphium/vim-koka'
+  use 'normen/vim-pio' -- platformio
 
   -- use 'rescript-lang/vim-rescript'
   use 'ashinkarov/nvim-agda'
-  -- use 'dart-lang/dart-vim-plugin'
+  use 'dart-lang/dart-vim-plugin'
   use 'edwinb/idris2-vim'
   -- use {'ShinKage/idris2-nvim',
   --   requires = {'neovim/nvim-lspconfig', 'MunifTanjim/nui.nvim'}}

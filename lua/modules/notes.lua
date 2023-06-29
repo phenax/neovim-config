@@ -37,8 +37,8 @@ function notes.neorg_config()
       ['core.export'] = {},
       ['core.export.markdown'] = {},
       ['core.integrations.telescope'] = {},
-      ['core.norg.qol.toc'] = {},
-      ['core.norg.completion'] = {
+      ['core.qol.toc'] = {},
+      ['core.completion'] = {
         config = {
           engine = 'nvim-cmp',
         }
@@ -50,7 +50,7 @@ function notes.neorg_config()
         },
       },
 
-      ['core.norg.dirman'] = {
+      ['core.dirman'] = {
         config = {
           workspaces = {
             work = notes.path .. '/work',
@@ -60,7 +60,7 @@ function notes.neorg_config()
         }
       },
 
-      ['core.norg.journal'] = {
+      ['core.journal'] = {
         config = {
           workspace = 'personal'
         }
@@ -73,7 +73,7 @@ function notes.neorg_config()
       --   }
       -- },
 
-      ['core.norg.concealer'] = {
+      ['core.concealer'] = {
         config = {
           enabled = true,
           icons = {
@@ -96,27 +96,27 @@ function notes.neorg_keybindings(keybinds)
     {
       n = {
         -- Tasks
-        { space 'cu', 'core.norg.qol.todo_items.todo.task_undone' },
-        { space 'cp', 'core.norg.qol.todo_items.todo.task_pending' },
-        { space 'cd', 'core.norg.qol.todo_items.todo.task_done' },
-        { space 'ci', 'core.norg.qol.todo_items.todo.task_important' },
-        { space 'ch', 'core.norg.qol.todo_items.todo.task_on_hold' },
-        { space 'cc', 'core.norg.qol.todo_items.todo.task_cancelled' },
-        { space 'cr', 'core.norg.qol.todo_items.todo.task_recurring' },
+        { space 'cu', 'core.qol.todo_items.todo.task_undone' },
+        { space 'cp', 'core.qol.todo_items.todo.task_pending' },
+        { space 'cd', 'core.qol.todo_items.todo.task_done' },
+        { space 'ci', 'core.qol.todo_items.todo.task_important' },
+        { space 'ch', 'core.qol.todo_items.todo.task_on_hold' },
+        { space 'cc', 'core.qol.todo_items.todo.task_cancelled' },
+        { space 'cr', 'core.qol.todo_items.todo.task_recurring' },
 
         -- GTD views
         { leader 'tt', 'core.integrations.telescope.find_aof_tasks' },
         { leader 'tc', 'core.integrations.telescope.find_context_tasks' },
 
         -- Notes
-        { space 'na', 'core.norg.dirman.new.note' },
+        { space 'na', 'core.dirman.new.note' },
 
         -- Navigation
         { '<Tab>',    'core.integrations.treesitter.next.link' },
         { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
         { ']]',       'core.integrations.treesitter.next.heading' },
         { '[[',       'core.integrations.treesitter.previous.heading' },
-        -- { '<cr>',     'core.norg.esupports.hop.hop-link' },
+        -- { '<cr>',     'core.esupports.hop.hop-link' },
       },
     },
     {

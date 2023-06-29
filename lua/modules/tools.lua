@@ -2,9 +2,8 @@ local utils = require 'utils'
 local tools = {}
 
 function tools.plugins(use)
-  -- use 'metakirby5/codi.vim'
   -- use 'ciaranm/detectindent'
-  --use 'editorconfig/editorconfig-vim'
+  -- use 'editorconfig/editorconfig-vim'
 
   -- Search todo,fixme, etc comments
   use 'gilsondev/searchtasks.vim'
@@ -12,6 +11,7 @@ function tools.plugins(use)
   -- Interactive scratchpad
   use 'metakirby5/codi.vim'
 
+  -- Run http requests from .http files
   use {
     'NTBBloodbath/rest.nvim',
     requires = 'nvim-lua/plenary.nvim',
@@ -24,8 +24,8 @@ function tools.configure()
   -- exec [[autocmd BufEnter * :DetectIndent]]
 
   -- Move line up and down
-  utils.xmap('K', ":move '<-2<cr>gv-gv")
-  utils.xmap('J', ":move '<+1<cr>gv-gv")
+  vim.api.nvim_set_keymap('v', 'K', [[ :m '<-2<CR>gv=gv ]], { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('v', 'J', [[ :m '>+1<CR>gv=gv ]], { noremap = true, silent = true })
 
   -- Copy file path
   exec [[command! CpPath :let @+=expand("%")]]
