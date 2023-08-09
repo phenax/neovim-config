@@ -13,7 +13,7 @@ function theme.plugins(use)
 
   use {
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    requires = { 'kyazdani42/nvim-web-devicons' },
   }
 end
 
@@ -104,6 +104,12 @@ function theme.lualine()
   thm.replace.c = cline
   thm.inactive.c = cline
 
+  vim.api.nvim_create_augroup('lualine_augroup', { clear = true })
+  vim.api.nvim_create_autocmd('User LspProgressStatusUpdated', {
+    group = 'lualine_augroup',
+    callback = require('lualine').refresh,
+  })
+
   lualine.setup {
     options = {
       icons_enabled = true,
@@ -190,6 +196,41 @@ function theme.telescope()
   })
 
   -- vim.api.nvim_command('autocmd FileType buffer_manager highlight Normal guibg=' .. bgfaded2 .. '')
+end
+
+-- __ Doesnt work
+function lualine_tab_swap()
+  local buffers_component = require('lualine.components.buffers')
+
+  function get_buffer_index(bufnr)
+    for i, v in ipairs(buffers_component.bufpos2nr) do
+      if v == bufnr then
+        return i
+      end
+    end
+    return nil
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local buf_index = get_buffer_index(bufnr)
+
+  -- buffers_component.bufpos2nr
+  return {
+    next = function()
+      if buf_index < #buffers_component.bufpos2nr then
+        local n = buffers_component.bufpos2nr[buf_index]
+        buffers_component.bufpos2nr[buf_index] = buffers_component.bufpos2nr[buf_index + 1]
+        buffers_component.bufpos2nr[buf_index + 1] = n
+      end
+    end,
+    prev = function()
+      if buf_index > 1 then
+        local n = buffers_component.bufpos2nr[buf_index]
+        buffers_component.bufpos2nr[buf_index] = buffers_component.bufpos2nr[buf_index - 1]
+        buffers_component.bufpos2nr[buf_index - 1] = n
+      end
+    end,
+  }
 end
 
 return theme;

@@ -16,6 +16,7 @@ local lsp = {
     "rust",
     "elm",
     "vue",
+    "svelte",
     -- "javascript",
     -- "javascriptreact",
     -- "typescript",
@@ -40,6 +41,8 @@ local lsp = {
       },
     },
 
+    tailwindcss = {},
+
     -- scala
     metals = {},
 
@@ -51,6 +54,8 @@ local lsp = {
     },
 
     astro = {},
+
+    svelte = {},
 
     vuels = {
       settings = {
@@ -141,6 +146,7 @@ function lsp.plugins(use)
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-calc',
       'ray-x/cmp-treesitter',
       'onsails/lspkind-nvim',
     }
@@ -176,8 +182,7 @@ function lsp.on_lsp_attached(client, bufnr)
 
   -- Refactor actions
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  nmap_options('<localleader>aa', '<cmd>Telescope lsp_code_actions<cr>', opts)
-  nmap_options('<leader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
 
   -- Diagnostics
@@ -281,6 +286,8 @@ function lsp.configure()
       { name = 'luasnip' },
       { name = 'path' },
       { name = 'buffer' },
+      { name = 'neorg' },
+      { name = 'calc' },
     },
     snippet = {
       expand = function(args)

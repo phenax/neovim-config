@@ -17,11 +17,11 @@ return packer.startup(function()
     require 'modules.buffers',
     require 'modules.fs',
     require 'modules.git',
-    -- require 'modules.coc',
     require 'modules.editor',
     require 'modules.lsp',
-    require 'modules.notes',
     require 'modules.tools',
+    require 'modules.notes',
+    -- require 'modules.coc',
   }
 
   for _, m in pairs(modules) do

@@ -12,11 +12,11 @@ function buffers.configure()
   -- Buffer manipulation
   nmap('<C-d>', ':BD<CR>')
   exec [[ command! CloseAll :%bd|e#|bd#|'" ]] -- Delete all buffers except for the current one
-  nmap('<leader>ca', [[ :CloseAll ]])
+  nmap('<leader>ca', [[ :CloseAll<cr> ]])
 
   -- Buffer navigation
   nmap('<localleader>b', ':Telescope buffers<CR>')
-  nmap('<C-_>', ':Telescope current_buffer_fuzzy_find<CR>')
+  nmap('<C-_>', ':Telescope current_buffer_fuzzy_find<CR>') -- Ctrl + /
   nmap('<localleader><tab>', ':b#<CR>')
   -- nmap('<C-k>', ':bp<CR>')
   -- nmap('<C-j>', ':bn<CR>')

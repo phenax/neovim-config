@@ -89,6 +89,7 @@ function fs.configure()
     actions.select_default(prompt_bufnr)
     require('telescope.builtin').resume()
   end
+
   require('telescope').setup {
     defaults = {
       prompt_prefix = ' λ ',

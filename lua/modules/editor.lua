@@ -18,7 +18,7 @@ function editor.plugins(use)
 
   -- Syntax
   use 'sheerun/vim-polyglot' -- All syntax highlighting
-  use 'norcalli/nvim-colorizer.lua' -- Hex/rgb colors
+  use 'NvChad/nvim-colorizer.lua' -- Hex/rgb colors
 
   -- Languages
   -- use {'koka-lang/koka', { rtp = 'support/vim' }}
@@ -46,16 +46,23 @@ function editor.plugins(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
-    commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0',
+    commit = '08aabb145f93ed1dd607ce8e2dcd52d356822300',
+    requires = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      'nvim-treesitter/nvim-treesitter-context',
+    },
   }
   use 'nvim-treesitter/playground'
   use 'p00f/nvim-ts-rainbow'
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'nvim-treesitter/nvim-treesitter-context'
   use 'drybalka/tree-climber.nvim'
 
   use 'hkupty/iron.nvim'
   use 'Exafunction/codeium.vim'
+
+  use {
+    'DanielVolchek/tailiscope.nvim',
+    requires = { 'nvim-telescope/telescope.nvim' },
+  }
 end
 
 function editor.configure()
@@ -72,7 +79,11 @@ function editor.configure()
   exec [[autocmd BufRead,BufEnter *.astro set filetype=astro]]
 
   -- Colorizer
-  require'colorizer'.setup()
+  require'colorizer'.setup({
+    user_default_options = {
+      tailwind = true,
+    },
+  })
   g.indent_blankline_char = '┊'
   g.indent_blankline_space_char = ' '
   utils.updateScheme({
@@ -83,8 +94,13 @@ function editor.configure()
   -- Treesitter
   require'nvim-treesitter.configs'.setup {
     ensure_installed = "all",
-    highlight = { enable = true, },
-    indent = { enable = true },
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
+    },
+    indent = {
+      enable = true
+    },
     textobjects = {
       enable = true,
       select = {
@@ -124,6 +140,12 @@ function editor.configure()
         },
       },
     },
+    rainbow = {
+      enable = true,
+      extended_mode = true,
+      -- disable = { "jsx", "cpp" },
+      -- max_file_lines = 2000,
+    }
   }
 
   -- Symbols
@@ -147,8 +169,8 @@ function editor.configure()
   require('Comment').setup({
     padding = true,
     toggler = {
-        line = '<leader>cc',
-        block = '<leader>bc',
+      line = '<leader>cc',
+      block = '<leader>bc',
     },
     opleader = {
       line = '<leader>c',
@@ -181,7 +203,7 @@ function editor.configure()
   nmap('<C-m>', '10k')
 
   require'treesitter-context'.setup({
-    enable = false,
+    enable = true,
     mode = 'cursor',
     separator = '―',
   })
@@ -195,7 +217,14 @@ function editor.configure()
 
   -- Leap.nvim
   vim.keymap.set({'n', 'i', 'v'}, '<c-b>', function ()
-    require('leap').leap { target_windows = { vim.fn.win_getid() } }
+    require('leap').leap {
+      target_windows = vim.tbl_filter(
+        function (win) return vim.api.nvim_win_get_config(win).focusable end,
+        vim.api.nvim_tabpage_list_wins(0)
+      ),
+    }
+    -- Search only on current window
+    -- require('leap').leap { target_windows = { vim.fn.win_getid() } }
   end)
 
   editor.iron_repl()
@@ -203,6 +232,9 @@ function editor.configure()
   -- require('idris2').setup({})
 
   editor.codeium()
+
+  -- Tailwind
+  require('telescope').load_extension('tailiscope')
 end
 
 -- Bindings for tagbar

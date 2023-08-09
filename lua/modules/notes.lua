@@ -11,6 +11,8 @@ function notes.plugins(use)
   use 'vimwiki/vimwiki'
   use {
     'nvim-neorg/neorg',
+    run = ':Neorg sync-parsers',
+    -- after = 'nvim-treesitter',
     -- commit = 'b66bbbf',
     -- tag = '0.0.12',
     requires = {
@@ -19,6 +21,8 @@ function notes.plugins(use)
       {'nvim-telescope/telescope.nvim'},
       {'nvim-neorg/neorg-telescope'},
       {'folke/zen-mode.nvim'},
+      {'phenax/neorg-timelog'},
+      {'phenax/neorg-hop-extras'},
     }
   }
 end
@@ -53,16 +57,23 @@ function notes.neorg_config()
       ['core.dirman'] = {
         config = {
           workspaces = {
+            notes = notes.path,
             work = notes.path .. '/work',
-            personal = notes.path .. '/personal',
+            journal = notes.path .. '/journal',
           },
-          default_workspace = 'default',
+          index = 'index.norg',
+          default_workspace = 'notes',
+          open_last_workspace = false,
+          use_popup = false,
         }
       },
 
       ['core.journal'] = {
         config = {
-          workspace = 'personal'
+          workspace = 'journal',
+          strategy = 'flat',
+          template_name = 'template.norg',
+          use_template = true,
         }
       },
 
@@ -75,9 +86,15 @@ function notes.neorg_config()
 
       ['core.concealer'] = {
         config = {
-          enabled = true,
+          icon_preset = 'basic',
           icons = {
-            enabled = false,
+            todo = {
+              undone = { icon = ' ' },
+            },
+            code_block = {
+              width = "content",
+              padding = { left = 1, right = 1 },
+            },
           }
         },
       },
@@ -86,7 +103,14 @@ function notes.neorg_config()
         config = {
           hook = notes.neorg_keybindings,
         }
-      }
+      },
+
+      -- ['core.ui.calendar'] = {}, -- TODO: After nvim 0.10
+      ['core.summary'] = {}, -- :Neorg generate-workspace-summary
+      ['core.esupports.metagen'] = {}, -- :Neorg inject-metadata | :Neorg update-metadata
+
+      ['external.timelog'] = {}, -- :Neorg insert_timelog <name>
+      ['external.hop-extras'] = {}, -- extends <cr> to hop
     }
   }
 end
@@ -111,6 +135,9 @@ function notes.neorg_keybindings(keybinds)
         -- Notes
         { space 'na', 'core.dirman.new.note' },
 
+        { space 'cn', 'core.itero.next-iteration' },
+        { space 'li', 'core.itero.next-iteration' },
+
         -- Navigation
         { '<Tab>',    'core.integrations.treesitter.next.link' },
         { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
@@ -128,13 +155,13 @@ function notes.neorg_keybindings(keybinds)
   keybinds.map_to_mode('norg',
     {
       n = {
-        { space 'cn',  '<cmd>lua Notes__on_new_line("  - ( ) ")<cr>' },
-        { space 'li',  '<cmd>lua Notes__on_new_line("  - ")<cr>' },
+        -- { space 'cn',  '<cmd>lua Notes__on_new_line("  - ( ) ")<cr>' },
+        -- { space 'li',  '<cmd>lua Notes__on_new_line("  - ")<cr>' },
         { leader 'jn', '<cmd>Neorg journal today<cr>' },
-        { leader 'tp', '<cmd>Telescope neorg find_project_tasks<cr>' },
-        { leader 'tc', '<cmd>Telescope neorg find_context_tasks<cr>' },
+        { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
         { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
         { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
+        { leader 'tl', '<cmd>Neorg insert-timelog *<cr>' }, -- NOTE: Updates all timelogs
       },
     },
     {
@@ -181,6 +208,17 @@ function notes.configure()
       },
     },
   }
+
+  -- FIXME: Temporary workaround for filetype in neorg
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = { "*.norg" },
+    callback = function()
+      vim.opt.ft = 'norg'
+      vim.opt.conceallevel = 2
+      exec [[hi @neorg.markup.bold guifg=#51E980 gui=bold]]
+    end,
+  })
+  vim.api.nvim_set_hl(0, '@neorg.tags.ranged_verbatim.code_block', { bg = '#1a1824' })
   require('neorg').setup(notes.neorg_config())
 
   g.vimwiki_folding = 'expr'
