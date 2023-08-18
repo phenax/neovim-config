@@ -9,12 +9,14 @@ function M.setup()
     mode = 'cursor',
     separator = '―',
   })
-  vim.keymaps.set('n', '<leader>tc', ':TSContextToggle<CR>')
+  vim.keymap.set('n', '<leader>tc', ':TSContextToggle<CR>')
 end
 
 function M.get_ts_config()
   return {
     ensure_installed = "all",
+
+    parser_install_dir = vim.fn.expand("~/.local/share/nvim-flake/treesitter/parsers/"),
 
     highlight = {
       enable = true,

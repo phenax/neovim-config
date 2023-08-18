@@ -14,12 +14,12 @@ return packer.startup(function()
 
   local modules = {
     require 'modules.theme',
-    require 'modules.buffers',
-    require 'modules.fs',
-    require 'modules.git',
+    require 'modules.buffers',  -- migrated
+    require 'modules.fs',  -- migrated
+    require 'modules.git', -- migrated
     require 'modules.editor',
     require 'modules.lsp',
-    require 'modules.tools',
+    require 'modules.tools', -- migrated
     require 'modules.notes',
     -- require 'modules.coc',
   }

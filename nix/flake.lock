@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "codeium": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1692209571,
+        "narHash": "sha256-EVDpzE/q4TDOBVEn1M2UYICWh3KZrCChCcKPO5A6dz8=",
+        "owner": "Exafunction",
+        "repo": "codeium.vim",
+        "rev": "512acc2a0057f3f351674a7c2851651bf607fe8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Exafunction",
+        "repo": "codeium.vim",
+        "type": "github"
+      }
+    },
     "devicons": {
       "flake": false,
       "locked": {
@@ -165,11 +181,11 @@
     },
     "nvim-plugin-manager": {
       "locked": {
-        "lastModified": 1692362298,
-        "narHash": "sha256-xqiZ4/ONmRSbdDeirMNdyA6ksgVrhq+aG8auqhd6COg=",
+        "lastModified": 1692366044,
+        "narHash": "sha256-kIpeW+JCmQZMJOjXClKTkYPPLX4NCJRHK77Qa5ZJafY=",
         "owner": "phenax",
         "repo": "nvim-flake-plugin-manager",
-        "rev": "28a77579f6a21964000b072451c3a0e32e2349a8",
+        "rev": "37116b276425d98875b050e345685937cea78542",
         "type": "github"
       },
       "original": {
@@ -210,8 +226,25 @@
         "type": "github"
       }
     },
+    "rest-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1689535548,
+        "narHash": "sha256-ePO6fcY7WgRr2hYtx33ax07PilgRG40euXDATXBmLqs=",
+        "owner": "NTBBloodbath",
+        "repo": "rest.nvim",
+        "rev": "22673c848768ff25517154a5aebfebc0c77d0b4f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NTBBloodbath",
+        "repo": "rest.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "codeium": "codeium",
         "devicons": "devicons",
         "flake-utils": "flake-utils",
         "fugitive": "fugitive",
@@ -224,6 +257,7 @@
         "nvim-plugin-manager": "nvim-plugin-manager",
         "nvim-tree": "nvim-tree",
         "plenary": "plenary",
+        "rest-nvim": "rest-nvim",
         "telescope": "telescope",
         "treesitter": "treesitter",
         "treesitter-context": "treesitter-context",

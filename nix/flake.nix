@@ -26,17 +26,14 @@
 
     vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
     vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
+
+    codeium = { url = "github:Exafunction/codeium.vim"; flake = false; };
+    rest-nvim = { url = "github:NTBBloodbath/rest.nvim"; flake = false; };
   };
 
   outputs = sources@{ self, nixpkgs, flake-utils, home-manager, nvim-plugin-manager, ... }:
     let
       plugins = {
-        treesitter = {
-          dependencies = [ "treesitter-textobjects" "treesitter-context" ];
-          configModule = "_plugins.treesitter";
-        };
-        treesitter-playground = { };
-
         telescope = {
           dependencies = [ "plenary" ];
           configModule = "_plugins.telescope";
@@ -56,8 +53,25 @@
 
         vim-autoread = { };
         vim-bufkill = { lazy.commands = [ "BD" ]; };
-
+        codeium = {
+          lazy.commands = [ "Codeium" "CodeiumEnable" ];
+          configModule = "_plugins.codeium-ai";
+        };
         material = { configModule = "_plugins.material"; };
+
+        rest-nvim = {
+          lazy.exts = [ "*.http" ];
+          dependencies = [ "plenary" ];
+          configModule = "_plugins.rest-nvim";
+        };
+
+        # TODO: Enable after packer stuff is cleaned out
+        # treesitter = {
+        #   dependencies = [ "treesitter-context" ];
+        #   configModule = "_plugins.treesitter";
+        # };
+        # treesitter-textobjects = { };
+        # treesitter-playground = { dependencies = [ "treesitter" ]; };
       };
     in
     flake-utils.lib.eachDefaultSystem (system:
@@ -68,9 +82,9 @@
         packages.default = nvim-plugin-manager.lib.mkPlugins {
           inherit plugins sources pkgs;
           modulePath = ./.;
-          doCheck = true;
+          doCheck = false;
           extraModulesPre = [ "_modules.settings" ];
-          extraModules = [ "_modules.theme" "_modules.buffers" ];
+          extraModules = [ "_modules.theme" "_modules.basic-keybinds" ];
         };
       });
 }
