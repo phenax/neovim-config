@@ -10,10 +10,13 @@
     telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
     plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
     nvim-tree = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
-    vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
-    vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
+    lualine = { url = "github:nvim-lualine/lualine.nvim"; flake = false; };
+    devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
 
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
+
+    vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
+    vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
   };
 
   outputs = sources@{ self, nixpkgs, flake-utils, home-manager, nvim-plugin-manager, ... }:
@@ -24,7 +27,12 @@
           configModule = "_plugins.telescope";
         };
         nvim-tree = {
+          # TODO: Lazy load
           configModule = "_plugins.nvim-tree";
+        };
+        lualine = {
+          dependencies = [ "devicons" ];
+          configModule = "_plugins.lualine";
         };
         vim-autoread = { };
         vim-bufkill = { lazy.commands = [ "BD" ]; };

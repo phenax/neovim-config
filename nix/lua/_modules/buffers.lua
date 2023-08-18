@@ -3,7 +3,7 @@
 vim.keymap.set({ 'n', 'i' }, '<C-d>', ':BD<CR>')
 
 -- Delete all buffers except for the current one
-exec [[ command! CloseAll :%bd|e#|bd#|'" ]]
+vim.cmd [[ command! CloseAll :%bd|e#|bd#|'" ]]
 vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
 
 -- Toggle between last 2 buffers

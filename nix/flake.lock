@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "devicons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1692224430,
+        "narHash": "sha256-6iuZbUi7MA69/wIMijCWj3J1s2RrCWKxQ/l7fWDnOF0=",
+        "owner": "kyazdani42",
+        "repo": "nvim-web-devicons",
+        "rev": "cfc8824cc1db316a276b36517f093baccb8e799a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kyazdani42",
+        "repo": "nvim-web-devicons",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -33,6 +49,22 @@
       "original": {
         "id": "home-manager",
         "type": "indirect"
+      }
+    },
+    "lualine": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1691046210,
+        "narHash": "sha256-v8finXk+sLNaFMA7pSHhEu0WF5mhPYWHEKhl0IKBv8c=",
+        "owner": "nvim-lualine",
+        "repo": "lualine.nvim",
+        "rev": "45e27ca739c7be6c49e5496d14fcf45a303c3a63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-lualine",
+        "repo": "lualine.nvim",
+        "type": "github"
       }
     },
     "material": {
@@ -132,8 +164,10 @@
     },
     "root": {
       "inputs": {
+        "devicons": "devicons",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "lualine": "lualine",
         "material": "material",
         "nixpkgs": "nixpkgs_2",
         "nvim-plugin-manager": "nvim-plugin-manager",
