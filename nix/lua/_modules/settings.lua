@@ -13,10 +13,13 @@ vim.o.mouse = 'c'
 vim.o.splitbelow = true
 vim.o.splitright = true
 
--- set('foldmethod', 'expr')
--- set('foldexpr', 'nvim_treesitter#foldexpr()')
--- set('foldlevel', 50)
---
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.o.foldlevel = 50
+
+vim.o.number = true
+vim.o.relativenumber = true
+
 -- set('showmatch', true)
 -- set('ignorecase', true)
 -- set('smartcase', true)
@@ -32,8 +35,6 @@ vim.o.splitright = true
 -- set('swapfile', false)
 -- set('noshowmode', true)
 --
--- set('number', true)
--- set('relativenumber', true)
 -- set('ruler', true)
 -- set('scrolloff', 15)
 -- set('colorcolumn', 120)

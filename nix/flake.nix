@@ -36,13 +36,7 @@
         };
         vim-autoread = { };
         vim-bufkill = { lazy.commands = [ "BD" ]; };
-        material = {
-          configLua = ''
-            vim.g.material_terminal_italics = 1
-            vim.g.material_theme_style = 'ocean'
-            vim.cmd 'colorscheme material'
-          '';
-        };
+        material = { configModule = "_plugins.material"; };
       };
     in
     flake-utils.lib.eachDefaultSystem (system:
@@ -55,7 +49,7 @@
           modulePath = ./.;
           doCheck = true;
           extraModulesPre = [ "_modules.settings" ];
-          extraModules = [ "_modules.buffers" ];
+          extraModules = [ "_modules.theme" "_modules.buffers" ];
         };
       });
 }
