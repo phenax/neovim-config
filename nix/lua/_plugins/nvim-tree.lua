@@ -1,40 +1,37 @@
-local M = {
-  setup = function()
-    vim.g.mapleader = "\\"
-    vim.g.maplocalleader = " "
+local M = {}
 
-    vim.keymap.set('n', '<localleader>nn', ':NvimTreeToggle<CR>')
-    vim.keymap.set('n', '<localleader>nf', ':NvimTreeFindFileToggle<CR>')
+function M.setup()
+  vim.keymap.set('n', '<localleader>nn', ':NvimTreeToggle<CR>')
+  vim.keymap.set('n', '<localleader>nf', ':NvimTreeFindFileToggle<CR>')
 
-    require('nvim-tree').setup({
-      hijack_cursor = true,
-      on_attach = nvim_tree_on_attach,
-      view = {
-        centralize_selection = true,
+  require('nvim-tree').setup({
+    hijack_cursor = true,
+    on_attach = M.nvim_tree_on_attach,
+    view = {
+      centralize_selection = true,
+    },
+    renderer = {
+      add_trailing = true,
+      highlight_git = true,
+      highlight_opened_files = 'icon',
+      indent_width = 2,
+      indent_markers = {
+        enable = true,
+        inline_arrows = true,
       },
-      renderer = {
-        add_trailing = true,
-        highlight_git = true,
-        highlight_opened_files = 'icon',
-        indent_width = 2,
-        indent_markers = {
-          enable = true,
-          inline_arrows = true,
-        },
+    },
+    actions = {
+      open_file = {
+        quit_on_open = true,
       },
-      actions = {
-        open_file = {
-          quit_on_open = true,
-        },
-      },
-    })
+    },
+  })
 
-    vim.cmd [[autocmd StdinReadPre * let s:std_in=1autocmd StdinReadPre * let s:std_in=1]]
-    vim.cmd [[autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exec 'bd' | endif]]
-  end
-}
+  vim.cmd [[autocmd StdinReadPre * let s:std_in=1autocmd StdinReadPre * let s:std_in=1]]
+  vim.cmd [[autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exec 'bd' | endif]]
+end
 
-local function nvim_tree_on_attach(bufnr)
+function M.nvim_tree_on_attach(bufnr)
   local api = require('nvim-tree.api')
 
   local function add_key(key, action, desc)

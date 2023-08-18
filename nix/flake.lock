@@ -85,11 +85,11 @@
     },
     "nvim-plugin-manager": {
       "locked": {
-        "lastModified": 1692357248,
-        "narHash": "sha256-q5ZnEQULad729Y05nOud6jk1Tr7CGRPClO9zBdrETw4=",
+        "lastModified": 1692362298,
+        "narHash": "sha256-xqiZ4/ONmRSbdDeirMNdyA6ksgVrhq+aG8auqhd6COg=",
         "owner": "phenax",
         "repo": "nvim-flake-plugin-manager",
-        "rev": "dc0b316eaab8ff14700a16e5a0e1ab91fbb5a651",
+        "rev": "28a77579f6a21964000b072451c3a0e32e2349a8",
         "type": "github"
       },
       "original": {
@@ -140,7 +140,8 @@
         "nvim-tree": "nvim-tree",
         "plenary": "plenary",
         "telescope": "telescope",
-        "vim-autoread": "vim-autoread"
+        "vim-autoread": "vim-autoread",
+        "vim-bufkill": "vim-bufkill"
       }
     },
     "systems": {
@@ -187,6 +188,22 @@
       "original": {
         "owner": "djoshea",
         "repo": "vim-autoread",
+        "type": "github"
+      }
+    },
+    "vim-bufkill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650339529,
+        "narHash": "sha256-rolvtTZM7nTXKtRGvqegc1jLi9Wjf4mZ+VNSN3/83Mk=",
+        "owner": "qpkorr",
+        "repo": "vim-bufkill",
+        "rev": "3113181d0c1bfb8719f3ddcd2e2f35a8d763d1e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qpkorr",
+        "repo": "vim-bufkill",
         "type": "github"
       }
     }

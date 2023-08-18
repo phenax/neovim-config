@@ -8,9 +8,11 @@
 
     # Neovim plugin sources
     telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
+    plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
     nvim-tree = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
     vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
-    plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
+    vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
+
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
   };
 
@@ -25,6 +27,7 @@
           configModule = "_plugins.nvim-tree";
         };
         vim-autoread = { };
+        vim-bufkill = { lazy.commands = [ "BD" ]; };
         material = {
           configLua = ''
             vim.g.material_terminal_italics = 1
@@ -43,6 +46,8 @@
           inherit plugins sources pkgs;
           modulePath = ./.;
           doCheck = true;
+          extraModulesPre = [ "_modules.settings" ];
+          extraModules = [ "_modules.buffers" ];
         };
       });
 }

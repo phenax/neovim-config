@@ -1,8 +1,5 @@
 return {
   setup = function()
-    vim.g.mapleader = "\\"
-    vim.g.maplocalleader = " "
-
     local telescope = require('telescope')
     local actions = require('telescope.actions')
     local builtin = require('telescope.builtin')
@@ -52,5 +49,11 @@ return {
 
     -- Set buffer file type
     vim.keymap.set('n', '<leader>cf', builtin.filetypes)
+
+    -- Search through buffers
+    vim.keymap.set('n', '<localleader>b', builtin.buffers)
+
+    -- Search inside current buffer
+    vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find) -- Ctrl + /
   end
 }
