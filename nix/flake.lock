@@ -34,6 +34,22 @@
         "type": "github"
       }
     },
+    "fugitive": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1688507093,
+        "narHash": "sha256-JAlILa/7A9L10nWJh7IIfhdNn1tpVSKyhuc0oGTekvg=",
+        "owner": "tpope",
+        "repo": "vim-fugitive",
+        "rev": "b3b838d690f315a503ec4af8c634bdff3b200aaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tpope",
+        "repo": "vim-fugitive",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -166,6 +182,7 @@
       "inputs": {
         "devicons": "devicons",
         "flake-utils": "flake-utils",
+        "fugitive": "fugitive",
         "home-manager": "home-manager",
         "lualine": "lualine",
         "material": "material",

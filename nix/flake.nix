@@ -13,6 +13,10 @@
     lualine = { url = "github:nvim-lualine/lualine.nvim"; flake = false; };
     devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
 
+    fugitive = { url = "github:tpope/vim-fugitive"; flake = false; };
+    gitgutter = { url = "github:airblade/vim-gitgutter"; flake = false; };
+    gitmessenger = { url = "github:rhysd/git-messenger.vim"; flake = false; };
+
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
 
     vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
@@ -34,8 +38,14 @@
           dependencies = [ "devicons" ];
           configModule = "_plugins.lualine";
         };
+
+        fugitive = { configModule = "_plugins.fugitive"; };
+        gitgutter = { configModule = "_plugins.gitgutter"; };
+        gitmessenger = { configModule = "_plugins.gitmessenger"; };
+
         vim-autoread = { };
         vim-bufkill = { lazy.commands = [ "BD" ]; };
+
         material = { configModule = "_plugins.material"; };
       };
     in
