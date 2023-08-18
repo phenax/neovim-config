@@ -1,9 +1,14 @@
 local utils = require 'utils'
+local nvim_lsp = require 'lspconfig'
 local nmap = utils.nmap
 local nmap_options = utils.nmap_options
 
-local function capabilityDisableFormatting()
+local function defaultCapabilities()
   local cap = vim.lsp.protocol.make_client_capabilities()
+  return cap
+end
+
+local function capDisableFormatting(cap)
   cap.textDocument.formatting = false
   return cap
 end
@@ -17,21 +22,25 @@ local lsp = {
     "elm",
     "vue",
     "svelte",
-    -- "javascript",
-    -- "javascriptreact",
-    -- "typescript",
-    -- "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
     "astro",
     "unison",
     "scala",
-    -- "crystal"
+    "crystal",
     "c",
     "h",
     "cpp"
   },
 
   lsp_servers = {
-    eslint = {},
+    eslint = {
+      commands = {
+        LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
+      }
+    },
 
     clangd = {},
 
@@ -41,7 +50,10 @@ local lsp = {
       },
     },
 
-    tailwindcss = {},
+    tailwindcss = {
+      root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts'),
+      single_file_support = false,
+    },
 
     -- scala
     metals = {},
@@ -50,19 +62,16 @@ local lsp = {
     -- crystalline = {},
 
     tsserver = {
-      capabilities = capabilityDisableFormatting(),
+      capabilities = capDisableFormatting(defaultCapabilities()),
     },
 
     astro = {},
-
     svelte = {},
 
     vuels = {
       settings = {
         vetur = {
-          format = {
-            enable = false,
-          },
+          format = { enable = false },
           validation = {
             style = true,
             script = true,
@@ -70,10 +79,7 @@ local lsp = {
             template = true,
             templateProps = false,
           },
-          completion = {
-            autoImport = true,
-            tagCasing = "kebab",
-          },
+          completion = { autoImport = true, tagCasing = "kebab" },
         },
       },
     },
@@ -81,16 +87,9 @@ local lsp = {
     rust_analyzer = {
       settings = {
         ["rust-analyzer"] = {
-          cargo = {
-            autoreload = true,
-            allFeatures = true,
-          },
-          procMacro = {
-            enable = true,
-          },
-          checkOnSave = {
-            command = "clippy",
-          },
+          cargo = { autoreload = true, allFeatures = true },
+          procMacro = { enable = true },
+          checkOnSave = { command = "clippy" },
           diagnostics = {
             enable = true,
             disabled = {"unresolved-proc-macro"},
@@ -102,7 +101,7 @@ local lsp = {
 
     jsonls = {
       commands = {
-        Format = {
+        LspFormat = {
           function()
             vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
           end
@@ -110,11 +109,7 @@ local lsp = {
       }
     },
 
-    elmls = {
-      init_options = {
-        elmReviewDiagnostics = 'warning',
-      },
-    },
+    elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
 
     rnix = {},
 
@@ -122,10 +117,7 @@ local lsp = {
 
     hls = {
       settings = {
-        languageServerHaskell = {
-          hlintOn = true,
-          completionSnippetsOn = true,
-        },
+        languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
       },
     },
 
@@ -165,6 +157,14 @@ function lsp.plugins(use)
   }
 end
 
+function lsp.format_buffer()
+  if vim.fn.exists(':LspFormat') > 0 then
+    vim.cmd [[LspFormat]]
+  else
+    vim.lsp.buf.format({ async = false })
+  end
+end
+
 function lsp.on_lsp_attached(client, bufnr)
   local opts = { noremap=true, silent=true }
 
@@ -183,7 +183,8 @@ function lsp.on_lsp_attached(client, bufnr)
   -- Refactor actions
   nmap_options('<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   nmap_options('<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
+  -- nmap_options('<localleader>f', "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
+  vim.keymap.set('n', '<localleader>f', lsp.format_buffer, { silent = true, noremap = true })
 
   -- Diagnostics
   nmap_options('<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -305,12 +306,6 @@ function lsp.configure()
       ['<C-j>'] = cmpDown,
       ['<C-k>'] = cmpUp,
     },
-    -- formatting = {
-    --   format = require('lspkind').cmp_format {
-    --     mode = 'text_symbol',
-    --     maxwidth = 50,
-    --   }
-    -- }
   }
 end
 
@@ -338,7 +333,7 @@ function lsp___toggle_autoformat()
 end
 function lsp___on_save()
   if is_autoformat_enabled then
-    vim.lsp.buf.format({ async = false })
+    lsp.format_buffer()
   end
 end
 
