@@ -7,6 +7,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Neovim plugin sources
+    treesitter = { url = "github:nvim-treesitter/nvim-treesitter"; flake = false; };
+    treesitter-textobjects = { url = "github:nvim-treesitter/nvim-treesitter-textobjects"; flake = false; };
+    treesitter-context = { url = "github:nvim-treesitter/nvim-treesitter-context"; flake = false; };
+    treesitter-playground = { url = "github:nvim-treesitter/playground"; flake = false; };
+
     telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
     plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
     nvim-tree = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
@@ -26,6 +31,12 @@
   outputs = sources@{ self, nixpkgs, flake-utils, home-manager, nvim-plugin-manager, ... }:
     let
       plugins = {
+        treesitter = {
+          dependencies = [ "treesitter-textobjects" "treesitter-context" ];
+          configModule = "_plugins.treesitter";
+        };
+        treesitter-playground = { };
+
         telescope = {
           dependencies = [ "plenary" ];
           configModule = "_plugins.telescope";

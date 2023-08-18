@@ -60,7 +60,7 @@ function M.setup()
   -- Git branches
   vim.keymap.set('n', '<localleader>gbb', require'telescope.builtin'.git_branches)
 
-  M.setup_theme()
+  -- M.setup_theme()
 end
 
 function M.setup_theme()
