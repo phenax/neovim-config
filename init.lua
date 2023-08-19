@@ -17,7 +17,7 @@ return packer.startup(function()
     require 'modules.buffers',  -- migrated
     require 'modules.fs',  -- migrated
     require 'modules.git', -- migrated
-    require 'modules.editor',
+    require 'modules.editor', -- (treesitter & language specific plugins pending)
     require 'modules.lsp',
     require 'modules.tools', -- migrated
     require 'modules.notes',

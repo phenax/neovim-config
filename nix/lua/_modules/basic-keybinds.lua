@@ -39,6 +39,24 @@ vim.keymap.set('v', '<C-c>', '"+y')
 
 -- Force indent for any buffer
 function SetIndent(indent)
-  exec(":set shiftwidth=".. indent .." expandtab")
+  vim.cmd(":set shiftwidth=".. indent .." expandtab")
 end
+
+-- Terminal mode
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
+
+-- Sessions
+vim.keymap.set('n', '<leader>sw', ':mksession! .vim.session<cr>')
+vim.keymap.set('n', '<leader>sl', ':source .vim.session<cr>')
+
+-- No highlight
+vim.keymap.set('n', '<c-\\>', ':noh<CR>')
+
+-- Replace word
+vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
+
+-- Code folding
+vim.keymap.set('n', '<S-Tab>', 'zR')
+vim.keymap.set('n', 'zx', 'zo')
+vim.keymap.set('n', 'zc', 'zc')
 

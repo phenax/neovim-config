@@ -12,11 +12,12 @@
     treesitter-context = { url = "github:nvim-treesitter/nvim-treesitter-context"; flake = false; };
     treesitter-playground = { url = "github:nvim-treesitter/playground"; flake = false; };
 
-    telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
     plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
+    devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
+
+    telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
     nvim-tree = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
     lualine = { url = "github:nvim-lualine/lualine.nvim"; flake = false; };
-    devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
 
     fugitive = { url = "github:tpope/vim-fugitive"; flake = false; };
     gitgutter = { url = "github:airblade/vim-gitgutter"; flake = false; };
@@ -24,11 +25,17 @@
 
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
 
-    vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
-    vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
-
     codeium = { url = "github:Exafunction/codeium.vim"; flake = false; };
     rest-nvim = { url = "github:NTBBloodbath/rest.nvim"; flake = false; };
+    vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
+    vim-bufkill = { url = "github:qpkorr/vim-bufkill"; flake = false; };
+    comment-nvim = { url = "github:numToStr/Comment.nvim"; flake = false; };
+    leap = { url = "github:ggandor/leap.nvim"; flake = false; };
+    vim-surround = { url = "github:tpope/vim-surround"; flake = false; };
+    vim-autoclose = { url = "github:Townk/vim-autoclose"; flake = false; };
+    targets-vim = { url = "github:wellle/targets.vim"; flake = false; };
+    indent-blankline = { url = "github:lukas-reineke/indent-blankline.nvim"; flake = false; };
+    nvim-colorizer = { url = "github:NvChad/nvim-colorizer.lua"; flake = false; };
   };
 
   outputs = sources@{ self, nixpkgs, flake-utils, home-manager, nvim-plugin-manager, ... }:
@@ -51,19 +58,27 @@
         gitgutter = { configModule = "_plugins.gitgutter"; };
         gitmessenger = { configModule = "_plugins.gitmessenger"; };
 
-        vim-autoread = { };
-        vim-bufkill = { lazy.commands = [ "BD" ]; };
         codeium = {
           lazy.commands = [ "Codeium" "CodeiumEnable" ];
           configModule = "_plugins.codeium-ai";
         };
-        material = { configModule = "_plugins.material"; };
-
         rest-nvim = {
           lazy.exts = [ "*.http" ];
           dependencies = [ "plenary" ];
           configModule = "_plugins.rest-nvim";
         };
+
+        vim-autoread = { };
+        vim-bufkill = { lazy.commands = [ "BD" ]; };
+        comment-nvim = { configModule = "_plugins.comment-nvim"; };
+        leap = { configModule = "_plugins.leap"; };
+        vim-surround = { };
+        vim-autoclose = { };
+        targets-vim = { };
+        indent-blankline = { configModule = "_plugins.indent-blankline"; };
+        nvim-colorizer = { configModule = "_plugins.nvim-colorizer"; };
+
+        material = { configModule = "_plugins.material"; };
 
         # TODO: Enable after packer stuff is cleaned out
         # treesitter = {
