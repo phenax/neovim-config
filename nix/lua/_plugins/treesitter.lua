@@ -1,6 +1,10 @@
-local M = {}
+local M = {
+  treesitter_runtime_dir = vim.fn.expand("~/.local/share/nvim-flake/treesitter/parsers"),
+}
 
 function M.setup()
+  vim.opt.runtimepath:append(M.treesitter_runtime_dir)
+
   require'nvim-treesitter.configs'.setup(M.get_ts_config())
 
   -- TS context
@@ -15,17 +19,11 @@ end
 function M.get_ts_config()
   return {
     ensure_installed = "all",
+    parser_install_dir = M.treesitter_runtime_dir,
+    auto_install = false,
 
-    parser_install_dir = vim.fn.expand("~/.local/share/nvim-flake/treesitter/parsers/"),
-
-    highlight = {
-      enable = true,
-      additional_vim_regex_highlighting = false,
-    },
-
-    indent = {
-      enable = true
-    },
+    highlight = { enable = true },
+    indent = { enable = true },
 
     textobjects = {
       enable = true,
@@ -38,34 +36,25 @@ function M.get_ts_config()
           ["aa"] = "@parameter.outer",
           ["ia"] = "@parameter.inner",
         },
-        swap = {
-          enable = true,
-          swap_next = {
-            ["<M-n>"] = "@parameter.inner",
-          },
-          swap_previous = {
-            ["<M-p>"] = "@parameter.inner",
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ["<leader>rn"] = "@function.outer",
-          },
-          goto_previous_start = {
-            ["<leader>rp"] = "@function.outer",
-          },
-        },
+        swap = { enable = true },
+        move = { enable = true, set_jumps = true },
         lsp_interop = {
           enable = true,
           border = 'none',
-          peek_definition_code = {
-            ["<leader>dt"] = "@function.outer",
-          },
+          peek_definition_code = { ["<leader>dt"] = "@function.outer" },
         },
       },
     },
+
+    incremental_selection = {
+	    enable = true,
+	    keymaps = {
+	      init_selection = '<CR>',
+	      scope_incremental = '<CR>',
+	      node_incremental = '<TAB>',
+	      node_decremental = '<S-TAB>',
+	    },
+	  },
 
     rainbow = {
       enable = true,

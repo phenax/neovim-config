@@ -185,7 +185,7 @@ function Notes__onvimwiki()
   nmap('<localleader>da',  ':VimwikiMakeDiaryNote<CR>')
   nmap('<localleader>dx',  ':VimwikiDiaryGenerateLinks<CR>')
   nmap('<localleader>di',  '<leader>wi')
-  -- Checklist
+  -- Checklist - V:s/- \[ \] /- [x] /|noh
   nmap('<localleader>cc',  ':VimwikiToggleListItem<CR>')
   nmap('<localleader>li',  ':lua Notes__on_new_line("  * ")<CR>')
   nmap('<localleader>cn',  ':lua Notes__on_new_line("  - [ ] ")<CR>')

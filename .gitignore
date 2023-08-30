@@ -3,3 +3,4 @@ plugin
 autoload
 .netrwhist
 .luarc.json
+backups

@@ -1,1 +1,1 @@
-vim.cmd [[luafile  result/load_plugins.lua]]
+vim.cmd [[luafile result/load_plugins.lua]]

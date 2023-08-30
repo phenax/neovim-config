@@ -60,3 +60,7 @@ vim.keymap.set('n', '<S-Tab>', 'zR')
 vim.keymap.set('n', 'zx', 'zo')
 vim.keymap.set('n', 'zc', 'zc')
 
+-- Spell checker
+vim.keymap.set('n', '<leader>==', ':setlocal spell! spelllang=en_us<CR>')
+vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
+

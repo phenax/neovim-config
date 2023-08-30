@@ -10,7 +10,21 @@
     treesitter = { url = "github:nvim-treesitter/nvim-treesitter"; flake = false; };
     treesitter-textobjects = { url = "github:nvim-treesitter/nvim-treesitter-textobjects"; flake = false; };
     treesitter-context = { url = "github:nvim-treesitter/nvim-treesitter-context"; flake = false; };
-    treesitter-playground = { url = "github:nvim-treesitter/playground"; flake = false; };
+
+    nvim-lspconfig = { url = "github:neovim/nvim-lspconfig"; flake = false; };
+    lsp-signature = { url = "github:ray-x/lsp_signature.nvim"; flake = false; };
+    virtual-types = { url = "github:jubnzv/virtual-types.nvim"; flake = false; };
+    nvim-cmp = { url = "github:hrsh7th/nvim-cmp"; flake = false; };
+    cmp-lsp = { url = "github:hrsh7th/cmp-nvim-lsp"; flake = false; };
+    cmp-path = { url = "github:hrsh7th/cmp-path"; flake = false; };
+    cmp-buffer = { url = "github:hrsh7th/cmp-buffer"; flake = false; };
+    cmp-calc = { url = "github:hrsh7th/cmp-calc"; flake = false; };
+    cmp-treesitter = { url = "github:ray-x/cmp-treesitter"; flake = false; };
+    cmp-luasnip = { url = "github:saadparwaiz1/cmp_luasnip"; flake = false; };
+    trouble-nvim = { url = "github:folke/trouble.nvim"; flake = false; };
+
+    luasnip = { url = "github:L3MON4D3/LuaSnip"; flake = false; };
+    friendly-snippets = { url = "github:rafamadriz/friendly-snippets"; flake = false; };
 
     plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
     devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
@@ -24,6 +38,11 @@
     gitmessenger = { url = "github:rhysd/git-messenger.vim"; flake = false; };
 
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
+
+    neorg = { url = "github:nvim-neorg/neorg"; flake = false; };
+    neorg-timelog = { url = "github:phenax/neorg-timelog"; flake = false; };
+    neorg-hop-extras = { url = "github:phenax/neorg-hop-extras"; flake = false; };
+    zen-mode = { url = "github:folke/zen-mode.nvim"; flake = false; };
 
     codeium = { url = "github:Exafunction/codeium.vim"; flake = false; };
     rest-nvim = { url = "github:NTBBloodbath/rest.nvim"; flake = false; };
@@ -78,15 +97,52 @@
         indent-blankline = { configModule = "_plugins.indent-blankline"; };
         nvim-colorizer = { configModule = "_plugins.nvim-colorizer"; };
 
-        material = { configModule = "_plugins.material"; };
+        treesitter = {
+          dependencies = [ "treesitter-context" ];
+          configModule = "_plugins.treesitter";
+        };
+        treesitter-textobjects = { };
 
-        # TODO: Enable after packer stuff is cleaned out
-        # treesitter = {
-        #   dependencies = [ "treesitter-context" ];
-        #   configModule = "_plugins.treesitter";
+        nvim-lspconfig = {
+          dependencies = [ "lsp-signature" "virtual-types" "cmp-lsp" ];
+          configModule = "_plugins.lspconfig";
+        };
+
+        nvim-cmp = {
+          requiredBy = [
+            "cmp-lsp"
+            "cmp-treesitter"
+            "cmp-path"
+            "cmp-buffer"
+            "cmp-calc"
+            # "cmp-luasnip"
+          ];
+          configModule = "_plugins.nvim-cmp";
+        };
+
+        # TODO: add snippets
+        # luasnip = {
+        #   requiredBy = [ "cmp-luasnip" "friendly-snippets" ];
         # };
-        # treesitter-textobjects = { };
-        # treesitter-playground = { dependencies = [ "treesitter" ]; };
+
+        trouble-nvim = {
+          dependencies = [ "devicons" ];
+          configModule = "_plugins.trouble-nvim";
+        };
+
+        neorg = {
+          configModule = "_plugins.neorg";
+          dependencies = [
+            "treesitter-context"
+            "treesitter"
+            "zen-mode"
+            "neorg-timelog"
+            "neorg-hop-extras"
+            "nvim-cmp"
+          ];
+        };
+
+        material = { configModule = "_plugins.material"; };
       };
     in
     flake-utils.lib.eachDefaultSystem (system:
