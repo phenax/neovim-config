@@ -49,8 +49,8 @@ function M.get_ts_config()
     incremental_selection = {
 	    enable = true,
 	    keymaps = {
-	      init_selection = '<CR>',
-	      scope_incremental = '<CR>',
+	      init_selection = '<localleader><CR>',
+	      scope_incremental = '<localleader><CR>',
 	      node_incremental = '<TAB>',
 	      node_decremental = '<S-TAB>',
 	    },

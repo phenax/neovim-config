@@ -10,16 +10,17 @@ local function leader(key)
 end
 
 function M.setup()
-  require('neorg').setup(M.get_neorg_config())
-
-  vim.api.nvim_create_autocmd( "FileType", {
-    pattern = { "norg" },
+  vim.api.nvim_create_autocmd({ "BufWinEnter", "BufRead", "BufNewFile" }, {
+    pattern = { "*.norg" },
     callback = M.configure_neorg_file,
   })
+
+  require('neorg').setup(M.get_neorg_config())
 end
 
 function M.configure_neorg_file()
-  vim.o.conceallevel = 2
+  vim.opt.ft = 'norg'
+  vim.opt.conceallevel = 2
 
   vim.api.nvim_set_hl(0, '@neorg.markup.bold', { fg = '#51E980', bold = true })
   vim.api.nvim_set_hl(0, '@neorg.tags.ranged_verbatim.code_block', { bg = '#1a1824' })
@@ -68,13 +69,6 @@ function M.get_neorg_config()
         }
       },
 
-      -- ['core.gtd.base'] = {
-      --   config = {
-      --     workspace = 'work',
-      --     inbox = 'index.norg',
-      --   }
-      -- },
-
       ['core.concealer'] = {
         config = {
           icon_preset = 'basic',
@@ -119,10 +113,6 @@ function M.neorg_keybindings(keybinds)
         { space 'cc', 'core.qol.todo_items.todo.task_cancelled' },
         { space 'cr', 'core.qol.todo_items.todo.task_recurring' },
 
-        -- GTD views
-        -- { leader 'tt', 'core.integrations.telescope.find_aof_tasks' },
-        -- { leader 'tc', 'core.integrations.telescope.find_context_tasks' },
-
         -- Notes
         { space 'na', 'core.dirman.new.note' },
 
@@ -134,7 +124,6 @@ function M.neorg_keybindings(keybinds)
         { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
         { ']]',       'core.integrations.treesitter.next.heading' },
         { '[[',       'core.integrations.treesitter.previous.heading' },
-        -- { '<cr>',     'core.esupports.hop.hop-link' },
       },
     },
     {
@@ -147,9 +136,6 @@ function M.neorg_keybindings(keybinds)
     {
       n = {
         { leader 'jn', '<cmd>Neorg journal today<cr>' },
-        -- { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
-        -- { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
-        -- { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
         { leader 'tl', '<cmd>Neorg insert-timelog *<cr>' },
       },
     },

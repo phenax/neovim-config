@@ -10,7 +10,6 @@
     treesitter = { url = "github:nvim-treesitter/nvim-treesitter"; flake = false; };
     treesitter-textobjects = { url = "github:nvim-treesitter/nvim-treesitter-textobjects"; flake = false; };
     treesitter-context = { url = "github:nvim-treesitter/nvim-treesitter-context"; flake = false; };
-
     nvim-lspconfig = { url = "github:neovim/nvim-lspconfig"; flake = false; };
     lsp-signature = { url = "github:ray-x/lsp_signature.nvim"; flake = false; };
     virtual-types = { url = "github:jubnzv/virtual-types.nvim"; flake = false; };
@@ -22,28 +21,21 @@
     cmp-treesitter = { url = "github:ray-x/cmp-treesitter"; flake = false; };
     cmp-luasnip = { url = "github:saadparwaiz1/cmp_luasnip"; flake = false; };
     trouble-nvim = { url = "github:folke/trouble.nvim"; flake = false; };
-
     luasnip = { url = "github:L3MON4D3/LuaSnip"; flake = false; };
     friendly-snippets = { url = "github:rafamadriz/friendly-snippets"; flake = false; };
-
     plenary = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
     devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
-
     telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
     nvim-tree = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
     lualine = { url = "github:nvim-lualine/lualine.nvim"; flake = false; };
-
     fugitive = { url = "github:tpope/vim-fugitive"; flake = false; };
     gitgutter = { url = "github:airblade/vim-gitgutter"; flake = false; };
     gitmessenger = { url = "github:rhysd/git-messenger.vim"; flake = false; };
-
     material = { url = "github:kaicataldo/material.vim"; flake = false; };
-
     neorg = { url = "github:nvim-neorg/neorg"; flake = false; };
     neorg-timelog = { url = "github:phenax/neorg-timelog"; flake = false; };
     neorg-hop-extras = { url = "github:phenax/neorg-hop-extras"; flake = false; };
     zen-mode = { url = "github:folke/zen-mode.nvim"; flake = false; };
-
     codeium = { url = "github:Exafunction/codeium.vim"; flake = false; };
     rest-nvim = { url = "github:NTBBloodbath/rest.nvim"; flake = false; };
     vim-autoread = { url = "github:djoshea/vim-autoread"; flake = false; };
@@ -131,6 +123,7 @@
         };
 
         neorg = {
+          # lazy.exts = [ "*.norg" ];
           configModule = "_plugins.neorg";
           dependencies = [
             "treesitter-context"
@@ -141,6 +134,8 @@
             "nvim-cmp"
           ];
         };
+
+        zen-mode = { };
 
         material = { configModule = "_plugins.material"; };
       };

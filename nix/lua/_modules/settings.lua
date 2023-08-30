@@ -20,40 +20,40 @@ vim.o.foldlevel = 50
 vim.o.number = true
 vim.o.relativenumber = true
 
--- set('showmatch', true)
--- set('ignorecase', true)
--- set('smartcase', true)
--- set('hlsearch', true)
--- set('incsearch', true)
--- set('history', 800)
--- set('undolevels', 1000)
--- set('title', true)
--- set('visualbell', true)
--- set('errorbells', false)
--- set('backspace', 'indent,eol,start')
--- set('backup', false)
--- set('swapfile', false)
--- set('noshowmode', true)
---
--- set('ruler', true)
--- set('scrolloff', 15)
--- set('colorcolumn', 120)
---
+vim.o.showmatch = true
+vim.o.ignorecase = true
+
+vim.o.smartcase = true
+vim.o.hlsearch = true
+vim.o.incsearch = true
+vim.o.history = 800
+vim.o.undolevels = 1000
+vim.o.title = true
+vim.o.visualbell = true
+vim.o.errorbells = false
+vim.o.backspace = 'indent,eol,start'
+vim.o.backup = false
+vim.o.swapfile = false
+vim.o.showmode = false
+vim.o.ruler = true
+vim.o.scrolloff = 15
+vim.o.colorcolumn = 120
+
 -- -- Indent
--- set('autoindent', true)
--- set('copyindent', true)
--- set('shiftwidth', 2)
--- set('tabstop', 2)
--- set('smarttab', true)
--- set('expandtab', true)
---
--- set('laststatus', 2)
--- set('cmdheight', 1)
--- set('updatetime', 300)
--- set('signcolumn', 'yes')
--- set('cursorline', true)
--- set('cursorcolumn', true)
---
--- -- Short messages
--- append('shortmess', 'TIFc')
---
+vim.o.autoindent = true
+vim.o.copyindent = true
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.smarttab = true
+vim.o.expandtab = true
+
+vim.o.laststatus = 2
+vim.o.cmdheight = 1
+vim.o.updatetime = 300
+vim.o.signcolumn = 'yes'
+vim.o.cursorline = true
+vim.o.cursorcolumn = true
+
+-- Short messages
+vim.o.shortmess = vim.o.shortmess .. 'TIFc'
+
