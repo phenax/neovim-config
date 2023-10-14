@@ -110,6 +110,7 @@ function fs.configure()
         i = {
           ['<C-d>'] = actions.delete_buffer,
           ['<C-o>'] = open_and_resume,
+          ['<C-h>'] = 'which_key',
         }
       },
     },

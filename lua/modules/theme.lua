@@ -131,23 +131,10 @@ function theme.lualine()
 
     tabline = {
       lualine_a = {
-        -- {
-        --   'filename',
-        --   file_status = true,
-        --   newfile_status = true,
-        --   path = 1,
-        --   -- shorting_target = 40,
-        --   symbols = {
-        --     modified = '[+]',
-        --     readonly = '[-]',
-        --     unnamed = '<no name>',
-        --     newfile = '<new>',
-        --   }
-        -- },
         {
           'buffers',
           mode = 2,
-          max_length = vim.o.columns * 4 / 5,
+          max_length = vim.o.columns,
           filetype_names = {
             TelescopePrompt = '<telescope>',
             fugitive = '<git>',
@@ -162,9 +149,7 @@ function theme.lualine()
       lualine_b = {},
       lualine_c = {},
       lualine_x = {},
-      lualine_y = {
-        'filetype'
-      },
+      lualine_y = {},
       lualine_z = {},
     },
   }

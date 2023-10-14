@@ -11,8 +11,9 @@ function editor.plugins(use)
   use 'ggandor/leap.nvim'
   -- justinmk/vim-sneak
 
-  use 'simrat39/symbols-outline.nvim'
+  -- use 'simrat39/symbols-outline.nvim'
   use 'lukas-reineke/indent-blankline.nvim'
+  use 'RRethy/vim-illuminate'
   -- use 'ray-x/lsp_signature.nvim'
   -- use 'jubnzv/virtual-types.nvim'
 
@@ -39,6 +40,9 @@ function editor.plugins(use)
     callback = function()
       utils.add_rtp('BQN/editors/vim')
       exec [[setf bqn]]
+      require("luasnip.loaders.from_vscode").load_standalone({
+        path = "./snippets/bqn.json"
+      })
     end,
   })
 
@@ -53,16 +57,17 @@ function editor.plugins(use)
     },
   }
   use 'nvim-treesitter/playground'
-  use 'p00f/nvim-ts-rainbow'
+  -- use 'p00f/nvim-ts-rainbow'
   use 'drybalka/tree-climber.nvim'
 
   use 'hkupty/iron.nvim'
   use 'Exafunction/codeium.vim'
+  use 'stevearc/aerial.nvim'
 
-  use {
-    'DanielVolchek/tailiscope.nvim',
-    requires = { 'nvim-telescope/telescope.nvim' },
-  }
+  -- use {
+  --   'DanielVolchek/tailiscope.nvim',
+  --   requires = { 'nvim-telescope/telescope.nvim' },
+  -- }
 end
 
 function editor.configure()
@@ -101,6 +106,15 @@ function editor.configure()
     indent = {
       enable = true
     },
+    incremental_selection = {
+	    enable = true,
+	    keymaps = {
+	      init_selection = '<localleader><CR>',
+	      scope_incremental = '<localleader><CR>',
+	      node_incremental = '<TAB>',
+	      node_decremental = '<S-TAB>',
+	    },
+	  },
     textobjects = {
       enable = true,
       select = {
@@ -140,31 +154,31 @@ function editor.configure()
         },
       },
     },
-    rainbow = {
-      enable = true,
-      extended_mode = true,
-      -- disable = { "jsx", "cpp" },
-      -- max_file_lines = 2000,
-    }
+    -- rainbow = {
+    --   enable = true,
+    --   extended_mode = true,
+    --   -- disable = { "jsx", "cpp" },
+    --   -- max_file_lines = 2000,
+    -- }
   }
 
   -- Symbols
-  nmap('<localleader>ns', ':SymbolsOutline<cr>')
-  g.symbols_outline = {
-    highlight_hovered_item = true,
-    show_guides = true,
-    auto_preview = false,
-    position = 'right',
-    keymaps = {
-      close = "q",
-      goto_location = "<CR>",
-      focus_location = "o",
-      hover_symbol = "K",
-      rename_symbol = "r",
-      code_actions = "a",
-    },
-    lsp_blacklist = {},
-  }
+  -- nmap('<localleader>ns', ':SymbolsOutline<cr>')
+  -- g.symbols_outline = {
+  --   highlight_hovered_item = true,
+  --   show_guides = true,
+  --   auto_preview = false,
+  --   position = 'right',
+  --   keymaps = {
+  --     close = "q",
+  --     goto_location = "<CR>",
+  --     focus_location = "o",
+  --     hover_symbol = "K",
+  --     rename_symbol = "r",
+  --     code_actions = "a",
+  --   },
+  --   lsp_blacklist = {},
+  -- }
 
   require('Comment').setup({
     padding = true,
@@ -234,7 +248,15 @@ function editor.configure()
   editor.codeium()
 
   -- Tailwind
-  require('telescope').load_extension('tailiscope')
+  -- require('telescope').load_extension('tailiscope')
+  --
+
+  -- vim.cmd [[ hi def IlluminatedWordText guibg=#15121f ]]
+  -- hi def IlluminatedWordText guifg=red guibg=none gui=none
+
+  require('aerial').setup()
+  vim.keymap.set('n', '<localleader>ns', ':AerialToggle right<cr>')
+  vim.keymap.set('n', '<localleader>nt', ':AerialNavToggle<cr>')
 end
 
 -- Bindings for tagbar

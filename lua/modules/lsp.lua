@@ -26,16 +26,25 @@ local lsp = {
     "javascriptreact",
     "typescript",
     "typescriptreact",
+    "ruby",
     "astro",
     "unison",
     "scala",
     "crystal",
     "c",
     "h",
-    "cpp"
+    "cpp",
+    "uiua"
   },
 
   lsp_servers = {
+    rubocop = {},
+    ruby_ls = {},
+
+    uiua = {},
+
+    zls = {},
+
     eslint = {
       commands = {
         LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },

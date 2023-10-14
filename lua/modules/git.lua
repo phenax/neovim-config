@@ -45,7 +45,7 @@ function git.configure()
   nmap('<localleader>gll', ':Commits<cr>')
   nmap('<localleader>glf', ':BCommits<cr>')
   nmap('<localleader>gm', ':GitMessenger<cr>')
-  nmap('<localleader>gbb', ':Telescope git_branches<cr>')
+  nmap('<localleader>gbb', ':Telescope git_branches show_remote_tracking_branches=false<cr>')
 
   -- Add
   nmap('<localleader>ga.', ':Git add .<cr>')
