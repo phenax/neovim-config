@@ -64,6 +64,8 @@ function editor.plugins(use)
   use 'Exafunction/codeium.vim'
   use 'stevearc/aerial.nvim'
 
+  use 'github/copilot.vim'
+
   -- use {
   --   'DanielVolchek/tailiscope.nvim',
   --   requires = { 'nvim-telescope/telescope.nvim' },
@@ -257,6 +259,8 @@ function editor.configure()
   require('aerial').setup()
   vim.keymap.set('n', '<localleader>ns', ':AerialToggle right<cr>')
   vim.keymap.set('n', '<localleader>nt', ':AerialNavToggle<cr>')
+
+  -- vim.cmd [[ Copilot disable ]]
 end
 
 -- Bindings for tagbar
