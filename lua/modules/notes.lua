@@ -10,6 +10,10 @@ local notes = {
 function notes.plugins(use)
   use 'vimwiki/vimwiki'
   use {
+    'lukas-reineke/headlines.nvim',
+    requires = { 'nvim-treesitter/nvim-treesitter' },
+  }
+  use {
     'nvim-neorg/neorg',
     run = ':Neorg sync-parsers',
     -- after = 'nvim-treesitter',
@@ -237,6 +241,21 @@ function notes.configure()
 
   exec [[au BufRead,BufNewFile *.md set filetype=vimwiki]]
   exec [[autocmd FileType vimwiki,markdown lua Notes__onvimwiki()]]
+
+  require('headlines').setup({
+    norg = {
+      headline_highlights = { "Headline" },
+      codeblock_highlight = false,
+      dash_highlight = "Dash",
+      dash_string = "-",
+      doubledash_highlight = "DoubleDash",
+      doubledash_string = "=",
+      quote_highlight = false,
+      fat_headlines = false,
+      -- fat_headline_upper_string = "▃",
+      -- fat_headline_lower_string = "▀",
+    },
+  })
 end
 
 function Notes__toggle_foldlevel()
