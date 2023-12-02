@@ -104,11 +104,11 @@ function theme.lualine()
   thm.replace.c = cline
   thm.inactive.c = cline
 
-  vim.api.nvim_create_augroup('lualine_augroup', { clear = true })
-  vim.api.nvim_create_autocmd('User LspProgressStatusUpdated', {
-    group = 'lualine_augroup',
-    callback = require('lualine').refresh,
-  })
+  -- vim.api.nvim_create_augroup('lualine_augroup', { clear = true })
+  -- vim.api.nvim_create_autocmd('User LspProgressStatusUpdated', {
+  --   group = 'lualine_augroup',
+  --   callback = require('lualine').refresh,
+  -- })
 
   lualine.setup {
     options = {

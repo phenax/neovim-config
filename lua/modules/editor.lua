@@ -63,6 +63,7 @@ function editor.plugins(use)
   use 'hkupty/iron.nvim'
   use 'Exafunction/codeium.vim'
   use 'stevearc/aerial.nvim'
+  use 'cshuaimin/ssr.nvim'
 
   use 'github/copilot.vim'
 
@@ -91,12 +92,17 @@ function editor.configure()
       tailwind = true,
     },
   })
-  g.indent_blankline_char = '┊'
-  g.indent_blankline_space_char = ' '
   utils.updateScheme({
     'IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine',
     'IndentBlanklineChar guifg=#1f1c29 gui=nocombine',
   })
+  -- Indent blankline
+  require('ibl').setup {
+    indent = {
+      highlight = { 'Normal', 'Comment' },
+      char = '┊',
+    },
+  }
 
   -- Treesitter
   require'nvim-treesitter.configs'.setup {
@@ -256,9 +262,16 @@ function editor.configure()
   -- vim.cmd [[ hi def IlluminatedWordText guibg=#15121f ]]
   -- hi def IlluminatedWordText guifg=red guibg=none gui=none
 
-  require('aerial').setup()
+  require('aerial').setup({
+    disable_max_lines = 30000,
+  })
   vim.keymap.set('n', '<localleader>ns', ':AerialToggle right<cr>')
   vim.keymap.set('n', '<localleader>nt', ':AerialNavToggle<cr>')
+
+  -- Search and replace
+  vim.keymap.set('n', '<leader>sr', function()
+    require('ssr').run()
+  end, { noremap = true, silent = true })
 
   -- vim.cmd [[ Copilot disable ]]
 end

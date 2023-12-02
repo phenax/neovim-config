@@ -14,6 +14,10 @@ function fs.plugins(use)
     'nvim-telescope/telescope.nvim',
     requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
+  use {
+    'https://github.com/Marskey/telescope-sg',
+    requires = {{ 'nvim-telescope/telescope.nvim' }},
+  }
 end
 
 local function nvim_tree_on_attach(bufnr)
@@ -114,6 +118,9 @@ function fs.configure()
         }
       },
     },
+    -- extensions = {
+    --   ast_grep = {},
+    -- },
   }
   -- Resume last search
   nmap('<leader>tr', ':Telescope resume<CR>')
@@ -128,6 +135,7 @@ function fs.configure()
   -- Global content search
   nmap_silent('<c-f>', ':Telescope live_grep<cr>')
   nmap_silent('<leader>mm', ':Telescope marks<cr>')
+  nmap_silent('<leader>sg', ':Telescope ast_grep<cr>')
 
   -- Set buffer file type
   nmap_silent('<leader>cf', ':Telescope filetypes<cr>')

@@ -165,7 +165,7 @@ function notes.neorg_keybindings(keybinds)
         { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
         { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
         { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
-        { leader 'tl', '<cmd>Neorg insert-timelog *<cr>' }, -- NOTE: Updates all timelogs
+        { leader 'tl', '<cmd>Neorg timelog insert *<cr>' }, -- NOTE: Updates all timelogs
       },
     },
     {

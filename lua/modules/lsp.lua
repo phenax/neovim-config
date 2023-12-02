@@ -34,16 +34,49 @@ local lsp = {
     "c",
     "h",
     "cpp",
-    "uiua"
+    "uiua",
+    "go",
+    "racket"
   },
 
   lsp_servers = {
+    racket_langserver = {},
+    uiua = {},
+    zls = {},
+    clangd = {},
+    unison = {
+      settings = {
+        maxCompletions = 100,
+      },
+    },
+    ocamlls = {},
+    elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
+    -- vuels = {
+    --   settings = {
+    --     vetur = {
+    --       format = { enable = false },
+    --       validation = {
+    --         style = true,
+    --         script = true,
+    --         interpolation = true,
+    --         template = true,
+    --         templateProps = false,
+    --       },
+    --       completion = { autoImport = true, tagCasing = "kebab" },
+    --     },
+    --   },
+    -- },
+    -- purescriptls = {},
+    -- metals = {}, -- scala
+    -- gleam = {},
+    -- crystalline = {},
+    -- astro = {},
+    -- svelte = {},
+
     rubocop = {},
     ruby_ls = {},
-
-    uiua = {},
-
-    zls = {},
+    yamlls = {},
+    gopls = {},
 
     eslint = {
       commands = {
@@ -51,46 +84,13 @@ local lsp = {
       }
     },
 
-    clangd = {},
-
-    unison = {
-      settings = {
-        maxCompletions = 100,
-      },
-    },
-
     tailwindcss = {
       root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts'),
       single_file_support = false,
     },
 
-    -- scala
-    metals = {},
-
-    -- gleam = {},
-    -- crystalline = {},
-
     tsserver = {
       capabilities = capDisableFormatting(defaultCapabilities()),
-    },
-
-    astro = {},
-    svelte = {},
-
-    vuels = {
-      settings = {
-        vetur = {
-          format = { enable = false },
-          validation = {
-            style = true,
-            script = true,
-            interpolation = true,
-            template = true,
-            templateProps = false,
-          },
-          completion = { autoImport = true, tagCasing = "kebab" },
-        },
-      },
     },
 
     rust_analyzer = {
@@ -118,19 +118,13 @@ local lsp = {
       }
     },
 
-    elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
-
     rnix = {},
-
-    ocamlls = {},
 
     hls = {
       settings = {
         languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
       },
     },
-
-    purescriptls = {},
   },
 }
 
