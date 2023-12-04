@@ -9,6 +9,7 @@ function editor.plugins(use)
   use 'tpope/vim-surround'
   use 'wellle/targets.vim'
   use 'ggandor/leap.nvim'
+  use 'windwp/nvim-ts-autotag'
   -- justinmk/vim-sneak
 
   -- use 'simrat39/symbols-outline.nvim'
@@ -162,12 +163,15 @@ function editor.configure()
         },
       },
     },
+    autotag = {
+      enable = true,
+    },
     -- rainbow = {
     --   enable = true,
     --   extended_mode = true,
     --   -- disable = { "jsx", "cpp" },
     --   -- max_file_lines = 2000,
-    -- }
+    -- },
   }
 
   -- Symbols
