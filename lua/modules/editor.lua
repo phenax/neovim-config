@@ -274,7 +274,7 @@ function editor.configure()
 
   -- Search and replace
   vim.keymap.set('n', '<leader>sr', function()
-    require('ssr').run()
+    require('ssr').open()
   end, { noremap = true, silent = true })
 
   -- vim.cmd [[ Copilot disable ]]
