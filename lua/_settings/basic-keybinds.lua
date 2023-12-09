@@ -61,14 +61,14 @@ vim.keymap.set('n', '<leader>==', ':setlocal spell! spelllang=en_us<CR>')
 
 -- Toggle foldlevel: all or none
 local function toggle_foldlevel()
-  local max_level = notes.max_fold_level
-  local min_level = notes.min_fold_level
+  local max_level = 20
+  local min_level = 1
 
   if (vim.opt.foldlevel._value >= max_level) then
-    exec [["normal! zM<CR>]]
+    vim.cmd [[normal! zM<CR>]]
     vim.opt.foldlevel = min_level
   else
-    exec [["normal! zR<CR>]]
+    vim.cmd [[normal! zR<CR>]]
     vim.opt.foldlevel = max_level
   end
 end

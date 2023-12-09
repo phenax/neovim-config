@@ -1,14 +1,21 @@
-local M = {
+local plugin = {
   'kyazdani42/nvim-tree.lua',
+
+  keys = {
+    { '<localleader>nn', ':NvimTreeToggle<CR>', mode = 'n' },
+    { '<localleader>nf', ':NvimTreeFindFileToggle<CR>', mode = 'n' },
+  },
 }
 
-function M.config()
-  vim.keymap.set('n', '<localleader>nn', ':NvimTreeToggle<CR>')
-  vim.keymap.set('n', '<localleader>nf', ':NvimTreeFindFileToggle<CR>')
+local config = {}
+
+function plugin.config()
+  -- vim.keymap.set('n', '<localleader>nn', ':NvimTreeToggle<CR>')
+  -- vim.keymap.set('n', '<localleader>nf', ':NvimTreeFindFileToggle<CR>')
 
   require('nvim-tree').setup({
     hijack_cursor = true,
-    on_attach = nvim_tree_on_attach,
+    on_attach = config.nvim_tree_on_attach,
     view = {
       centralize_selection = true,
     },
@@ -33,7 +40,7 @@ function M.config()
   vim.cmd [[autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exec 'bd' | endif]]
 end
 
-local function nvim_tree_on_attach(bufnr)
+function config.nvim_tree_on_attach(bufnr)
   local api = require('nvim-tree.api')
 
   local function add_key(key, action, desc)
@@ -69,4 +76,4 @@ local function nvim_tree_on_attach(bufnr)
   add_key('Y',      api.fs.copy.relative_path, 'Copy Relative Path')
 end
 
-return M
+return plugin

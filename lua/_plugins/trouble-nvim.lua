@@ -3,6 +3,9 @@ local M = {
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
+  keys = {
+    { mode = 'n', '<leader>xx', ':TroubleToggle workspace_diagnostics<cr>' },
+  },
 }
 
 function M.config()
@@ -11,7 +14,6 @@ function M.config()
     position = 'bottom',
     height = 16,
   }
-  vim.keymap.set('n', '<leader>xx', ':TroubleToggle workspace_diagnostics<cr>')
 end
 
 return M

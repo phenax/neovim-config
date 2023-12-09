@@ -198,7 +198,7 @@ function config.on_lsp_attached(client, bufnr)
   -- Refresh code lenses
   if client.server_capabilities.codeLensProvider ~= nil then
     vim.lsp.codelens.refresh()
-    exec [[ autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh() ]]
+    vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 
     -- Show types as virtual text
     require'virtualtypes'.on_attach(client, bufnr)

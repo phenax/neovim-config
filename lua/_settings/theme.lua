@@ -19,7 +19,7 @@ function theme.setup(colorscheme)
   vim.cmd('colorscheme ' .. colorscheme)
 
   updateScheme {
-    Normal = { bg = 'NONE' },
+    Normal = { bg = 'NONE', fg = '#b8bec9' },
     ColorColumn = { bg = '#15121f' },
   }
 

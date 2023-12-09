@@ -1,10 +1,6 @@
-local M = {
-  'rhysd/git-messenger.vim'
+return {
+  'rhysd/git-messenger.vim',
+  keys = {
+    { '<localleader>gm', ':GitMessenger<cr>', mode = 'n' },
+  },
 }
-
-function M.config()
-  vim.keymap.set('n', '<localleader>gm', ':GitMessenger<cr>')
-end
-
-return M
-

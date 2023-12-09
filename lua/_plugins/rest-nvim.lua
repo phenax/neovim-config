@@ -3,6 +3,11 @@ local M = {
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
+
+  keys = {
+    { '<CR>', ':lua require"rest-nvim".run()<CR>', mode = 'n', ft = 'http' },
+  },
+  cmd = { 'RunHttpRequest' },
 }
 
 function M.config()

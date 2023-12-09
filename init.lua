@@ -17,5 +17,9 @@ require('_settings')
 
 require('lazy').setup('_plugins', {
   lockfile = vim.fn.expand('~') .. '/nixos/config/nvim/lazy.lock',
+  change_detection = {
+    enabled = false,
+    notify = false,
+  },
 })
 

@@ -68,6 +68,9 @@ function M.config()
 
   -- Spell suggestions
   vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
+
+  vim.keymap.set('n', '<localleader>b', ':Telescope buffers<CR>')
+  vim.keymap.set('n', '<C-_>', ':Telescope current_buffer_fuzzy_find<CR>') -- Ctrl + /
 end
 
 return M

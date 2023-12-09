@@ -1,5 +1,6 @@
 local M = {
-  'numToStr/Comment.nvim'
+  'numToStr/Comment.nvim',
+  event = 'BufRead',
 }
 
 function M.config()

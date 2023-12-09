@@ -1,5 +1,6 @@
 local plugin = {
   'hrsh7th/nvim-cmp',
+  event = 'BufRead',
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
@@ -9,9 +10,15 @@ local plugin = {
     'onsails/lspkind-nvim',
     'hrsh7th/cmp-cmdline',
 
-    'saadparwaiz1/cmp_luasnip',
-    'L3MON4D3/LuaSnip',
-    'rafamadriz/friendly-snippets',
+    {
+      'L3MON4D3/LuaSnip',
+      version = "v2.*",
+      build = "make install_jsregexp",
+      dependencies = {
+        'saadparwaiz1/cmp_luasnip',
+        'rafamadriz/friendly-snippets',
+      },
+    },
   },
 }
 
@@ -41,6 +48,7 @@ function plugin.config()
   local cmp = require 'cmp'
 
   -- LuaSnip
+  require("luasnip").filetype_extend("all", { "_" })
   require("luasnip.loaders.from_vscode").lazy_load()
 
   local mappings = {
