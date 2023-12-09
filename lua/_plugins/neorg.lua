@@ -1,4 +1,18 @@
 local M = {
+  'nvim-neorg/neorg',
+  build = ':Neorg sync-parsers',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    'nvim-treesitter/nvim-treesitter',
+    'nvim-telescope/telescope.nvim',
+    'nvim-neorg/neorg-telescope',
+    'folke/zen-mode.nvim',
+    'phenax/neorg-timelog',
+    'phenax/neorg-hop-extras',
+  }
+}
+
+local config = {
   path = vim.fn.expand('~/nixos/extras/notes'),
 }
 
@@ -9,16 +23,16 @@ local function leader(key)
   return "<leader>" .. key
 end
 
-function M.setup()
+function M.config()
   vim.api.nvim_create_autocmd({ "BufWinEnter", "BufRead", "BufNewFile" }, {
     pattern = { "*.norg" },
-    callback = M.configure_neorg_file,
+    callback = config.configure_neorg_file,
   })
 
-  require('neorg').setup(M.get_neorg_config())
+  require('neorg').setup(config.get_neorg_config())
 end
 
-function M.configure_neorg_file()
+function config.configure_neorg_file()
   vim.opt.ft = 'norg'
   vim.opt.conceallevel = 2
 
@@ -26,7 +40,7 @@ function M.configure_neorg_file()
   vim.api.nvim_set_hl(0, '@neorg.tags.ranged_verbatim.code_block', { bg = '#1a1824' })
 end
 
-function M.get_neorg_config()
+function config.get_neorg_config()
   return {
     load = {
       ['core.defaults'] = {},
@@ -49,9 +63,9 @@ function M.get_neorg_config()
       ['core.dirman'] = {
         config = {
           workspaces = {
-            notes = M.path,
-            work = M.path .. '/work',
-            journal = M.path .. '/journal',
+            notes = config.path,
+            work = config.path .. '/work',
+            journal = config.path .. '/journal',
           },
           index = 'index.norg',
           default_workspace = 'notes',
@@ -86,7 +100,7 @@ function M.get_neorg_config()
 
       ['core.keybinds'] = {
         config = {
-          hook = M.neorg_keybindings,
+          hook = config.neorg_keybindings,
         }
       },
 
@@ -100,7 +114,7 @@ function M.get_neorg_config()
   }
 end
 
-function M.neorg_keybindings(keybinds)
+function config.neorg_keybindings(keybinds)
   keybinds.map_event_to_mode('norg',
     {
       n = {

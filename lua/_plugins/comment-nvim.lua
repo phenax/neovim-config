@@ -1,6 +1,8 @@
-local M = {}
+local M = {
+  'numToStr/Comment.nvim'
+}
 
-function M.setup()
+function M.config()
   require('Comment').setup({
     padding = true,
     toggler = {

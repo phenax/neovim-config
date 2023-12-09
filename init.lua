@@ -1,34 +1,21 @@
-exec = vim.api.nvim_command
-o = vim.o
-g = vim.g
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
-require "settings"
-require "packer-autoload"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath,
+  })
+end
 
-vim.cmd [[packadd packer.nvim]]
+vim.opt.rtp:prepend(lazypath)
 
-local packer = require('packer')
-return packer.startup(function()
-  use {'wbthomason/packer.nvim', opt = true} -- Packer
-  -- use 'dstein64/vim-startuptime'
+require('_settings')
 
-  local modules = {
-    require 'modules.theme',
-    require 'modules.buffers',  -- migrated
-    require 'modules.fs',  -- migrated
-    require 'modules.git', -- migrated
-    require 'modules.editor', -- migrated
-    require 'modules.lsp',
-    require 'modules.tools', -- migrated
-    require 'modules.notes', -- started but paused
-    -- require 'modules.coc',
-  }
-
-  for _, m in pairs(modules) do
-    m.plugins(use)
-  end
-  for _, m in pairs(modules) do
-    m.configure(use)
-  end
-end)
+require('lazy').setup('_plugins', {
+  lockfile = vim.fn.expand('~') .. '/lazy.lock',
+})
 

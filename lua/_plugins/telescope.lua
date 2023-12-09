@@ -1,6 +1,14 @@
-local M = {}
+local M = {
+  'nvim-telescope/telescope.nvim',
+  dependencies = {
+    'nvim-lua/popup.nvim',
+    'nvim-lua/plenary.nvim',
+  }
+}
 
-function M.setup()
+local config = {}
+
+function M.config()
   local telescope = require('telescope')
   local actions = require('telescope.actions')
   local builtin = require('telescope.builtin')
@@ -60,10 +68,24 @@ function M.setup()
   -- Git branches
   vim.keymap.set('n', '<localleader>gbb', require'telescope.builtin'.git_branches)
 
-  -- M.setup_theme()
+  config.theme()
 end
 
-function M.setup_theme()
+local function mapList(func, array)
+  local new_array = {}
+  for i,v in ipairs(array) do
+    new_array[i] = func(v)
+  end
+  return new_array
+end
+
+local function updateScheme(schemes)
+  local toHl = function(str) return "hi "..str; end;
+  local highlights = table.concat(mapList(toHl, schemes), " | ")
+  vim.cmd('autocmd ColorScheme * '..highlights)
+end
+
+function config.theme()
   -- local bg = '#0f0c19'
   local bgfaded = '#110f1b'
   local bgfaded2 = '#1a1824'

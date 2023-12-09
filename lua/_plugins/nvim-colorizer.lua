@@ -1,6 +1,8 @@
-local M = {}
+local M = {
+  'NvChad/nvim-colorizer.lua',
+}
 
-function M.setup()
+function M.config()
   require'colorizer'.setup({
     user_default_options = {
       tailwind = true,

@@ -1,9 +1,17 @@
-local cmp = require 'cmp'
--- local luasnip = require 'luasnip'
+local M = {
+  'hrsh7th/nvim-cmp',
+  dependencies = {
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-calc',
+    'ray-x/cmp-treesitter',
+    'onsails/lspkind-nvim',
+  }
+}
 
-local M = {}
-
-function M.setup()
+function M.config()
+  local cmp = require 'cmp'
   cmp.setup {
     sources = {
       { name = 'nvim_lsp' },
@@ -34,6 +42,7 @@ function M.setup()
 end
 
 local function cmpDown(fallback)
+  local cmp = require 'cmp'
   if cmp.visible() then
     cmp.select_next_item()
   -- elseif luasnip.expand_or_jumpable() then
@@ -44,6 +53,7 @@ local function cmpDown(fallback)
 end
 
 local function cmpUp(fallback)
+  local cmp = require 'cmp'
   if cmp.visible() then
     cmp.select_prev_item()
   -- elseif luasnip.jumpable(-1) then

@@ -1,6 +1,8 @@
-local M = {}
+local M = {
+  'tpope/vim-fugitive'
+}
 
-function M.setup()
+function M.config()
   vim.keymap.set('n', '<localleader>gs', ':G<cr>')
   vim.keymap.set('n', '<localleader>gaf', ':Git add %<cr>')
   vim.keymap.set('n', '<localleader>gcc', ':Git commit<cr>')

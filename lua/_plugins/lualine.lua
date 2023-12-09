@@ -1,12 +1,19 @@
-local M = {}
+local M = {
+  'nvim-lualine/lualine.nvim',
+  dependencies = {
+    'kyazdani42/nvim-web-devicons',
+  },
+}
 
-function M.setup()
+local config = {}
+
+function M.config()
   local lualine = require'lualine'
 
   lualine.setup {
     options = {
       icons_enabled = true,
-      theme = M.get_theme(),
+      theme = config.get_theme(),
       component_separators = { left = '', right = ''},
       section_separators = { left = '', right = ''},
       always_divide_middle = false,
@@ -52,7 +59,7 @@ function M.setup()
   end
 end
 
-function M.get_theme()
+function config.get_theme()
   local colors = {
     dark = {
       '#0f0c19',

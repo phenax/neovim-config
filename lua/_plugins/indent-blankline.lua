@@ -1,6 +1,8 @@
-local M = {}
+local M = {
+  'lukas-reineke/indent-blankline.nvim'
+}
 
-function M.setup()
+function M.config()
   vim.cmd [[highlight IndentBlanklineChar guifg=#1f1c29 gui=nocombine]]
   vim.cmd [[highlight IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine]]
   vim.cmd [[highlight IndentBlanklineContextStart guifg=#1f1c29 gui=nocombine]]

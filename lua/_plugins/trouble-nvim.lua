@@ -1,6 +1,11 @@
-local M = {}
+local M = {
+  'folke/trouble.nvim',
+  dependencies = {
+    'nvim-tree/nvim-web-devicons',
+  },
+}
 
-function M.setup()
+function M.config()
   require('trouble').setup {
     mode = 'workspace_diagnostics',
     position = 'bottom',

@@ -1,4 +1,6 @@
-local nvim_lsp = require 'lspconfig'
+local M = {
+  'neovim/nvim-lspconfig'
+}
 
 local function defaultCapabilities()
   return vim.lsp.protocol.make_client_capabilities()
@@ -9,7 +11,7 @@ local function capDisableFormatting(cap)
   return cap
 end
 
-local M = {
+local config = {
   is_autoformat_enabled = true,
 
   format_on_save_ft = {
@@ -33,112 +35,115 @@ local M = {
     "cpp"
   },
 
-  lsp_servers = {
-    eslint = {
-      commands = {
-        LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
-      }
-    },
-
-    clangd = {},
-
-    unison = {
-      settings = {
-        maxCompletions = 100,
-      },
-    },
-
-    tailwindcss = {
-      root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts'),
-      single_file_support = false,
-    },
-
-    -- scala
-    metals = {},
-
-    -- gleam = {},
-    -- crystalline = {},
-
-    tsserver = {
-      capabilities = capDisableFormatting(defaultCapabilities()),
-    },
-
-    astro = {},
-    svelte = {},
-
-    vuels = {
-      settings = {
-        vetur = {
-          format = { enable = false },
-          validation = {
-            style = true,
-            script = true,
-            interpolation = true,
-            template = true,
-            templateProps = false,
-          },
-          completion = { autoImport = true, tagCasing = "kebab" },
-        },
-      },
-    },
-
-    rust_analyzer = {
-      settings = {
-        ["rust-analyzer"] = {
-          cargo = { autoreload = true, allFeatures = true },
-          procMacro = { enable = true },
-          checkOnSave = { command = "clippy" },
-          diagnostics = {
-            enable = true,
-            disabled = {"unresolved-proc-macro"},
-            enableExperimental = true,
-          },
-        },
-      },
-    },
-
-    jsonls = {
-      commands = {
-        LspFormat = {
-          function()
-            vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-          end
+  lsp_servers = function()
+    local nvim_lsp = require 'lspconfig'
+    return {
+      eslint = {
+        commands = {
+          LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
         }
-      }
-    },
-
-    elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
-
-    rnix = {},
-
-    ocamlls = {},
-
-    hls = {
-      settings = {
-        languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
       },
-    },
 
-    purescriptls = {},
-  },
+      clangd = {},
+
+      unison = {
+        settings = {
+          maxCompletions = 100,
+        },
+      },
+
+      tailwindcss = {
+        root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts'),
+        single_file_support = false,
+      },
+
+      -- scala
+      metals = {},
+
+      -- gleam = {},
+      -- crystalline = {},
+
+      tsserver = {
+        capabilities = capDisableFormatting(defaultCapabilities()),
+      },
+
+      astro = {},
+      svelte = {},
+
+      vuels = {
+        settings = {
+          vetur = {
+            format = { enable = false },
+            validation = {
+              style = true,
+              script = true,
+              interpolation = true,
+              template = true,
+              templateProps = false,
+            },
+            completion = { autoImport = true, tagCasing = "kebab" },
+          },
+        },
+      },
+
+      rust_analyzer = {
+        settings = {
+          ["rust-analyzer"] = {
+            cargo = { autoreload = true, allFeatures = true },
+            procMacro = { enable = true },
+            checkOnSave = { command = "clippy" },
+            diagnostics = {
+              enable = true,
+              disabled = {"unresolved-proc-macro"},
+              enableExperimental = true,
+            },
+          },
+        },
+      },
+
+      jsonls = {
+        commands = {
+          LspFormat = {
+            function()
+              vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+            end
+          }
+        }
+      },
+
+      elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
+
+      rnix = {},
+
+      ocamlls = {},
+
+      hls = {
+        settings = {
+          languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
+        },
+      },
+
+      purescriptls = {},
+    }
+  end,
 }
 
-function M.setup()
+function M.config()
   -- Lsp
   local nvim_lsp = require 'lspconfig'
-  for name, options in pairs(M.lsp_servers) do
+  for name, options in pairs(config.lsp_servers()) do
     local cap = options.capabilities or defaultCapabilities()
     cap = require('cmp_nvim_lsp').default_capabilities(cap)
 
-    nvim_lsp[name].setup(vim.tbl_extend("force", { on_attach = M.on_lsp_attached, capabilities = cap }, options))
+    nvim_lsp[name].setup(vim.tbl_extend("force", { on_attach = config.on_lsp_attached, capabilities = cap }, options))
   end
 
   -- Autoformatting
-  vim.keymap.set('n', '<leader>df', M.toggle_autoformat)
+  vim.keymap.set('n', '<leader>df', config.toggle_autoformat)
   vim.api.nvim_create_autocmd({ "FileType" }, {
-    pattern = M.format_on_save_ft,
+    pattern = config.format_on_save_ft,
     callback = function(ev)
-      vim.api.nvim_create_autocmd({ "BufWritePre" }, { buffer = ev.buf, callback = M.run_auto_formatter })
+      vim.api.nvim_create_autocmd({ "BufWritePre" }, { buffer = ev.buf, callback = config.run_auto_formatter })
     end,
   })
 
@@ -156,7 +161,7 @@ function M.setup()
   })
 end
 
-function M.on_lsp_attached(client, bufnr)
+function config.on_lsp_attached(client, bufnr)
   local opts = { noremap=true, silent=true }
 
   -- Navigation
@@ -174,7 +179,7 @@ function M.on_lsp_attached(client, bufnr)
   -- Refactor actions
   vim.keymap.set('n', '<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.keymap.set('n', '<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.keymap.set('n', '<localleader>f', M.format_buffer, { silent = true, noremap = true })
+  vim.keymap.set('n', '<localleader>f', config.format_buffer, { silent = true, noremap = true })
 
   -- Diagnostics
   vim.keymap.set('n', '<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -199,22 +204,22 @@ function M.on_lsp_attached(client, bufnr)
 end
 
 -- Autoformatting hooks
-function M.toggle_autoformat()
-  M.is_autoformat_enabled = not M.is_autoformat_enabled
-  if M.is_autoformat_enabled then
+function config.toggle_autoformat()
+  config.is_autoformat_enabled = not config.is_autoformat_enabled
+  if config.is_autoformat_enabled then
     print "[Autoformat enabled]"
   else
     print "[Autoformat disabled]"
   end
 end
 
-function M.run_auto_formatter()
-  if M.is_autoformat_enabled then
-    M.format_buffer()
+function config.run_auto_formatter()
+  if config.is_autoformat_enabled then
+    config.format_buffer()
   end
 end
 
-function M.format_buffer()
+function config.format_buffer()
   if vim.fn.exists(':LspFormat') > 0 then
     vim.cmd [[LspFormat]]
   else

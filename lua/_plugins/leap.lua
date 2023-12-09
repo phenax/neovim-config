@@ -1,6 +1,8 @@
-local M = {}
+local M = {
+  'ggandor/leap.nvim'
+}
 
-function M.setup()
+function M.config()
   vim.keymap.set({'n', 'i', 'v'}, '<c-b>', function ()
     require('leap').leap {
       target_windows = vim.tbl_filter(

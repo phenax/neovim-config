@@ -1,12 +1,14 @@
-local M = {}
+local M = {
+  'kyazdani42/nvim-tree.lua',
+}
 
-function M.setup()
+function M.config()
   vim.keymap.set('n', '<localleader>nn', ':NvimTreeToggle<CR>')
   vim.keymap.set('n', '<localleader>nf', ':NvimTreeFindFileToggle<CR>')
 
   require('nvim-tree').setup({
     hijack_cursor = true,
-    on_attach = M.nvim_tree_on_attach,
+    on_attach = nvim_tree_on_attach,
     view = {
       centralize_selection = true,
     },
@@ -31,7 +33,7 @@ function M.setup()
   vim.cmd [[autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exec 'bd' | endif]]
 end
 
-function M.nvim_tree_on_attach(bufnr)
+local function nvim_tree_on_attach(bufnr)
   local api = require('nvim-tree.api')
 
   local function add_key(key, action, desc)

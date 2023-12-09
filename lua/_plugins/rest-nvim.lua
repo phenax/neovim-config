@@ -1,6 +1,11 @@
-local M = {}
+local M = {
+  'NTBBloodbath/rest.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
+}
 
-function M.setup()
+function M.config()
   require'rest-nvim'.setup({
     skip_ssl_verification = false,
   })
