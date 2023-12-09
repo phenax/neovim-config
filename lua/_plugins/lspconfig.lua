@@ -1,5 +1,10 @@
-local M = {
-  'neovim/nvim-lspconfig'
+local plugin = {
+  'neovim/nvim-lspconfig',
+  dependencies = {
+    'ray-x/lsp_signature.nvim',
+    'jubnzv/virtual-types.nvim',
+    'hrsh7th/cmp-nvim-lsp',
+  },
 }
 
 local function defaultCapabilities()
@@ -26,30 +31,64 @@ local config = {
     "javascriptreact",
     "typescript",
     "typescriptreact",
+    "ruby",
     "astro",
     "unison",
     "scala",
     "crystal",
     "c",
     "h",
-    "cpp"
+    "cpp",
+    "uiua",
+    "go",
+    "racket"
   },
 
   lsp_servers = function()
     local nvim_lsp = require 'lspconfig'
     return {
-      eslint = {
-        commands = {
-          LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
-        }
-      },
-
+      racket_langserver = {},
+      uiua = {},
+      zls = {},
       clangd = {},
-
       unison = {
         settings = {
           maxCompletions = 100,
         },
+      },
+      ocamlls = {},
+      elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
+      -- vuels = {
+      --   settings = {
+      --     vetur = {
+      --       format = { enable = false },
+      --       validation = {
+      --         style = true,
+      --         script = true,
+      --         interpolation = true,
+      --         template = true,
+      --         templateProps = false,
+      --       },
+      --       completion = { autoImport = true, tagCasing = "kebab" },
+      --     },
+      --   },
+      -- },
+      -- purescriptls = {},
+      -- metals = {}, -- scala
+      -- gleam = {},
+      -- crystalline = {},
+      -- astro = {},
+      -- svelte = {},
+
+      rubocop = {},
+      ruby_ls = {},
+      yamlls = {},
+      gopls = {},
+
+      eslint = {
+        commands = {
+          LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
+        }
       },
 
       tailwindcss = {
@@ -57,33 +96,8 @@ local config = {
         single_file_support = false,
       },
 
-      -- scala
-      metals = {},
-
-      -- gleam = {},
-      -- crystalline = {},
-
       tsserver = {
         capabilities = capDisableFormatting(defaultCapabilities()),
-      },
-
-      astro = {},
-      svelte = {},
-
-      vuels = {
-        settings = {
-          vetur = {
-            format = { enable = false },
-            validation = {
-              style = true,
-              script = true,
-              interpolation = true,
-              template = true,
-              templateProps = false,
-            },
-            completion = { autoImport = true, tagCasing = "kebab" },
-          },
-        },
       },
 
       rust_analyzer = {
@@ -111,24 +125,18 @@ local config = {
         }
       },
 
-      elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
-
       rnix = {},
-
-      ocamlls = {},
 
       hls = {
         settings = {
           languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
         },
       },
-
-      purescriptls = {},
     }
   end,
 }
 
-function M.config()
+function plugin.config()
   -- Lsp
   local nvim_lsp = require 'lspconfig'
   for name, options in pairs(config.lsp_servers()) do
@@ -227,4 +235,4 @@ function config.format_buffer()
   end
 end
 
-return M
+return plugin

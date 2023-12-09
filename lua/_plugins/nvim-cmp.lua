@@ -1,4 +1,4 @@
-local M = {
+local plugin = {
   'hrsh7th/nvim-cmp',
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
@@ -7,46 +7,20 @@ local M = {
     'hrsh7th/cmp-calc',
     'ray-x/cmp-treesitter',
     'onsails/lspkind-nvim',
-  }
-}
+    'hrsh7th/cmp-cmdline',
 
-function M.config()
-  local cmp = require 'cmp'
-  cmp.setup {
-    sources = {
-      { name = 'nvim_lsp' },
-      { name = 'treesitter' },
-      -- { name = 'luasnip' },
-      { name = 'path' },
-      { name = 'buffer' },
-      -- { name = 'neorg' },
-      { name = 'calc' },
-    },
-    -- snippet = {
-    --   expand = function(args)
-    --     require('luasnip').lsp_expand(args.body)
-    --   end,
-    -- },
-    mapping = {
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      },
-      ['<down>'] = cmpDown,
-      ['<up>'] = cmpUp,
-      ['<C-j>'] = cmpDown,
-      ['<C-k>'] = cmpUp,
-    },
-  }
-end
+    'saadparwaiz1/cmp_luasnip',
+    'L3MON4D3/LuaSnip',
+    'rafamadriz/friendly-snippets',
+  },
+}
 
 local function cmpDown(fallback)
   local cmp = require 'cmp'
   if cmp.visible() then
     cmp.select_next_item()
-  -- elseif luasnip.expand_or_jumpable() then
-  --   luasnip.expand_or_jump()
+  elseif luasnip.expand_or_jumpable() then
+    luasnip.expand_or_jump()
   else
     fallback()
   end
@@ -56,11 +30,65 @@ local function cmpUp(fallback)
   local cmp = require 'cmp'
   if cmp.visible() then
     cmp.select_prev_item()
-  -- elseif luasnip.jumpable(-1) then
-  --   luasnip.jump(-1)
+  elseif luasnip.jumpable(-1) then
+    luasnip.jump(-1)
   else
     fallback()
   end
 end
 
-return M
+function plugin.config()
+  local cmp = require 'cmp'
+
+  -- LuaSnip
+  require("luasnip.loaders.from_vscode").lazy_load()
+
+  local mappings = {
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm {},
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<down>'] = cmp.mapping(cmpDown),
+    ['<up>'] = cmp.mapping(cmpUp),
+    ['<C-j>'] = cmp.mapping(cmpDown),
+    ['<C-k>'] = cmp.mapping(cmpUp),
+  }
+
+  cmp.setup {
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'treesitter' },
+      { name = 'luasnip' },
+      { name = 'path' },
+      { name = 'buffer' },
+      { name = 'calc' },
+    }),
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
+    mapping = cmp.mapping.preset.insert(mappings),
+    confirm_opts = {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    experimental = {
+      ghost_text = true,
+    },
+  }
+
+  cmp.setup.filetype('norg', {
+    sources = cmp.config.sources({
+      { name = 'neorg' },
+    })
+  })
+
+  -- cmp.setup.cmdline(":", {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = "cmdline" },
+  --   },
+  -- })
+end
+
+return plugin

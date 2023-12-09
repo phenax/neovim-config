@@ -1,5 +1,6 @@
 local M = {
   'Exafunction/codeium.vim',
+  enabled = false,
 }
 
 function M.config()

@@ -16,6 +16,6 @@ vim.opt.rtp:prepend(lazypath)
 require('_settings')
 
 require('lazy').setup('_plugins', {
-  lockfile = vim.fn.expand('~') .. '/lazy.lock',
+  lockfile = vim.fn.expand('~') .. '/nixos/config/nvim/lazy.lock',
 })
 

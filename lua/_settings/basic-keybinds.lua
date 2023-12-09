@@ -1,7 +1,3 @@
-
--- Close buffer
-vim.keymap.set({ 'n', 'i' }, '<C-d>', ':BD<CR>')
-
 -- Delete all buffers except for the current one
 vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
 vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
@@ -62,5 +58,19 @@ vim.keymap.set('n', 'zc', 'zc')
 
 -- Spell checker
 vim.keymap.set('n', '<leader>==', ':setlocal spell! spelllang=en_us<CR>')
-vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
 
+-- Toggle foldlevel: all or none
+local function toggle_foldlevel()
+  local max_level = notes.max_fold_level
+  local min_level = notes.min_fold_level
+
+  if (vim.opt.foldlevel._value >= max_level) then
+    exec [["normal! zM<CR>]]
+    vim.opt.foldlevel = min_level
+  else
+    exec [["normal! zR<CR>]]
+    vim.opt.foldlevel = max_level
+  end
+end
+
+vim.keymap.set('n', '<leader><Tab>', toggle_foldlevel, { silent = true })

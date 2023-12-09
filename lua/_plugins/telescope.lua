@@ -6,8 +6,6 @@ local M = {
   }
 }
 
-local config = {}
-
 function M.config()
   local telescope = require('telescope')
   local actions = require('telescope.actions')
@@ -68,47 +66,8 @@ function M.config()
   -- Git branches
   vim.keymap.set('n', '<localleader>gbb', require'telescope.builtin'.git_branches)
 
-  config.theme()
-end
-
-local function mapList(func, array)
-  local new_array = {}
-  for i,v in ipairs(array) do
-    new_array[i] = func(v)
-  end
-  return new_array
-end
-
-local function updateScheme(schemes)
-  local toHl = function(str) return "hi "..str; end;
-  local highlights = table.concat(mapList(toHl, schemes), " | ")
-  vim.cmd('autocmd ColorScheme * '..highlights)
-end
-
-function config.theme()
-  -- local bg = '#0f0c19'
-  local bgfaded = '#110f1b'
-  local bgfaded2 = '#1a1824'
-  local accent = '#4e3aA3'
-
-  local blend = function(c)
-    return 'guibg=' .. c .. ' guifg=' .. c
-  end
-
-  updateScheme({
-    'TelescopeNormal guibg=' .. bgfaded,
-    'TelescopeBorder ' .. blend(bgfaded),
-
-    'TelescopePreviewNormal guibg=' .. bgfaded,
-    'TelescopePreviewTitle guibg=' .. accent .. ' guifg=#ffffff',
-
-    'TelescopeResultsTitle ' .. blend(bgfaded),
-
-    'TelescopePromptNormal guibg=' .. bgfaded2,
-    'TelescopePromptTitle guibg=' .. accent .. ' guifg=#ffffff',
-    'TelescopePromptBorder ' ..  blend(bgfaded2),
-    'TelescopePromptPrefix guibg=' .. bgfaded2,
-  })
+  -- Spell suggestions
+  vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
 end
 
 return M

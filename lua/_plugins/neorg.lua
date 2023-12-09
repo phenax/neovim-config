@@ -1,6 +1,6 @@
-local M = {
+local plugin = {
   'nvim-neorg/neorg',
-  build = ':Neorg sync-parsers',
+  build = 'Neorg sync-parsers',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',
@@ -9,35 +9,19 @@ local M = {
     'folke/zen-mode.nvim',
     'phenax/neorg-timelog',
     'phenax/neorg-hop-extras',
-  }
+  },
+  ft = { 'norg' },
 }
 
 local config = {
   path = vim.fn.expand('~/nixos/extras/notes'),
 }
 
-local function space(key)
-  return "<LocalLeader>" .. key
-end
-local function leader(key)
-  return "<leader>" .. key
-end
-
-function M.config()
-  vim.api.nvim_create_autocmd({ "BufWinEnter", "BufRead", "BufNewFile" }, {
-    pattern = { "*.norg" },
-    callback = config.configure_neorg_file,
-  })
-
-  require('neorg').setup(config.get_neorg_config())
-end
-
-function config.configure_neorg_file()
-  vim.opt.ft = 'norg'
-  vim.opt.conceallevel = 2
-
+function plugin.config()
   vim.api.nvim_set_hl(0, '@neorg.markup.bold', { fg = '#51E980', bold = true })
   vim.api.nvim_set_hl(0, '@neorg.tags.ranged_verbatim.code_block', { bg = '#1a1824' })
+
+  require('neorg').setup(config.get_neorg_config())
 end
 
 function config.get_neorg_config()
@@ -46,7 +30,7 @@ function config.get_neorg_config()
       ['core.defaults'] = {},
       ['core.export'] = {},
       ['core.export.markdown'] = {},
-      -- ['core.integrations.telescope'] = {},
+      ['core.integrations.telescope'] = {},
       ['core.qol.toc'] = {},
       ['core.completion'] = {
         config = {
@@ -114,6 +98,13 @@ function config.get_neorg_config()
   }
 end
 
+local function space(key)
+  return "<LocalLeader>" .. key
+end
+local function leader(key)
+  return "<leader>" .. key
+end
+
 function config.neorg_keybindings(keybinds)
   keybinds.map_event_to_mode('norg',
     {
@@ -127,6 +118,10 @@ function config.neorg_keybindings(keybinds)
         { space 'cc', 'core.qol.todo_items.todo.task_cancelled' },
         { space 'cr', 'core.qol.todo_items.todo.task_recurring' },
 
+        -- GTD views
+        { leader 'tt', 'core.integrations.telescope.find_aof_tasks' },
+        { leader 'tc', 'core.integrations.telescope.find_context_tasks' },
+
         -- Notes
         { space 'na', 'core.dirman.new.note' },
 
@@ -138,6 +133,7 @@ function config.neorg_keybindings(keybinds)
         { '<S-Tab>',  'core.integrations.treesitter.previous.link' },
         { ']]',       'core.integrations.treesitter.next.heading' },
         { '[[',       'core.integrations.treesitter.previous.heading' },
+        -- { '<cr>',     'core.esupports.hop.hop-link' },
       },
     },
     {
@@ -149,8 +145,13 @@ function config.neorg_keybindings(keybinds)
   keybinds.map_to_mode('norg',
     {
       n = {
+        -- { space 'cn',  '<cmd>lua Notes__on_new_line("  - ( ) ")<cr>' },
+        -- { space 'li',  '<cmd>lua Notes__on_new_line("  - ")<cr>' },
         { leader 'jn', '<cmd>Neorg journal today<cr>' },
-        { leader 'tl', '<cmd>Neorg insert-timelog *<cr>' },
+        { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
+        { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
+        { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
+        { leader 'tl', '<cmd>Neorg timelog insert *<cr>' }, -- NOTE: Updates all timelogs
       },
     },
     {
@@ -162,4 +163,4 @@ function config.neorg_keybindings(keybinds)
   keybinds.unmap('norg', 'n', '<LocalLeader>nn')
 end
 
-return M
+return plugin
