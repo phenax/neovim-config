@@ -3,11 +3,6 @@ local M = {
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
-
-  keys = {
-    { '<CR>', ':lua require"rest-nvim".run()<CR>', mode = 'n', ft = 'http' },
-  },
-  cmd = { 'RunHttpRequest' },
 }
 
 function M.config()
@@ -15,7 +10,13 @@ function M.config()
     skip_ssl_verification = false,
   })
 
-  vim.cmd [[command! RunHttpRequest :lua require('rest-nvim').run()]]
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = { "*.http" },
+    callback = function()
+      vim.cmd [[command! RunHttpRequest :lua require('rest-nvim').run()]]
+      vim.keymap.set('n', '<CR>', ':lua require"rest-nvim".run()<CR>', { buffer = true })
+    end,
+  })
 end
 
 return M
