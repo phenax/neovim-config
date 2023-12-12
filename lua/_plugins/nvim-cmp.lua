@@ -12,8 +12,8 @@ local plugin = {
 
     {
       'L3MON4D3/LuaSnip',
-      version = "v2.*",
-      build = "make install_jsregexp",
+      version = 'v2.*',
+      build = 'make install_jsregexp',
       dependencies = {
         'saadparwaiz1/cmp_luasnip',
         'rafamadriz/friendly-snippets',
@@ -24,6 +24,7 @@ local plugin = {
 
 local function cmpDown(fallback)
   local cmp = require 'cmp'
+  local luasnip = require 'luasnip'
   if cmp.visible() then
     cmp.select_next_item()
   elseif luasnip.expand_or_jumpable() then
@@ -35,6 +36,7 @@ end
 
 local function cmpUp(fallback)
   local cmp = require 'cmp'
+  local luasnip = require 'luasnip'
   if cmp.visible() then
     cmp.select_prev_item()
   elseif luasnip.jumpable(-1) then
@@ -46,10 +48,11 @@ end
 
 function plugin.config()
   local cmp = require 'cmp'
+  local luasnip = require 'luasnip'
 
   -- LuaSnip
-  require("luasnip").filetype_extend("all", { "_" })
-  require("luasnip.loaders.from_vscode").lazy_load()
+  luasnip.filetype_extend('all', { '_' })
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   local mappings = {
     ['<C-e>'] = cmp.mapping.abort(),
@@ -72,7 +75,7 @@ function plugin.config()
     }),
     snippet = {
       expand = function(args)
-        require('luasnip').lsp_expand(args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
     mapping = cmp.mapping.preset.insert(mappings),
@@ -91,10 +94,10 @@ function plugin.config()
     })
   })
 
-  -- cmp.setup.cmdline(":", {
+  -- cmp.setup.cmdline(':', {
   --   mapping = cmp.mapping.preset.cmdline(),
   --   sources = {
-  --     { name = "cmdline" },
+  --     { name = 'cmdline' },
   --   },
   -- })
 end

@@ -1,4 +1,4 @@
-local M = {
+local plugin = {
   'nvim-lualine/lualine.nvim',
   dependencies = {
     'kyazdani42/nvim-web-devicons',
@@ -7,7 +7,7 @@ local M = {
 
 local config = {}
 
-function M.config()
+function plugin.config()
   local lualine = require'lualine'
 
   lualine.setup {
@@ -34,7 +34,7 @@ function M.config()
         {
           'buffers',
           mode = 2,
-          max_length = vim.o.columns * 4 / 5,
+          max_length = vim.o.columns,
           filetype_names = {
             TelescopePrompt = '<telescope>',
             fugitive = '<git>',
@@ -46,9 +46,11 @@ function M.config()
           },
         },
       },
-      lualine_y = {
-        'filetype'
-      },
+      lualine_b = {},
+      lualine_c = {},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
     },
   }
 
@@ -97,5 +99,4 @@ function config.get_theme()
   return thm
 end
 
-return M
-
+return plugin

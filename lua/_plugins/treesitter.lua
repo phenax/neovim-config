@@ -1,4 +1,4 @@
-local M = {
+local plugin = {
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
   commit = '08aabb145f93ed1dd607ce8e2dcd52d356822300',
@@ -79,7 +79,7 @@ local function get_ts_config()
   }
 end
 
-function M.config()
+function plugin.config()
   require'nvim-treesitter.configs'.setup(get_ts_config())
 
   -- TS context
@@ -95,4 +95,4 @@ function M.config()
   end, { silent = true })
 end
 
-return M
+return plugin

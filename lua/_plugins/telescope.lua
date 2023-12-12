@@ -1,4 +1,4 @@
-local M = {
+local plugin = {
   'nvim-telescope/telescope.nvim',
   dependencies = {
     'nvim-lua/popup.nvim',
@@ -6,7 +6,7 @@ local M = {
   }
 }
 
-function M.config()
+function plugin.config()
   local telescope = require('telescope')
   local actions = require('telescope.actions')
   local builtin = require('telescope.builtin')
@@ -73,5 +73,5 @@ function M.config()
   vim.keymap.set('n', '<C-_>', ':Telescope current_buffer_fuzzy_find<CR>') -- Ctrl + /
 end
 
-return M
+return plugin
 

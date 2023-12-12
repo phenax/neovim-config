@@ -1,9 +1,9 @@
-local M = {
+local plugin = {
   'lukas-reineke/indent-blankline.nvim',
   main = 'ibl'
 }
 
-function M.config()
+function plugin.config()
   vim.cmd [[highlight IndentBlanklineChar guifg=#1f1c29 gui=nocombine]]
   vim.cmd [[highlight IndentBlanklineSpaceChar guifg=#1f1c29 gui=nocombine]]
   vim.cmd [[highlight IndentBlanklineContextStart guifg=#1f1c29 gui=nocombine]]
@@ -18,4 +18,4 @@ function M.config()
   }
 end
 
-return M
+return plugin
