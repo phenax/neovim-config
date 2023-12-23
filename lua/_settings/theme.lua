@@ -31,15 +31,18 @@ end
 function theme.buffer_manager()
   local bgfaded = '#110f1b'
   local bgfaded2 = '#1a1824'
+  local bgfaded3 = '#2a2834'
   local accent = '#4e3aA3'
   local fg = '#ffffff'
-  local fg2 = '#4a4854'
+  local fg2 = '#8a8894'
+  local fg3 = '#4a4854'
 
   updateScheme {
     BufferManagerModified = { fg = accent },
-    BufferManagerNormal = { bg = bgfaded2, fg = fg },
-    BufferManagerBorder = { bg = bgfaded2, fg = fg2 },
-    -- BufferManagerHeader = { bg = accent, fg = fg },
+    BufferManagerNormal = { bg = bgfaded2, fg = fg2 },
+    BufferManagerBorder = { bg = bgfaded2, fg = bgfaded2 },
+    BufferManagerLineNr = { bg = bgfaded2, fg = fg },
+    BufferManagerVisual = { bg = bgfaded3, fg = fg },
   }
 end
 
@@ -83,6 +86,44 @@ function theme.lsp()
     LspCodeLens = { fg = lensColors.Lens },
     LspSignatureActiveParameter = { fg = lensColors.Info },
   }
+end
+
+function theme.lualine()
+  local colors = {
+    dark = {
+      '#0f0c19',
+      '#15121f',
+    },
+    purple = '#4e3aA3',
+    red = '#7c162e',
+    white = '#ffffff',
+    fadedwhite = '#bbc0d9',
+    gray = {
+      '#7b8099',
+      '#3e445e',
+    }
+  }
+
+  local thm = require'lualine.themes.iceberg_dark'
+
+  thm.normal.a = { bg = colors.purple, fg = colors.white, gui = 'bold' }
+  thm.inactive.a = { bg = colors.dark[2], fg = colors.gray[1] }
+
+  local bline = { bg = colors.dark[2], fg = colors.gray[1] }
+  thm.normal.b = bline
+  thm.insert.b = bline
+  thm.visual.b = bline
+  thm.replace.b = bline
+  thm.inactive.b = bline
+
+  local cline = { bg = colors.dark[1], fg = colors.gray[2] }
+  thm.normal.c = cline
+  thm.insert.c = cline
+  thm.visual.c = cline
+  thm.replace.c = cline
+  thm.inactive.c = cline
+
+  return thm
 end
 
 return theme
