@@ -1,6 +1,6 @@
 function updateScheme(schemes)
   for k, v in pairs(schemes) do
-    vim.api.nvim_set_hl(0, k, v)   
+    vim.api.nvim_set_hl(0, k, v)
   end
 end
 

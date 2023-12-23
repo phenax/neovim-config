@@ -136,24 +136,29 @@ local config = {
   end,
 }
 
+-- Can be run to setup a language server dynamically
+-- _SetupLspServer('name')
+function _SetupLspServer(name, opts, autoformat_ft)
+  local options = opts or {}
+  local nvim_lsp = require 'lspconfig'
+  local cap = options.capabilities or defaultCapabilities()
+  cap = require('cmp_nvim_lsp').default_capabilities(cap)
+  nvim_lsp[name].setup(vim.tbl_extend("force", { on_attach = config.on_lsp_attached, capabilities = cap }, options))
+
+  if autoformat_ft then
+    config.setup_file_autoformat(autoformat_ft)
+  end
+end
+
 function plugin.config()
   -- Lsp
-  local nvim_lsp = require 'lspconfig'
   for name, options in pairs(config.lsp_servers()) do
-    local cap = options.capabilities or defaultCapabilities()
-    cap = require('cmp_nvim_lsp').default_capabilities(cap)
-
-    nvim_lsp[name].setup(vim.tbl_extend("force", { on_attach = config.on_lsp_attached, capabilities = cap }, options))
+    _SetupLspServer(name, options)
   end
 
   -- Autoformatting
   vim.keymap.set('n', '<leader>df', config.toggle_autoformat)
-  vim.api.nvim_create_autocmd({ "FileType" }, {
-    pattern = config.format_on_save_ft,
-    callback = function(ev)
-      vim.api.nvim_create_autocmd({ "BufWritePre" }, { buffer = ev.buf, callback = config.run_auto_formatter })
-    end,
-  })
+  config.setup_file_autoformat(config.format_on_save_ft)
 
   -- diagnostics config
   vim.diagnostic.config({
@@ -209,6 +214,18 @@ function config.on_lsp_attached(client, bufnr)
     bind = true,
     hi_parameter = 'LspSignatureActiveParameter',
   }, bufnr)
+end
+
+function config.setup_file_autoformat(fts)
+  vim.api.nvim_create_autocmd({ "FileType" }, {
+    pattern = fts,
+    callback = function(ev)
+      vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+        buffer = ev.buf,
+        callback = config.run_auto_formatter
+      })
+    end,
+  })
 end
 
 -- Autoformatting hooks

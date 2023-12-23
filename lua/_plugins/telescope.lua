@@ -36,6 +36,7 @@ function plugin.config()
         i = {
           ['<C-d>'] = actions.delete_buffer,
           ['<C-o>'] = open_and_resume,
+          ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
         }
       },
     },
