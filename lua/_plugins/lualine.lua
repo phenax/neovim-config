@@ -28,37 +28,7 @@ function plugin.config()
       lualine_y = {'progress'},
       lualine_z = {'location'},
     },
-
-    tabline = {
-      lualine_a = {
-        {
-          'buffers',
-          mode = 2,
-          max_length = vim.o.columns,
-          filetype_names = {
-            TelescopePrompt = '<telescope>',
-            fugitive = '<git>',
-            NvimTree = '<dir>',
-            Trouble = '<diagnostic>',
-          },
-          symbols = {
-            alternate_file = '',
-          },
-        },
-      },
-      lualine_b = {},
-      lualine_c = {},
-      lualine_x = {},
-      lualine_y = {},
-      lualine_z = {},
-    },
   }
-
-  for i = 0, 9 do
-    local bidx = i
-    if (i == 0) then bidx = 10 end
-    vim.keymap.set('n',  '<localleader>' .. i, ':LualineBuffersJump! '.. bidx ..'<CR>')
-  end
 end
 
 function config.get_theme()

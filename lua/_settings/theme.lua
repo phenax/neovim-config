@@ -24,7 +24,23 @@ function theme.setup(colorscheme)
   }
 
   theme.telescope()
+  theme.buffer_manager()
   theme.lsp()
+end
+
+function theme.buffer_manager()
+  local bgfaded = '#110f1b'
+  local bgfaded2 = '#1a1824'
+  local accent = '#4e3aA3'
+  local fg = '#ffffff'
+  local fg2 = '#4a4854'
+
+  updateScheme {
+    BufferManagerModified = { fg = accent },
+    BufferManagerNormal = { bg = bgfaded2, fg = fg },
+    BufferManagerBorder = { bg = bgfaded2, fg = fg2 },
+    -- BufferManagerHeader = { bg = accent, fg = fg },
+  }
 end
 
 function theme.telescope()

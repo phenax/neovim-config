@@ -59,7 +59,7 @@ function plugin.config()
   vim.keymap.set('n', '<leader>cf', builtin.filetypes)
 
   -- Search through buffers
-  vim.keymap.set('n', '<localleader>b', builtin.buffers)
+  vim.keymap.set('n', '<leader>bb', builtin.buffers)
 
   -- (Ctrl + /) Search inside current buffer
   vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find)
@@ -70,7 +70,6 @@ function plugin.config()
   -- Spell suggestions
   vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
 
-  vim.keymap.set('n', '<localleader>b', ':Telescope buffers<CR>')
   vim.keymap.set('n', '<C-_>', ':Telescope current_buffer_fuzzy_find<CR>') -- Ctrl + /
 end
 
