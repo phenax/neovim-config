@@ -83,9 +83,6 @@ function plugin.config()
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    experimental = {
-      ghost_text = true,
-    },
   }
 
   cmp.setup.filetype('norg', {
@@ -95,11 +92,16 @@ function plugin.config()
   })
 
   -- cmp.setup.cmdline(':', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = {
-  --     { name = 'cmdline' },
-  --   },
+  --   mapping = vim.tbl_extend('force', cmp.mapping.preset.cmdline(), mappings),
+  --   sources = cmp.config.sources(
+  --     { { name = 'path' } },
+  --     { { name = 'cmdline', option = { ignore_cmds = { 'Man', '!' } } } }
+  --   )
   -- })
+  cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = { { name = 'buffer' } },
+  })
 end
 
 return plugin
