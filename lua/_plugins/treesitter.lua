@@ -4,7 +4,6 @@ local plugin = {
   commit = '08aabb145f93ed1dd607ce8e2dcd52d356822300',
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/playground',
     'windwp/nvim-ts-autotag',
   },
@@ -48,31 +47,31 @@ local function get_ts_config()
           ['aa'] = '@parameter.outer',
           ['ia'] = '@parameter.inner',
         },
-        swap = {
-          enable = true,
-          swap_next = {
-            ['<M-n>'] = '@parameter.inner',
-          },
-          swap_previous = {
-            ['<M-p>'] = '@parameter.inner',
-          },
+      },
+      swap = {
+        enable = true,
+        swap_next = {
+          ['<C-l>'] = '@parameter.inner',
         },
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ['<leader>rn'] = '@function.outer',
-          },
-          goto_previous_start = {
-            ['<leader>rp'] = '@function.outer',
-          },
+        swap_previous = {
+          ['<C-h>'] = '@parameter.inner',
         },
-        lsp_interop = {
-          enable = true,
-          border = 'none',
-          peek_definition_code = {
-            ['<leader>dt'] = '@function.outer',
-          },
+      },
+      move = {
+        enable = true,
+        set_jumps = true,
+        goto_previous_start = {
+          ['[['] = '@function.outer',
+        },
+        goto_next_start = {
+          [']]'] = '@function.outer',
+        },
+      },
+      lsp_interop = {
+        enable = true,
+        border = 'none',
+        peek_definition_code = {
+          ['<leader>dt'] = '@function.outer',
         },
       },
     },
@@ -81,18 +80,6 @@ end
 
 function plugin.config()
   require'nvim-treesitter.configs'.setup(get_ts_config())
-
-  -- TS context
-  require'treesitter-context'.setup({
-    enable = true,
-    mode = 'topline',
-    separator = '―',
-    max_lines = 10,
-  })
-  vim.keymap.set('n', '<leader>tc', ':TSContextToggle<CR>')
-  vim.keymap.set('n', '<localleader>ck', function()
-    require('treesitter-context').go_to_context()
-  end, { silent = true })
 end
 
 return plugin
