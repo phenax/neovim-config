@@ -18,9 +18,6 @@ local config = {
 }
 
 function plugin.config()
-  vim.api.nvim_set_hl(0, '@neorg.markup.bold', { fg = '#51E980', bold = true })
-  vim.api.nvim_set_hl(0, '@neorg.tags.ranged_verbatim.code_block', { bg = '#1a1824' })
-
   require('neorg').setup(config.get_neorg_config())
 
   vim.api.nvim_create_autocmd('FileType', {
