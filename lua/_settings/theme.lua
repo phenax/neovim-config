@@ -22,8 +22,11 @@ local theme = {
       [1] = '#ffaf68',
     },
     red = {
-      [1] = '#7c162e',
+      [1] = '#ff5370',
       [2] = '#db4b4b',
+    },
+    blue = {
+      [1] = '#82aaff',
     },
   },
 }
@@ -42,11 +45,12 @@ function theme.setup(colorscheme)
 
   vim.cmd('colorscheme ' .. colorscheme)
 
-  theme.updateScheme {
+  theme.update_hl {
     Normal = { bg = 'NONE', fg = theme.colors.slate[7] },
     ColorColumn = { bg = theme.colors.bg[1] },
   }
 
+  theme.lualine_hl()
   theme.telescope()
   theme.buffer_manager()
   theme.lsp()
@@ -54,9 +58,15 @@ function theme.setup(colorscheme)
   theme.indent_blankline()
 end
 
+function theme.update_hl(schemes)
+  for k, v in pairs(schemes) do
+    vim.api.nvim_set_hl(0, k, v)
+  end
+end
+
 function theme.buffer_manager()
   local c = theme.colors
-  theme.updateScheme {
+  theme.update_hl {
     BufferManagerModified = { fg = c.accent },
     BufferManagerNormal = { bg = c.slate[3], fg = c.slate[6] },
     BufferManagerBorder = { bg = c.slate[3], fg = c.slate[3] },
@@ -67,7 +77,7 @@ end
 
 function theme.telescope()
   local c = theme.colors
-  theme.updateScheme {
+  theme.update_hl {
     TelescopeNormal = { bg = c.bg[2] },
     TelescopeBorder = { bg = c.bg[2], fg = c.bg[2] },
     TelescopePreviewNormal = { bg = c.bg[2] },
@@ -89,7 +99,7 @@ function theme.lsp()
     Lens = theme.colors.violet[2],
   }
 
-  theme.updateScheme {
+  theme.update_hl {
     DiagnosticError = { fg = lensColors.Error },
     DiagnosticWarn = { fg = lensColors.Warn },
     DiagnosticInfo = { fg = lensColors.Info },
@@ -103,7 +113,13 @@ function theme.lsp()
   }
 end
 
-function theme.lualine()
+function theme.lualine_hl()
+  theme.update_hl {
+    ['@_phenax.statusline'] = { bg = theme.colors.bg[2], fg = theme.colors.slate[6] },
+  }
+end
+
+function theme.get_lualine_theme()
   local colors = theme.colors
 
   local thm = require'lualine.themes.iceberg_dark'
@@ -118,7 +134,7 @@ function theme.lualine()
   thm.replace.b = bline
   thm.inactive.b = bline
 
-  local cline = { bg = colors.bg[1], fg = colors.slate[5] }
+  local cline = { bg = colors.bg[1], fg = colors.slate[6] }
   thm.normal.c = cline
   thm.insert.c = cline
   thm.visual.c = cline
@@ -129,25 +145,25 @@ function theme.lualine()
 end
 
 function theme.neorg()
-  theme.updateScheme {
+  theme.update_hl {
+    -- Color for text
     ['@neorg.markup.bold'] = { fg = theme.colors.green[2], bold = true },
+    ['@neorg.markup.italic'] = { fg = theme.colors.yellow[1] },
+    ['@neorg.markup.underline'] = { fg = theme.colors.red[1] },
+    ['@neorg.anchors.declaration'] = { fg = theme.colors.blue[1] },
+    -- Code highlights
     ['@neorg.tags.ranged_verbatim.code_block'] = { bg = theme.colors.slate[3] },
+    ['@neorg.markup.verbatim'] = { bg = theme.colors.slate[3] },
   }
 end
 
 function theme.indent_blankline()
-  theme.updateScheme {
+  theme.update_hl {
     IndentBlanklineChar = { fg = theme.colors.slate[3], nocombine = true },
     IndentBlanklineSpaceChar = { fg = theme.colors.slate[3], nocombine = true },
     IndentBlanklineContextStart = { fg = theme.colors.slate[3], nocombine = true },
     IndentBlanklineContextChar = { fg = theme.colors.slate[3], nocombine = true },
   }
-end
-
-function theme.updateScheme(schemes)
-  for k, v in pairs(schemes) do
-    vim.api.nvim_set_hl(0, k, v)
-  end
 end
 
 return theme
