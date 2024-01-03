@@ -246,9 +246,9 @@ end
 
 function config.format_buffer()
   if vim.fn.exists(':LspFormat') > 0 then
-    vim.cmd [[LspFormat]]
+    vim.cmd [[sil LspFormat]]
   else
-    vim.lsp.buf.format({ async = false })
+    vim.cmd [[sil lua vim.lsp.buf.format({ async = false })]]
   end
 end
 
