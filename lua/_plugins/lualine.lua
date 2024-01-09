@@ -18,7 +18,7 @@ function plugin.config()
       component_separators = { left = '', right = ''},
       section_separators = { left = '', right = ''},
       always_divide_middle = false,
-      globalstatus = true,
+      globalstatus = false,
       disabled_filetypes = {
         winbar = { 'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
       },
@@ -26,6 +26,7 @@ function plugin.config()
 
     sections = {},
     inactive_sections = {},
+    tabline = {},
 
     inactive_winbar = {
       lualine_c = { { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
