@@ -8,4 +8,5 @@ return {
     { mode = 'n', '<localleader>gpp', ':Git push<cr>' },
     { mode = 'n', '<localleader>gpu', ':Git pull<cr>' },
   },
+  cmd = {'Git', 'G'},
 }

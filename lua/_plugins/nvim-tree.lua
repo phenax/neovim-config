@@ -16,6 +16,7 @@ function plugin.config()
   require('nvim-tree').setup({
     hijack_cursor = true,
     on_attach = config.nvim_tree_on_attach,
+    sync_root_with_cwd = false,
     view = {
       centralize_selection = true,
     },
@@ -30,8 +31,15 @@ function plugin.config()
       },
     },
     actions = {
+      use_system_clipboard = true,
       open_file = {
         quit_on_open = true,
+        window_picker = {
+          enable = false,
+        },
+      },
+      change_dir = {
+        global = true,
       },
     },
   })
