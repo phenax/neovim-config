@@ -9,16 +9,7 @@ local plugin = {
     'ray-x/cmp-treesitter',
     'onsails/lspkind-nvim',
     'hrsh7th/cmp-cmdline',
-
-    {
-      'L3MON4D3/LuaSnip',
-      version = 'v2.*',
-      build = 'make install_jsregexp',
-      dependencies = {
-        'saadparwaiz1/cmp_luasnip',
-        'rafamadriz/friendly-snippets',
-      },
-    },
+    'L3MON4D3/LuaSnip',
   },
 }
 
@@ -48,11 +39,6 @@ end
 
 function plugin.config()
   local cmp = require 'cmp'
-  local luasnip = require 'luasnip'
-
-  -- LuaSnip
-  luasnip.filetype_extend('all', { '_' })
-  require('luasnip.loaders.from_vscode').lazy_load()
 
   local mappings = {
     ['<C-e>'] = cmp.mapping.abort(),

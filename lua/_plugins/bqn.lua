@@ -7,6 +7,6 @@ return {
 
     -- Load snippets
     -- TODO: Only load on buffer
-    require('luasnip.loaders.from_vscode').load_standalone({ path = './snippets/bqn.json' })
+    -- require('luasnip.loaders.from_vscode').load_standalone({ path = './snippets/bqn/bqn.json' })
   end,
 }
