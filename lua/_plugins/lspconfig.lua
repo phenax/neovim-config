@@ -81,7 +81,16 @@ local config = {
       -- svelte = {},
 
       rubocop = {},
-      ruby_ls = {},
+      solargraph = {
+        init_options = {
+          formatting = false,
+        },
+      },
+      -- ruby_ls = {
+      --   init_options = {
+      --     formatter = false,
+      --   },
+      -- },
       yamlls = {},
       gopls = {},
 
