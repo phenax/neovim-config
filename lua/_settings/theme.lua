@@ -56,6 +56,7 @@ function theme.setup(colorscheme)
   theme.lsp()
   theme.neorg()
   theme.indent_blankline()
+  theme.mini_files()
 end
 
 function theme.update_hl(schemes)
@@ -163,6 +164,18 @@ function theme.indent_blankline()
     IndentBlanklineSpaceChar = { fg = theme.colors.slate[3], nocombine = true },
     IndentBlanklineContextStart = { fg = theme.colors.slate[3], nocombine = true },
     IndentBlanklineContextChar = { fg = theme.colors.slate[3], nocombine = true },
+  }
+end
+
+function theme.mini_files()
+  local c = theme.colors
+  theme.update_hl {
+    MiniFilesBorder = { bg = c.slate[3], fg = c.slate[3] },
+    MiniFilesBorderModified = { bg = c.accent, fg = c.accent },
+    MiniFilesNormal = { bg = c.slate[3], fg = c.slate[6] },
+    MiniFilesTitle = { fg = c.white, bg = c.slate[3], bold = true },
+    MiniFilesTitleFocused = { fg = c.white, bg = c.accent, bold = true},
+    MiniFilesCursorLine = { bg = c.slate[2], bold = true },
   }
 end
 
