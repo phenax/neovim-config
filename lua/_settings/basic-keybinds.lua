@@ -64,13 +64,21 @@ local function toggle_foldlevel()
   local max_level = 20
   local min_level = 1
 
-  if (vim.opt.foldlevel._value >= max_level) then
+  if (vim.o.foldlevel >= max_level) then
     vim.cmd [[normal! zM<CR>]]
-    vim.opt.foldlevel = min_level
+    vim.o.foldlevel = min_level
   else
     vim.cmd [[normal! zR<CR>]]
-    vim.opt.foldlevel = max_level
+    vim.o.foldlevel = max_level
   end
 end
 
 vim.keymap.set('n', '<leader><Tab>', toggle_foldlevel, { silent = true })
+
+vim.keymap.set('n',  '<leader>ct' , function()
+	if vim.o.conceallevel > 0 then
+		vim.o.conceallevel = 0
+	else
+		vim.o.conceallevel = 2
+	end
+end, { silent = true, noremap = true })
