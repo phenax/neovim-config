@@ -36,6 +36,13 @@ function plugin.config()
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual',
     },
   })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'buffer_manager' },
+    callback = function()
+      vim.keymap.set('n', '<leader>cr', ':v/\\%#/d<cr>', { buffer = true })
+    end,
+  })
 end
 
 return plugin

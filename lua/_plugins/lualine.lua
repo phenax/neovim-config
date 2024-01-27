@@ -43,7 +43,6 @@ function plugin.config()
   }
 
   -- Disable statusline
-  vim.o.laststatus = 0
   vim.o.statusline = '%#@_phenax.statusline#'
 end
 

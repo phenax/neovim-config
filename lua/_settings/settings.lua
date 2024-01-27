@@ -37,7 +37,7 @@ vim.o.swapfile = false
 vim.o.showmode = false
 vim.o.ruler = true
 vim.o.scrolloff = 15
-vim.o.colorcolumn = 120
+vim.o.colorcolumn = '120'
 
 -- -- Indent
 vim.o.autoindent = true
@@ -47,15 +47,18 @@ vim.o.tabstop = 2
 vim.o.smarttab = true
 vim.o.expandtab = true
 
-vim.o.laststatus = 2
+vim.o.laststatus = 0
 vim.o.cmdheight = 1
 vim.o.updatetime = 300
 vim.o.signcolumn = 'yes'
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
-vim.o.cursorline = true
 
--- vim.opt.conceallevel = 2
+-- vim.o.conceallevel = 2
 
 -- Short messages
 vim.o.shortmess = vim.o.shortmess .. 'TIFc'
+
+-- Whitespace characters
+vim.o.list = true
+vim.o.listchars = 'lead:.,trail:.,tab:| '

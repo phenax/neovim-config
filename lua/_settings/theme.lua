@@ -3,6 +3,7 @@ local theme = {
     white = '#ffffff',
     slate = {
       [1] = '#0f0c19',
+      [1.5] = '#130e1d',
       [2] = '#15121f',
       [3] = '#1a1824',
       [4] = '#2a2834',
@@ -47,7 +48,11 @@ function theme.setup(colorscheme)
 
   theme.update_hl {
     Normal = { bg = 'NONE', fg = theme.colors.slate[7] },
-    ColorColumn = { bg = theme.colors.bg[1] },
+    ColorColumn = { bg = theme.colors.slate[1.5] },
+    CursorColumn = { bg = theme.colors.slate[1.5] },
+    CursorLine = { bg = theme.colors.slate[1.5] },
+    Whitespace = { fg = theme.colors.slate[4] },
+    SignColumn = { bg = 'none' }
   }
 
   theme.lualine_hl()
