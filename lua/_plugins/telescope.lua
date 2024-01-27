@@ -3,7 +3,7 @@ local plugin = {
   dependencies = {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
-  }
+  },
 }
 
 function plugin.config()
