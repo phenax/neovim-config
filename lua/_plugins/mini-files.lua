@@ -1,4 +1,7 @@
-local M = { show_preview = false }
+local M = {
+  show_preview = false,
+  lsp_timeout = 10000,
+}
 
 local plugin = {
   'echasnovski/mini.files',
@@ -31,21 +34,7 @@ function plugin.config()
     },
   })
 
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'MiniFilesBufferCreate',
-    callback = function(args)
-      M.bind_extra_keys(function(mappings)
-        if args.data == nil or args.data.buf_id == nil then return end
-        for mode, mode_map in pairs(mappings) do
-          for k, v in pairs(mode_map) do
-            vim.keymap.set(mode, k, v, { noremap = true, buffer = args.data.buf_id })
-          end
-        end
-      end)
-    end,
-  })
-
-  M.lsp_integration()
+  M.init_event_handlers()
 end
 
 function M.bind_extra_keys(map)
@@ -118,6 +107,33 @@ function M.bind_extra_keys(map)
   })
 end
 
+M.init_event_handlers = function()
+  -- Bind keys to mini.files buffer
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesBufferCreate',
+    callback = function(args)
+      M.bind_extra_keys(function(mappings)
+        if args.data == nil or args.data.buf_id == nil then return end
+        for mode, mode_map in pairs(mappings) do
+          for k, v in pairs(mode_map) do
+            vim.keymap.set(mode, k, v, { noremap = true, buffer = args.data.buf_id })
+          end
+        end
+      end)
+    end,
+  })
+
+  -- Handle on rename/move
+  vim.api.nvim_create_autocmd('User', {
+    pattern = { 'MiniFilesActionRename', 'MiniFilesActionMove' },
+    callback = function(args)
+      for _, client in ipairs(vim.lsp.get_active_clients()) do
+        M.handle_lsp_rename(client, args)
+      end
+    end
+  })
+end
+
 function M.minifiles_toggle(...)
   local mini_files = require('mini.files')
   if not mini_files.close() then
@@ -130,38 +146,39 @@ function M.toggle_cwd()
 end
 
 function M.toggle_current()
-  M.minifiles_toggle(vim.api.nvim_buf_get_name(0), true)
+  local path = vim.api.nvim_buf_get_name(0)
+  while vim.loop.fs_stat(path) == nil do
+    path = vim.fs.dirname(path)
+  end
+  M.minifiles_toggle(path, true)
 end
 
-M.lsp_integration = function()
-  vim.api.nvim_create_autocmd('User', {
-    pattern = { 'MiniFilesActionRename' },
-    callback = function(args)
-      -- vim.lsp.buf.execute_command({
-      --   command = 'workspace/didRenameFiles',
-      --   arguments = {
-      --     {
-      --       files = {
-      --         { oldUri = 'file://'..args.data.from, newUri = 'file://'..args.data.to },
-      --       },
-      --     },
-      --   },
-      -- })
-
-      -- Typescript only
-      if args.data.from:sub(-3) == '.ts' then 
-        vim.lsp.buf.execute_command({
-          command = '_typescript.applyRenameFile',
-          arguments = {
-            { sourceUri = args.data.from, targetUri = args.data.to },
-          },
-          title = ''
-        })
-      end
+local function get_path(obj, path)
+  local current = obj
+  for _, key in ipairs(path) do
+    if current[key] == nil then
+      return nil
     end
-  })
+    current = current[key]
+  end
+  return current
+end
+
+function M.handle_lsp_rename(client, args)
+  if get_path(client, {'server_capabilities','workspace','fileOperations','willRename'}) == nil then
+    return
+  end
+
+  local success, resp = pcall(client.request_sync, 'workspace/willRenameFiles', {
+    files = {{
+      oldUri = vim.uri_from_fname(args.data.from),
+      newUri = vim.uri_from_fname(args.data.to),
+    }},
+  }, M.lsp_timeout)
+
+  if success and resp and resp.result ~= nil then
+    vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+  end
 end
 
 return plugin
-
--- TODO: LSP integration
