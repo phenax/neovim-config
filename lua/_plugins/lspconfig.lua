@@ -41,7 +41,8 @@ local config = {
     "cpp",
     "uiua",
     "go",
-    "racket"
+    "racket",
+    -- "lua",
   },
 
   lsp_servers = function()
@@ -101,7 +102,8 @@ local config = {
       },
 
       tailwindcss = {
-        root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts'),
+        root_dir = nvim_lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs',
+          'tailwind.config.ts'),
         single_file_support = false,
       },
 
@@ -117,7 +119,7 @@ local config = {
             checkOnSave = { command = "clippy" },
             diagnostics = {
               enable = true,
-              disabled = {"unresolved-proc-macro"},
+              disabled = { "unresolved-proc-macro" },
               enableExperimental = true,
             },
           },
@@ -128,7 +130,7 @@ local config = {
         commands = {
           LspFormat = {
             function()
-              vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line('$'), 0 })
             end
           }
         }
@@ -140,6 +142,25 @@ local config = {
         settings = {
           languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
         },
+      },
+
+      lua_ls = {
+        on_init = function(client)
+          local path = client.workspace_folders[1].name
+          if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+            client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+              Lua = {
+                runtime = { version = 'LuaJIT' },
+                workspace = {
+                  checkThirdParty = false,
+                  library = { vim.env.VIMRUNTIME },
+                },
+              },
+            })
+            client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
+          end
+          return true
+        end,
       },
     }
   end,
@@ -184,7 +205,7 @@ function plugin.config()
 end
 
 function config.on_lsp_attached(client, bufnr)
-  local opts = { noremap=true, silent=true }
+  local opts = { noremap = true, silent = true }
 
   -- Navigation
   vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
@@ -215,7 +236,7 @@ function config.on_lsp_attached(client, bufnr)
     vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 
     -- Show types as virtual text
-    require'virtualtypes'.on_attach(client, bufnr)
+    require 'virtualtypes'.on_attach(client, bufnr)
   end
 
   -- Show function signature
