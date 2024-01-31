@@ -5,22 +5,21 @@ local plugin = {
   },
 }
 
-local config = {}
-
 function plugin.config()
-  local theme = require'_settings.theme'
-  local lualine = require'lualine'
+  local theme = require '_settings.theme'
+  local lualine = require 'lualine'
 
   lualine.setup {
     options = {
       icons_enabled = true,
       theme = theme.get_lualine_theme(),
-      component_separators = { left = '', right = ''},
-      section_separators = { left = '', right = ''},
+      component_separators = { left = '', right = '' },
+      section_separators = { left = '', right = '' },
       always_divide_middle = false,
       globalstatus = false,
       disabled_filetypes = {
-        winbar = { 'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
+        winbar = {
+          'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
       },
     },
 
@@ -30,15 +29,15 @@ function plugin.config()
 
     inactive_winbar = {
       lualine_c = { { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
-      lualine_x = {'%r', 'filetype'},
+      lualine_x = { '%r', 'filetype' },
     },
     winbar = {
-      lualine_a = {'mode'},
-      lualine_b = {'branch', { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
+      lualine_a = { 'mode' },
+      lualine_b = { 'branch', { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
       lualine_c = {},
-      lualine_x = {'%r', 'filetype'},
-      lualine_y = {'%m', '%L'},
-      lualine_z = {'location'},
+      lualine_x = { '%r', 'filetype' },
+      lualine_y = { '%m', '%L' },
+      lualine_z = { 'location' },
     },
   }
 
