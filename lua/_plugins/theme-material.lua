@@ -1,5 +1,7 @@
 return {
   'kaicataldo/material.vim',
+  lazy = false,
+  priority = 1000,
   dependencies = {
     'ryanoasis/vim-devicons',
     'kyazdani42/nvim-web-devicons',
