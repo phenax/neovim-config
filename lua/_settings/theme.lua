@@ -25,6 +25,8 @@ local theme = {
     red = {
       [1] = '#ff5370',
       [2] = '#db4b4b',
+      [3] = '#d63031',
+      [4] = '#7c162e',
     },
     blue = {
       [1] = '#82aaff',
@@ -53,6 +55,11 @@ function theme.setup(colorscheme)
     CursorLine = { bg = theme.colors.slate[1.5] },
     Whitespace = { fg = theme.colors.slate[4] },
     SignColumn = { bg = 'none' }
+  }
+  theme.update_hl {
+    -- WinBar = { bg = theme.colors.slate[1], fg = theme.colors.white },
+    -- ['@_bar.mode.inactive'] = { bg = theme.colors.slate[1], fg = theme.colors.white },
+    -- ['@_bar.mode.normal'] = { bg = theme.colors.accent, bold = true, },
   }
 
   theme.lualine_hl()
@@ -187,21 +194,21 @@ end
 
 function theme.terminal_colors()
   vim.g.terminal_color_0  = theme.colors.slate[2]
-  vim.g.terminal_color_1  = "#e06c75"
-  vim.g.terminal_color_10 = "#a3be8c"
-  vim.g.terminal_color_11 = "#f7b731"
-  vim.g.terminal_color_12 = "#5e81ac"
-  vim.g.terminal_color_13 = "#4e3aA3"
-  vim.g.terminal_color_14 = "#0fb9b1"
-  vim.g.terminal_color_15 = "#ebdbb2"
-  vim.g.terminal_color_2  = "#98C379"
-  vim.g.terminal_color_3  = "#E5C07B"
-  vim.g.terminal_color_4  = "#60a3bc"
-  vim.g.terminal_color_5  = "#4e3aA3"
-  vim.g.terminal_color_6  = "#56B6C2"
-  vim.g.terminal_color_7  = "#ABB2BF"
-  vim.g.terminal_color_8  = "#555555"
-  vim.g.terminal_color_9  = "#7c162e"
+  vim.g.terminal_color_1  = '#e06c75'
+  vim.g.terminal_color_10 = '#a3be8c'
+  vim.g.terminal_color_11 = '#f7b731'
+  vim.g.terminal_color_12 = '#5e81ac'
+  vim.g.terminal_color_13 = '#4e3aA3'
+  vim.g.terminal_color_14 = '#0fb9b1'
+  vim.g.terminal_color_15 = '#ebdbb2'
+  vim.g.terminal_color_2  = '#98C379'
+  vim.g.terminal_color_3  = '#E5C07B'
+  vim.g.terminal_color_4  = '#60a3bc'
+  vim.g.terminal_color_5  = '#4e3aA3'
+  vim.g.terminal_color_6  = '#56B6C2'
+  vim.g.terminal_color_7  = '#ABB2BF'
+  vim.g.terminal_color_8  = '#555555'
+  vim.g.terminal_color_9  = '#7c162e'
 end
 
 return theme

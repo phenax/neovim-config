@@ -18,7 +18,7 @@ vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 50
 
 vim.o.number = true
-vim.o.relativenumber = true
+vim.o.relativenumber = false
 
 vim.o.showmatch = true
 vim.o.ignorecase = true

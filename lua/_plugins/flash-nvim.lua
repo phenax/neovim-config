@@ -6,9 +6,13 @@ return {
     { '<c-b>', function() require 'flash'.toggle() end, mode = 'c' },
   },
   opts = {
-    labels = 'asdfghjklryuzxnm',
+    labels = 'asdfhjklqwertyuiop',
     label = {
       rainbow = { enabled = true, shade = 3 },
+      after = true,
+      uppercase = false,
+      distance = false,
+      reuse = 'none',
     },
     modes = {
       search = { enabled = false },

@@ -1,5 +1,6 @@
 local plugin = {
   'nvim-lualine/lualine.nvim',
+  -- enabled = false,
   dependencies = {
     'kyazdani42/nvim-web-devicons',
   },
@@ -8,6 +9,17 @@ local plugin = {
 function plugin.config()
   local theme = require '_settings.theme'
   local lualine = require 'lualine'
+
+  local filename = {
+    'filename',
+    path = 4,
+    newfile_status = true,
+    symbols = { modified = '●', newfile = '[new]', unnamed = '[unnamed]' },
+    color = function(_)
+      if not vim.bo.modified then return nil end
+      return { fg = theme.colors.red[3], gui = 'bold' }
+    end,
+  }
 
   lualine.setup {
     options = {
@@ -29,15 +41,22 @@ function plugin.config()
 
     inactive_winbar = {
       lualine_c = { { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
-      lualine_x = { '%r', 'filetype' },
+      lualine_x = { '%r', '%m', 'filetype' },
     },
+
     winbar = {
-      lualine_a = { 'mode' },
-      lualine_b = { 'branch', { 'filename', path = 4, symbols = { modified = '[● modified]' } } },
+      lualine_a = { filename },
+      lualine_b = { 'branch' },
       lualine_c = {},
-      lualine_x = { '%r', 'filetype' },
-      lualine_y = { '%m', '%L' },
-      lualine_z = { 'location' },
+      lualine_x = { '%r', '%m' },
+      lualine_y = { 'filetype' },
+      lualine_z = { '%l/%L' },
+      -- lualine_a = { 'mode' },
+      -- lualine_b = { 'branch', filename },
+      -- lualine_c = {},
+      -- lualine_x = { '%r', 'filetype' },
+      -- lualine_y = { '%m', '%L' },
+      -- lualine_z = { 'location' },
     },
   }
 
