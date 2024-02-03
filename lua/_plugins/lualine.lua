@@ -10,17 +10,6 @@ function plugin.config()
   local theme = require '_settings.theme'
   local lualine = require 'lualine'
 
-  local filename = {
-    'filename',
-    path = 4,
-    newfile_status = true,
-    symbols = { modified = '●', newfile = '[new]', unnamed = '[unnamed]' },
-    color = function(_)
-      if not vim.bo.modified then return nil end
-      return { fg = theme.colors.red[3], gui = 'bold' }
-    end,
-  }
-
   lualine.setup {
     options = {
       icons_enabled = true,
@@ -45,7 +34,15 @@ function plugin.config()
     },
 
     winbar = {
-      lualine_a = { filename },
+      lualine_a = { {
+        'filename',
+        path = 4,
+        symbols = { modified = '●' },
+        color = function(_)
+          if not vim.bo.modified then return nil end
+          return { gui = 'bold' }
+        end,
+      }, },
       lualine_b = { 'branch' },
       lualine_c = {},
       lualine_x = { '%r', '%m' },

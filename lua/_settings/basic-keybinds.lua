@@ -46,7 +46,7 @@ vim.keymap.set('n', '<leader>sw', ':mksession! .vim.session<cr>')
 vim.keymap.set('n', '<leader>sl', ':source .vim.session<cr>')
 
 -- No highlight
-vim.keymap.set('n', '<c-\\>', ':noh<CR>')
+vim.keymap.set('n', '<c-\\>', '<cmd>noh | echo expand("%p") "("..expand("%:p")..")"<cr>')
 
 -- Replace word
 vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
