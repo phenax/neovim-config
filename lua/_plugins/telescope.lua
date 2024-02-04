@@ -1,5 +1,6 @@
 local plugin = {
   'nvim-telescope/telescope.nvim',
+  event = 'VeryLazy',
   dependencies = {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
@@ -16,10 +17,20 @@ function plugin.config()
     builtin.resume()
   end
 
+  local keymaps = {
+    ['<C-d>'] = actions.delete_buffer,
+    ['<C-o>'] = open_and_resume,
+    ['<C-h>'] = actions.select_horizontal,
+    ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
+  }
+
   telescope.setup {
     defaults = {
       prompt_prefix = ' λ ',
       sorting_strategy = 'ascending',
+      cache_picker = {
+        num_pickers = 10,
+      },
       layout_config = {
         width = 0.8,
         prompt_position = 'top',
@@ -29,15 +40,8 @@ function plugin.config()
       use_less = true,
 
       mappings = {
-        n = {
-          ['<C-d>'] = actions.delete_buffer,
-          ['<C-o>'] = open_and_resume,
-        },
-        i = {
-          ['<C-d>'] = actions.delete_buffer,
-          ['<C-o>'] = open_and_resume,
-          ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
-        }
+        n = keymaps,
+        i = keymaps,
       },
     },
   }
@@ -54,6 +58,7 @@ function plugin.config()
 
   -- Resume last telescope search
   vim.keymap.set('n', '<leader>tr', builtin.resume)
+  vim.keymap.set('n', '<leader>tp', builtin.pickers)
 
   -- Set buffer file type
   vim.keymap.set('n', '<leader>cf', builtin.filetypes)
@@ -69,8 +74,6 @@ function plugin.config()
 
   -- Spell suggestions
   vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
-
-  vim.keymap.set('n', '<C-_>', ':Telescope current_buffer_fuzzy_find<CR>') -- Ctrl + /
 end
 
 return plugin

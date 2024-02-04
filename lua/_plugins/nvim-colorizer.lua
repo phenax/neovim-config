@@ -1,6 +1,6 @@
 return {
   'NvChad/nvim-colorizer.lua',
-  event = 'BufRead',
+  event = 'BufReadPost',
 
   config = function()
     require'colorizer'.setup({

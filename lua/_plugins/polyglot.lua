@@ -1,3 +1,1 @@
-return {
-  'sheerun/vim-polyglot'
-}
+return { 'sheerun/vim-polyglot' }

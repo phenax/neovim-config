@@ -1,6 +1,6 @@
 return {
   'airblade/vim-gitgutter',
-  event = 'BufRead',
+  event = 'BufReadPost',
   keys = {
     { mode = 'n', '<localleader>hh', '<Plug>(GitGutterPreviewHunk)' },
     { mode = 'n', '<localleader>hn', '<Plug>(GitGutterNextHunk)' },

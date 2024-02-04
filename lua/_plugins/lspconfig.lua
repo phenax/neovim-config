@@ -1,5 +1,6 @@
 local plugin = {
   'neovim/nvim-lspconfig',
+  event = 'VeryLazy',
   dependencies = {
     'ray-x/lsp_signature.nvim',
     'jubnzv/virtual-types.nvim',
@@ -227,6 +228,7 @@ function config.on_lsp_attached(client, bufnr)
   -- Diagnostics
   vim.keymap.set('n', '<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   vim.keymap.set('n', '<localleader>d', '<cmd>Telescope diagnostics<cr>', opts)
+  vim.keymap.set('n', '<leader>xx', '<cmd>Telescope diagnostics<cr>', opts)
   vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 

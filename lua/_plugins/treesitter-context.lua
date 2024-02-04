@@ -4,7 +4,7 @@ return {
     'nvim-treesitter/nvim-treesitter',
   },
 
-  event = 'BufRead',
+  event = 'BufReadPost',
 
   keys = {
     { mode = 'n', '<leader>tc', ':TSContextToggle<CR>'}
