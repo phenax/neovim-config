@@ -11,8 +11,8 @@ return {
       rainbow = { enabled = true, shade = 3 },
       after = true,
       uppercase = false,
-      distance = false,
-      reuse = 'none',
+      -- distance = false,
+      -- reuse = 'none',
     },
     modes = {
       search = { enabled = false },
