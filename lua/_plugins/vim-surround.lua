@@ -1,4 +1,1 @@
-return {
-  'tpope/vim-surround',
-  lazy = 'VeryLazy',
-}
+return { 'tpope/vim-surround' }

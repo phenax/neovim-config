@@ -1,6 +1,5 @@
 local plugin = {
   'neovim/nvim-lspconfig',
-  event = 'VeryLazy',
   dependencies = {
     'ray-x/lsp_signature.nvim',
     'jubnzv/virtual-types.nvim',

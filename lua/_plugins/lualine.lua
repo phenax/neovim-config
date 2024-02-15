@@ -19,8 +19,7 @@ function plugin.config()
       always_divide_middle = false,
       globalstatus = false,
       disabled_filetypes = {
-        winbar = {
-          'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
+        winbar = { 'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
       },
     },
 

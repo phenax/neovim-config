@@ -1,6 +1,5 @@
 return {
   'folke/flash.nvim',
-  event = 'VeryLazy',
   keys = {
     { '<c-b>', function() require 'flash'.jump() end,   mode = { 'n', 'i', 'v' } },
     { '<c-b>', function() require 'flash'.toggle() end, mode = 'c' },
@@ -17,7 +16,7 @@ return {
     modes = {
       search = { enabled = false },
       char = {
-        enabled = true,
+        enabled = false,
         multi_line = false,
         highlight = { backdrop = false },
       },
