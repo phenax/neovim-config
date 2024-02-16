@@ -86,6 +86,9 @@ function theme.buffer_manager()
     BufferManagerBorder = { bg = c.slate[3], fg = c.slate[3] },
     BufferManagerLineNr = { bg = c.slate[3], fg = c.white },
     BufferManagerVisual = { bg = c.slate[4], fg = c.white },
+    BufferManagerDiffChange = { fg = c.yellow[1], bold = true },
+    BufferManagerDiffAdd = { fg = c.green[2], bold = true },
+    BufferManagerDiffDelete = { fg = c.red[2], bold = true },
   }
 end
 
