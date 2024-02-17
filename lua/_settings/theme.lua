@@ -49,20 +49,18 @@ function theme.setup(colorscheme)
   vim.cmd('colorscheme ' .. colorscheme)
 
   theme.update_hl {
-    Normal = { bg = 'NONE', fg = theme.colors.slate[7] },
+    Normal = { bg = 'none', fg = theme.colors.slate[7] },
+    NormalFloat = { bg = theme.colors.slate[3], fg = theme.colors.white },
     ColorColumn = { bg = theme.colors.slate[1.5] },
     CursorColumn = { bg = theme.colors.slate[1.5] },
     CursorLine = { bg = theme.colors.slate[1.5] },
     Whitespace = { fg = theme.colors.slate[4] },
-    SignColumn = { bg = 'none' }
-  }
-  theme.update_hl {
-    -- WinBar = { bg = theme.colors.slate[1], fg = theme.colors.white },
-    -- ['@_bar.mode.inactive'] = { bg = theme.colors.slate[1], fg = theme.colors.white },
-    -- ['@_bar.mode.normal'] = { bg = theme.colors.accent, bold = true, },
+    SignColumn = { bg = 'none' },
+    StatusLine = { bg = 'none', fg = theme.colors.accent },
+    StatusLineNC = { bg = 'none', fg = theme.colors.slate[5] },
+    VertSplit = { bg = 'none', fg = theme.colors.slate[5] },
   }
 
-  theme.lualine_hl()
   theme.telescope()
   theme.buffer_manager()
   theme.lsp()
@@ -70,6 +68,7 @@ function theme.setup(colorscheme)
   theme.indent_blankline()
   theme.mini_files()
   theme.terminal_colors()
+  theme.incline()
 end
 
 function theme.update_hl(schemes)
@@ -127,12 +126,6 @@ function theme.lsp()
     DiagnosticUnderlineHint = { fg = lensColors.Hint },
     LspCodeLens = { fg = lensColors.Lens },
     LspSignatureActiveParameter = { fg = lensColors.Info },
-  }
-end
-
-function theme.lualine_hl()
-  theme.update_hl {
-    ['@_phenax.statusline'] = { bg = theme.colors.bg[2], fg = theme.colors.slate[6] },
   }
 end
 
@@ -212,6 +205,14 @@ function theme.terminal_colors()
   vim.g.terminal_color_7  = '#ABB2BF'
   vim.g.terminal_color_8  = '#555555'
   vim.g.terminal_color_9  = '#7c162e'
+end
+
+function theme.incline()
+  local c = theme.colors
+  theme.update_hl {
+    InclineModeNormal = { bg = c.accent, fg = c.white },
+    InclineModeInactive = { bg = c.slate[3], fg = c.slate[6] },
+  }
 end
 
 return theme

@@ -1,6 +1,6 @@
 local plugin = {
   'nvim-lualine/lualine.nvim',
-  -- enabled = false,
+  enabled = false,
   dependencies = {
     'kyazdani42/nvim-web-devicons',
   },

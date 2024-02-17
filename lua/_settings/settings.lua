@@ -53,11 +53,12 @@ vim.o.updatetime = 300
 vim.o.signcolumn = 'yes'
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
+vim.o.showmode = true
 
--- vim.o.conceallevel = 2
+vim.o.conceallevel = 0
 
 -- Short messages
-vim.o.shortmess = vim.o.shortmess .. 'TIFc'
+vim.opt.shortmess:append('TIc')
 
 -- Whitespace characters
 vim.o.list = true
