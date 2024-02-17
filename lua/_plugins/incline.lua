@@ -75,7 +75,8 @@ function M.component.filename(props)
 
   if string.len(filename) == 0 then return { '' } end
 
-  local file_seg = filename
+  local file_seg = ''
+      .. filename
       .. (bo.modified and ' ●' or '')
       .. (bo.readonly and ' [RO]' or '')
   file_seg = ' ' .. file_seg .. ' '

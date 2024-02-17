@@ -14,6 +14,7 @@ local theme = {
     violet = {
       [1] = '#4e3aA3',
       [2] = '#513970',
+      [3] = '#8e7ae3',
     },
     green = {
       [1] = '#d0bf78',
@@ -160,7 +161,8 @@ function theme.neorg()
     ['@neorg.markup.bold'] = { fg = theme.colors.green[2], bold = true },
     ['@neorg.markup.italic'] = { fg = theme.colors.yellow[1] },
     ['@neorg.markup.underline'] = { fg = theme.colors.red[1] },
-    ['@neorg.anchors.declaration'] = { fg = theme.colors.blue[1] },
+    ['@neorg.anchors.declaration'] = { fg = theme.colors.violet[3] },
+    ['@neorg.links.location.url.norg'] = { fg = theme.colors.blue[1] },
     -- Code highlights
     ['@neorg.tags.ranged_verbatim.code_block'] = { bg = theme.colors.slate[3] },
     ['@neorg.markup.verbatim'] = { bg = theme.colors.slate[3] },
