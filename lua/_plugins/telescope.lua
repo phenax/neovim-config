@@ -49,10 +49,14 @@ function plugin.config()
   vim.keymap.set('n', '<c-f>', builtin.live_grep)
 
   -- Fuzzy file finder
-  if vim.fn.filereadable('.git') == 1 then
-    vim.keymap.set('n', '<leader>f', function() builtin.git_files({ show_untracked = true }) end)
+  if vim.fn.isdirectory('.git') == 1 or vim.fn.filereadable('.git') == 1 then
+    vim.keymap.set('n', '<leader>f', function() builtin.git_files({
+      show_untracked = true,
+    }) end)
   else
-    vim.keymap.set('n', '<leader>f', builtin.find_files)
+    vim.keymap.set('n', '<leader>f', function() builtin.find_files({
+      hidden = true,
+    }) end)
   end
 
   -- Resume last telescope search

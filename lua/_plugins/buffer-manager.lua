@@ -6,7 +6,7 @@ local plugin = {
 }
 
 local config = {
-  bf_ns = vim.api.nvim_create_namespace('buffer_manager')
+  bf_ns = vim.api.nvim_create_namespace('buffer_manager/git')
 }
 
 -- Key bindings

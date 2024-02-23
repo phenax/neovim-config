@@ -160,9 +160,11 @@ function theme.neorg()
     -- Color for text
     ['@neorg.markup.bold'] = { fg = theme.colors.green[2], bold = true },
     ['@neorg.markup.italic'] = { fg = theme.colors.yellow[1] },
-    ['@neorg.markup.underline'] = { fg = theme.colors.red[1] },
+    ['@neorg.markup.underline'] = { fg = theme.colors.red[1], underline = true },
     ['@neorg.anchors.declaration'] = { fg = theme.colors.violet[3] },
-    ['@neorg.links.location.url.norg'] = { fg = theme.colors.blue[1] },
+    ['@neorg.links.location.url.norg'] = { fg = theme.colors.blue[1], underline = true },
+    ['@neorg.todo_items.pending.norg'] = { fg = theme.colors.yellow[1] },
+    ['@neorg.todo_items.urgent.norg'] = { fg = theme.colors.red[1], bold = true },
     -- Code highlights
     ['@neorg.tags.ranged_verbatim.code_block'] = { bg = theme.colors.slate[3] },
     ['@neorg.markup.verbatim'] = { bg = theme.colors.slate[3] },
