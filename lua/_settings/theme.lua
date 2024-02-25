@@ -161,7 +161,9 @@ function theme.neorg()
     ['@neorg.markup.bold'] = { fg = theme.colors.green[2], bold = true },
     ['@neorg.markup.italic'] = { fg = theme.colors.yellow[1] },
     ['@neorg.markup.underline'] = { fg = theme.colors.red[1], underline = true },
+    -- Links
     ['@neorg.anchors.declaration'] = { fg = theme.colors.violet[3] },
+    ['@neorg.links.description.norg'] = { fg = theme.colors.violet[3] },
     ['@neorg.links.location.url.norg'] = { fg = theme.colors.blue[1], underline = true },
     ['@neorg.todo_items.pending.norg'] = { fg = theme.colors.yellow[1] },
     ['@neorg.todo_items.urgent.norg'] = { fg = theme.colors.red[1], bold = true },

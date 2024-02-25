@@ -4,6 +4,7 @@ local plugin = {
     'ray-x/lsp_signature.nvim',
     'jubnzv/virtual-types.nvim',
     'hrsh7th/cmp-nvim-lsp',
+    -- 'artemave/workspace-diagnostics.nvim',
   },
 }
 
@@ -241,15 +242,29 @@ function config.on_lsp_attached(client, bufnr)
     vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 
     -- Show types as virtual text
-    require 'virtualtypes'.on_attach(client, bufnr)
+    require'virtualtypes'.on_attach(client, bufnr)
   end
 
   -- Show function signature
-  require 'lsp_signature'.on_attach({
+  require'lsp_signature'.on_attach({
     bind = true,
     hi_parameter = 'LspSignatureActiveParameter',
   }, bufnr)
+
+  -- Too slow to always do it
+  -- require'workspace-diagnostics'.populate_workspace_diagnostics(client, bufnr)
 end
+
+-- function _PopulateDiagnostics()
+--   require'workspace-diagnostics'.setup { workspace_files = function()
+--     return {  }
+--   end }
+--   local bufnr = vim.api.nvim_get_current_buf()
+--   local clients = vim.lsp.get_active_clients()
+--   for _, client in ipairs(clients) do
+--     require'workspace-diagnostics'.populate_workspace_diagnostics(client, bufnr)
+--   end
+-- end
 
 function config.setup_file_autoformat(fts)
   vim.api.nvim_create_autocmd('FileType', {

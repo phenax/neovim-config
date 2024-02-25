@@ -4,17 +4,19 @@ local plugin = {
   keys = {
     { '<leader>ti', '<cmd>lua require"incline".toggle()<cr>', mode = 'n' },
   },
-  -- dependencies = {
-  --   'kyazdani42/nvim-web-devicons',
-  -- },
+  dependencies = {
+    'kyazdani42/nvim-web-devicons',
+  },
 }
 
 local M = {
   component = {},
+  show_filetype_icon = false,
 }
 M.segments = function()
   return {
     M.component.diagnostics,
+    -- M.component.filetype,
     M.component.filename
   }
 end
@@ -34,6 +36,19 @@ function plugin.config()
   }
   vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
   vim.o.showmode = true
+end
+
+function M.component.filetype(props)
+  if not props.focused then return { '' } end
+  local name = vim.api.nvim_buf_get_name(props.buf)
+  local ft = vim.bo[props.buf].filetype
+  if not ft or ft == '' then return { '' } end
+  local icon_c = { '' };
+  if M.show_filetype_icon then
+    local icon, color = require'nvim-web-devicons'.get_icon_color(name, ft)
+    icon_c = { ' ' .. icon, guifg = color }
+  end
+  return { icon_c, { ' ' .. ft .. ' ', group = 'InclineModeInactive' } }
 end
 
 function M.component.diagnostics(props)
