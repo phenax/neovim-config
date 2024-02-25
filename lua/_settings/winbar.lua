@@ -1,11 +1,10 @@
-
 -- Disable statusline
 vim.opt.tabline = ''
 vim.opt.statusline = '%#@_phenax.statusline#'
 vim.opt.laststatus = 0
 
 local W = {
-  augroup = vim.api.nvim_create_augroup('@_bar', { clear = false });
+  augroup = vim.api.nvim_create_augroup('@_bar', { clear = false }),
   m = {
     mode = '%{mode()}',
     file = '%f',
@@ -77,7 +76,7 @@ local last_win_id = nil
 vim.api.nvim_create_autocmd({ 'WinEnter', 'WinLeave', 'VimEnter' }, {
   callback = function(args)
     local win_id = last_win_id
-    if vim.tbl_contains({'WinEnter', 'VimEnter'}, args.event) then
+    if vim.tbl_contains({ 'WinEnter', 'VimEnter' }, args.event) then
       win_id = vim.api.nvim_get_current_win()
       last_win_id = win_id
     end
@@ -86,17 +85,15 @@ vim.api.nvim_create_autocmd({ 'WinEnter', 'WinLeave', 'VimEnter' }, {
     local win_conf = win_id and vim.api.nvim_win_get_config(win_id) or { focusable = true }
 
     -- If ignored file type, or floating window, or not focusable, return
-    if win_conf.relative ~= "" or not win_conf.focusable or vim.tbl_contains(ignore_fts, ft) then
-      return
-    end
+    if win_conf.relative ~= '' or not win_conf.focusable or vim.tbl_contains(ignore_fts, ft) then return end
 
     -- print(vim.inspect(args))
     -- print("[" .. ft .. "]")
 
     print('EVENT: ' .. args.event .. '.' .. vim.inspect(win_id))
 
-    vim.wo[win_id].winbar = W.get_bar_string({
+    vim.wo[win_id].winbar = W.get_bar_string {
       win_id = win_id,
-    })
+    }
   end,
 })

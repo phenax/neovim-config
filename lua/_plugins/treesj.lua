@@ -9,10 +9,10 @@ local plugin = {
   },
 }
 function plugin.config()
-  require('treesj').setup({
+  require('treesj').setup {
     use_default_keymaps = false,
     max_join_length = 200,
-  })
+  }
 end
 
 return plugin

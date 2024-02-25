@@ -3,7 +3,7 @@ return {
   event = 'BufReadPost',
 
   config = function()
-    require('Comment').setup({
+    require('Comment').setup {
       padding = true,
       toggler = {
         line = '<leader>cc',
@@ -13,6 +13,6 @@ return {
         line = '<leader>c',
         block = '<leader>b',
       },
-    })
+    }
   end,
 }

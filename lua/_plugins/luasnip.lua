@@ -14,12 +14,12 @@ function plugin.config()
 
   -- LuaSnip
   luasnip.filetype_extend('all', { '_' })
-  require('luasnip.loaders.from_vscode').lazy_load({
+  require('luasnip.loaders.from_vscode').lazy_load {
     paths = {
-      vim.fn.stdpath('data') .. '/lazy/friendly-snippets',
-      vim.fn.stdpath('config'),
+      vim.fn.stdpath 'data' .. '/lazy/friendly-snippets',
+      vim.fn.stdpath 'config',
     },
-  })
+  }
 end
 
 return plugin

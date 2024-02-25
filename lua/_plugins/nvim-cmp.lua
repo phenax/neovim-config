@@ -51,17 +51,17 @@ function plugin.config()
   }
 
   cmp.setup {
-    sources = cmp.config.sources({
+    sources = cmp.config.sources {
       { name = 'nvim_lsp' },
       { name = 'treesitter' },
       { name = 'luasnip' },
       { name = 'path' },
       { name = 'buffer' },
       { name = 'calc' },
-    }),
+    },
     snippet = {
       expand = function(args)
-        local luasnip = require'luasnip'
+        local luasnip = require 'luasnip'
         luasnip.lsp_expand(args.body)
       end,
     },
@@ -73,9 +73,9 @@ function plugin.config()
   }
 
   cmp.setup.filetype('norg', {
-    sources = cmp.config.sources({
+    sources = cmp.config.sources {
       { name = 'neorg' },
-    })
+    },
   })
 
   -- cmp.setup.cmdline(':', {

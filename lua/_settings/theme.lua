@@ -41,7 +41,7 @@ function theme.setup(colorscheme)
   vim.o.background = 'dark'
   vim.g.base16colorspace = 256
 
-  if vim.fn.has('termguicolors') then
+  if vim.fn.has 'termguicolors' then
     vim.go.t_8f = '[[38;2;%lu;%lu;%lum'
     vim.go.t_8b = '[[48;2;%lu;%lu;%lum'
     vim.go.termguicolors = true
@@ -133,7 +133,7 @@ end
 function theme.get_lualine_theme()
   local colors = theme.colors
 
-  local thm = require'lualine.themes.iceberg_dark'
+  local thm = require 'lualine.themes.iceberg_dark'
 
   thm.normal.a = { bg = colors.accent, fg = colors.white, gui = 'bold' }
   thm.inactive.a = { bg = colors.bg[2], fg = colors.slate[6] }
@@ -189,28 +189,28 @@ function theme.mini_files()
     MiniFilesBorderModified = { bg = c.accent, fg = c.accent },
     MiniFilesNormal = { bg = c.slate[3], fg = c.slate[6] },
     MiniFilesTitle = { fg = c.white, bg = c.slate[3], bold = true },
-    MiniFilesTitleFocused = { fg = c.white, bg = c.accent, bold = true},
+    MiniFilesTitleFocused = { fg = c.white, bg = c.accent, bold = true },
     MiniFilesCursorLine = { bg = c.slate[2], bold = true },
   }
 end
 
 function theme.terminal_colors()
-  vim.g.terminal_color_0  = theme.colors.slate[2]
-  vim.g.terminal_color_1  = '#e06c75'
+  vim.g.terminal_color_0 = theme.colors.slate[2]
+  vim.g.terminal_color_1 = '#e06c75'
   vim.g.terminal_color_10 = '#a3be8c'
   vim.g.terminal_color_11 = '#f7b731'
   vim.g.terminal_color_12 = '#5e81ac'
   vim.g.terminal_color_13 = '#4e3aA3'
   vim.g.terminal_color_14 = '#0fb9b1'
   vim.g.terminal_color_15 = '#ebdbb2'
-  vim.g.terminal_color_2  = '#98C379'
-  vim.g.terminal_color_3  = '#E5C07B'
-  vim.g.terminal_color_4  = '#60a3bc'
-  vim.g.terminal_color_5  = '#4e3aA3'
-  vim.g.terminal_color_6  = '#56B6C2'
-  vim.g.terminal_color_7  = '#ABB2BF'
-  vim.g.terminal_color_8  = '#555555'
-  vim.g.terminal_color_9  = '#7c162e'
+  vim.g.terminal_color_2 = '#98C379'
+  vim.g.terminal_color_3 = '#E5C07B'
+  vim.g.terminal_color_4 = '#60a3bc'
+  vim.g.terminal_color_5 = '#4e3aA3'
+  vim.g.terminal_color_6 = '#56B6C2'
+  vim.g.terminal_color_7 = '#ABB2BF'
+  vim.g.terminal_color_8 = '#555555'
+  vim.g.terminal_color_9 = '#7c162e'
 end
 
 function theme.incline()

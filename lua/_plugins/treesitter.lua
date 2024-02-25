@@ -19,18 +19,18 @@ local function get_ts_config()
     },
 
     indent = {
-      enable = true
+      enable = true,
     },
 
     incremental_selection = {
-	    enable = true,
-	    keymaps = {
-	      init_selection = '<localleader><CR>',
-	      scope_incremental = '<localleader><CR>',
-	      node_incremental = '<TAB>',
-	      node_decremental = '<S-TAB>',
-	    },
-	  },
+      enable = true,
+      keymaps = {
+        init_selection = '<localleader><CR>',
+        scope_incremental = '<localleader><CR>',
+        node_incremental = '<TAB>',
+        node_decremental = '<S-TAB>',
+      },
+    },
 
     autotag = {
       enable = true,
@@ -78,8 +78,6 @@ local function get_ts_config()
   }
 end
 
-function plugin.config()
-  require'nvim-treesitter.configs'.setup(get_ts_config())
-end
+function plugin.config() require('nvim-treesitter.configs').setup(get_ts_config()) end
 
 return plugin

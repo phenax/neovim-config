@@ -17,7 +17,7 @@ M.segments = function()
   return {
     M.component.diagnostics,
     -- M.component.filetype,
-    M.component.filename
+    M.component.filename,
   }
 end
 
@@ -30,9 +30,7 @@ function plugin.config()
       padding = 0,
       margin = { horizontal = 0, vertical = 0 },
     },
-    render = function(props)
-      return M.to_render_segments(props, M.segments())
-    end,
+    render = function(props) return M.to_render_segments(props, M.segments()) end,
   }
   vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
   vim.o.showmode = true
@@ -43,9 +41,9 @@ function M.component.filetype(props)
   local name = vim.api.nvim_buf_get_name(props.buf)
   local ft = vim.bo[props.buf].filetype
   if not ft or ft == '' then return { '' } end
-  local icon_c = { '' };
+  local icon_c = { '' }
   if M.show_filetype_icon then
-    local icon, color = require'nvim-web-devicons'.get_icon_color(name, ft)
+    local icon, color = require('nvim-web-devicons').get_icon_color(name, ft)
     icon_c = { ' ' .. icon, guifg = color }
   end
   return { icon_c, { ' ' .. ft .. ' ', group = 'InclineModeInactive' } }
@@ -76,9 +74,7 @@ local function get_short_path(path, win_width)
     if string.len(dir) > 25 or string.len(dir .. fname) > 50 or win_width < 85 then
       dir = string.sub(dir, 1, 5) .. '…'
     end
-    if string.len(fname) > 40 then
-      fname = string.sub(fname, 1, 10) .. '…' .. string.sub(fname, -10, -1)
-    end
+    if string.len(fname) > 40 then fname = string.sub(fname, 1, 10) .. '…' .. string.sub(fname, -10, -1) end
     return dir .. '/' .. fname
   end
 end
@@ -90,15 +86,10 @@ function M.component.filename(props)
 
   if string.len(filename) == 0 then return { '' } end
 
-  local file_seg = ''
-      .. filename
-      .. (bo.modified and ' ●' or '')
-      .. (bo.readonly and ' [RO]' or '')
+  local file_seg = '' .. filename .. (bo.modified and ' ●' or '') .. (bo.readonly and ' [RO]' or '')
   file_seg = ' ' .. file_seg .. ' '
 
-  if props.focused then
-    return { { file_seg, group = 'InclineModeNormal' } }
-  end
+  if props.focused then return { { file_seg, group = 'InclineModeNormal' } } end
   return { { file_seg, group = 'InclineModeInactive' } }
 end
 
@@ -106,9 +97,7 @@ function M.to_render_segments(props, segments)
   local result = {}
   for _, seg in ipairs(segments) do
     local ok, arr = pcall(seg, props)
-    if ok and type(arr) == 'table' then
-      table.insert(result, arr)
-    end
+    if ok and type(arr) == 'table' then table.insert(result, arr) end
   end
   return result
 end

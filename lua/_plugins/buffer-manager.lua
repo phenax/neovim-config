@@ -6,7 +6,7 @@ local plugin = {
 }
 
 local config = {
-  bf_ns = vim.api.nvim_create_namespace('buffer_manager/git')
+  bf_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
 }
 
 -- Key bindings
@@ -15,7 +15,7 @@ plugin.keys = {
 }
 for i = 0, 9 do
   local bidx = i
-  if (i == 0) then bidx = 10 end
+  if i == 0 then bidx = 10 end
   table.insert(plugin.keys, {
     mode = 'n',
     '<localleader>' .. i,
@@ -26,9 +26,9 @@ for i = 0, 9 do
 end
 
 function plugin.config()
-  require('buffer_manager').setup({
+  require('buffer_manager').setup {
     select_menu_item_commands = {
-      { key = '<CR>',  command = 'edit' },
+      { key = '<CR>', command = 'edit' },
       { key = '<C-v>', command = 'vsplit' },
       { key = '<C-h>', command = 'split' },
     },
@@ -39,7 +39,7 @@ function plugin.config()
     win_extra_options = {
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual',
     },
-  })
+  }
 
   vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'buffer_manager' },
@@ -56,9 +56,7 @@ function plugin.config()
       -- Show git signs for files on buffer_manager
       vim.api.nvim_create_autocmd({ 'TextChanged', 'InsertLeave' }, {
         buffer = opts.buf,
-        callback = function()
-          config.show_git_signs(opts.buf)
-        end,
+        callback = function() config.show_git_signs(opts.buf) end,
       })
       config.show_git_signs(opts.buf)
     end,
@@ -69,18 +67,18 @@ function config.show_git_signs(bufnr)
   vim.api.nvim_buf_clear_namespace(bufnr, config.bf_ns, 0, -1)
 
   local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  if (#buf_files == 0 or (#buf_files == 1 and buf_files[1] == '')) then return end
+  if #buf_files == 0 or (#buf_files == 1 and buf_files[1] == '') then return end
 
   local git_status = config.get_git_status()
 
   for index, file in ipairs(buf_files) do
-    if (file ~= '') then
+    if file ~= '' then
       local matches = vim.tbl_filter(function(st) return st[2] == file end, git_status)
 
       for _, gs in ipairs(matches) do
         local status, _ = unpack(gs)
         vim.api.nvim_buf_set_extmark(bufnr, config.bf_ns, index - 1, 0, {
-          virt_text = { config.get_virt_text(status) }
+          virt_text = { config.get_virt_text(status) },
         })
       end
     end
@@ -88,11 +86,11 @@ function config.show_git_signs(bufnr)
 end
 
 function config.get_virt_text(status)
-  if (status == 'M') then
+  if status == 'M' then
     return { '~', 'BufferManagerDiffChange' }
-  elseif (status == 'A' or status == '?') then
+  elseif status == 'A' or status == '?' then
     return { '+', 'BufferManagerDiffAdd' }
-  elseif (status == 'D') then
+  elseif status == 'D' then
     return { '-', 'BufferManagerDiffDelete' }
   else
     return { '?', 'BufferManagerDiffChange' }
@@ -102,13 +100,10 @@ end
 function config.get_git_status()
   local ok, git_status = pcall(vim.fn.systemlist, { 'git', 'status', '--porcelain=v1' })
   if not ok then return {} end
-  return vim.tbl_map(
-    function(l)
-      local status, path = l:match('(%S) (.+)')
-      return { status, vim.fn.trim(path) }
-    end,
-    git_status
-  )
+  return vim.tbl_map(function(l)
+    local status, path = l:match '(%S) (.+)'
+    return { status, vim.fn.trim(path) }
+  end, git_status)
 end
 
 return plugin

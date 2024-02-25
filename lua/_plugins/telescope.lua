@@ -7,9 +7,9 @@ local plugin = {
 }
 
 function plugin.config()
-  local telescope = require('telescope')
-  local actions = require('telescope.actions')
-  local builtin = require('telescope.builtin')
+  local telescope = require 'telescope'
+  local actions = require 'telescope.actions'
+  local builtin = require 'telescope.builtin'
 
   local function open_and_resume(prompt_bufnr)
     actions.select_default(prompt_bufnr)
@@ -49,14 +49,22 @@ function plugin.config()
   vim.keymap.set('n', '<c-f>', builtin.live_grep)
 
   -- Fuzzy file finder
-  if vim.fn.isdirectory('.git') == 1 or vim.fn.filereadable('.git') == 1 then
-    vim.keymap.set('n', '<leader>f', function() builtin.git_files({
-      show_untracked = true,
-    }) end)
+  if vim.fn.isdirectory '.git' == 1 or vim.fn.filereadable '.git' == 1 then
+    vim.keymap.set(
+      'n',
+      '<leader>f',
+      function()
+        builtin.git_files {
+          show_untracked = true,
+        }
+      end
+    )
   else
-    vim.keymap.set('n', '<leader>f', function() builtin.find_files({
-      hidden = true,
-    }) end)
+    vim.keymap.set('n', '<leader>f', function()
+      builtin.find_files {
+        hidden = true,
+      }
+    end)
   end
 
   -- Resume last telescope search
@@ -73,11 +81,10 @@ function plugin.config()
   vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find)
 
   -- Git branches
-  vim.keymap.set('n', '<localleader>gbb', require'telescope.builtin'.git_branches)
+  vim.keymap.set('n', '<localleader>gbb', require('telescope.builtin').git_branches)
 
   -- Spell suggestions
   vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
 end
 
 return plugin
-

@@ -9,11 +9,11 @@ local plugin = {
   keys = {
     { '<localleader>nc', function() M.toggle_cwd() end, noremap = true, mode = 'n' },
     { '<localleader>nn', function() M.toggle_current() end, noremap = true, mode = 'n' },
-  }
+  },
 }
 
 function plugin.config()
-  require('mini.files').setup({
+  require('mini.files').setup {
     options = {
       permanent_delete = true,
       use_as_default_explorer = true,
@@ -23,74 +23,74 @@ function plugin.config()
       preview = M.show_preview,
     },
     mappings = {
-      close       = 'q',
-      go_in       = '<C-l>',
-      go_in_plus  = 'l',
-      go_out      = 'h',
+      close = 'q',
+      go_in = '<C-l>',
+      go_in_plus = 'l',
+      go_out = 'h',
       go_out_plus = '<C-h>',
-      reset       = '@',
-      reveal_cwd  = '<BS>',
+      reset = '@',
+      reveal_cwd = '<BS>',
       synchronize = '<C-s>',
     },
-  })
+  }
 
   M.init_event_handlers()
 end
 
 function M.bind_extra_keys(map)
-  local mini_files = require('mini.files')
-  map({
+  local mini_files = require 'mini.files'
+  map {
     n = {
       -- Change directory
       ['<C-c>'] = function()
         local path = vim.fs.dirname(mini_files.get_fs_entry().path)
-        print(":cd " .. path)
-        vim.notify(":cd " .. path, vim.log.levels.INFO, { title = "mini.files" })
+        print(':cd ' .. path)
+        vim.notify(':cd ' .. path, vim.log.levels.INFO, { title = 'mini.files' })
         vim.fn.chdir(path)
       end,
 
       -- Toggle preview
       ['<C-p>'] = function()
         M.show_preview = not M.show_preview
-        mini_files.refresh({ windows = { preview = M.show_preview } })
+        mini_files.refresh { windows = { preview = M.show_preview } }
       end,
 
       -- Refresh files
       ['R'] = function()
-        mini_files.refresh({ content = { filter = function() return true end } })
+        mini_files.refresh { content = { filter = function() return true end } }
       end,
 
       -- Open in external application
       ['<C-x>'] = function()
         local path = mini_files.get_fs_entry().path
         vim.cmd('sil !setsid xdg-open ' .. path)
-        vim.notify("!xdg-open " .. path, vim.log.levels.INFO, { title = "mini.files" })
+        vim.notify('!xdg-open ' .. path, vim.log.levels.INFO, { title = 'mini.files' })
       end,
 
       -- Copy path to clipboard (absolute)
       ['<C-y>'] = function()
         local path = mini_files.get_fs_entry().path
         vim.cmd(':let @+="' .. path .. '"')
-        vim.notify("Copied to clipboard: " .. path, vim.log.levels.INFO, { title = "mini.files" })
+        vim.notify('Copied to clipboard: ' .. path, vim.log.levels.INFO, { title = 'mini.files' })
       end,
       -- Copy path to clipboard (relative)
       ['Y'] = function()
         local path, _ = mini_files.get_fs_entry().path:gsub(vim.fn.getcwd(), '.')
         vim.cmd(':let @+="' .. path .. '"')
-        vim.notify("Copied to clipboard: " .. path, vim.log.levels.INFO, { title = "mini.files" })
+        vim.notify('Copied to clipboard: ' .. path, vim.log.levels.INFO, { title = 'mini.files' })
       end,
 
       -- Telescope grep inside dir
       ['<C-f>'] = function()
         local path = vim.fs.dirname(mini_files.get_fs_entry().path)
         mini_files.close()
-        require('telescope.builtin').live_grep({ search_dirs = {path}, prompt_title = 'Grep: ' .. path })
+        require('telescope.builtin').live_grep { search_dirs = { path }, prompt_title = 'Grep: ' .. path }
       end,
       -- Telescope find files inside dir
       ['<leader>f'] = function()
         local path = vim.fs.dirname(mini_files.get_fs_entry().path)
         mini_files.close()
-        require('telescope.builtin').find_files({ search_dirs = {path}, prompt_title = 'Find: ' .. path })
+        require('telescope.builtin').find_files { search_dirs = { path }, prompt_title = 'Find: ' .. path }
       end,
 
       -- Weird key bindings workaround
@@ -104,7 +104,7 @@ function M.bind_extra_keys(map)
       ['<C-i>'] = '<nop>',
       ['<C-o>'] = '<nop>',
     },
-  })
+  }
 end
 
 M.init_event_handlers = function()
@@ -130,20 +130,16 @@ M.init_event_handlers = function()
       for _, client in ipairs(vim.lsp.get_active_clients()) do
         M.handle_lsp_rename(client, args)
       end
-    end
+    end,
   })
 end
 
 function M.minifiles_toggle(...)
-  local mini_files = require('mini.files')
-  if not mini_files.close() then
-    mini_files.open(...)
-  end
+  local mini_files = require 'mini.files'
+  if not mini_files.close() then mini_files.open(...) end
 end
 
-function M.toggle_cwd()
-  M.minifiles_toggle(nil, false)
-end
+function M.toggle_cwd() M.minifiles_toggle(nil, false) end
 
 function M.toggle_current()
   local path = vim.api.nvim_buf_get_name(0)
@@ -156,24 +152,22 @@ end
 local function get_path(obj, path)
   local current = obj
   for _, key in ipairs(path) do
-    if current[key] == nil then
-      return nil
-    end
+    if current[key] == nil then return nil end
     current = current[key]
   end
   return current
 end
 
 function M.handle_lsp_rename(client, args)
-  if get_path(client, {'server_capabilities','workspace','fileOperations','willRename'}) == nil then
-    return
-  end
+  if get_path(client, { 'server_capabilities', 'workspace', 'fileOperations', 'willRename' }) == nil then return end
 
   local success, resp = pcall(client.request_sync, 'workspace/willRenameFiles', {
-    files = {{
-      oldUri = vim.uri_from_fname(args.data.from),
-      newUri = vim.uri_from_fname(args.data.to),
-    }},
+    files = {
+      {
+        oldUri = vim.uri_from_fname(args.data.from),
+        newUri = vim.uri_from_fname(args.data.to),
+      },
+    },
   }, M.lsp_timeout)
 
   if success and resp and resp.result ~= nil then

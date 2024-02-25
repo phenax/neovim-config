@@ -12,6 +12,6 @@ return {
     vim.g.material_terminal_italics = 1
     vim.g.material_theme_style = 'ocean'
 
-    require'_settings.theme'.setup('material')
-  end
+    require('_settings.theme').setup 'material'
+  end,
 }

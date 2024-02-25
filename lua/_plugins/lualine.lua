@@ -33,15 +33,17 @@ function plugin.config()
     },
 
     winbar = {
-      lualine_a = { {
-        'filename',
-        path = 4,
-        symbols = { modified = '●' },
-        color = function(_)
-          if not vim.bo.modified then return nil end
-          return { gui = 'bold' }
-        end,
-      }, },
+      lualine_a = {
+        {
+          'filename',
+          path = 4,
+          symbols = { modified = '●' },
+          color = function(_)
+            if not vim.bo.modified then return nil end
+            return { gui = 'bold' }
+          end,
+        },
+      },
       lualine_b = { 'branch' },
       lualine_c = {},
       lualine_x = { '%r', '%m' },

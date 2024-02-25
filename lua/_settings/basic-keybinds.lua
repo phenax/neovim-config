@@ -34,9 +34,7 @@ vim.keymap.set('n', '<C-s>', ':w<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<C-c>', '"+y')
 
 -- Force indent for any buffer
-function SetIndent(indent)
-  vim.cmd(":set shiftwidth=".. indent .." expandtab")
-end
+function SetIndent(indent) vim.cmd(':set shiftwidth=' .. indent .. ' expandtab') end
 
 -- Terminal mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
@@ -64,7 +62,7 @@ local function toggle_foldlevel()
   local max_level = 20
   local min_level = 1
 
-  if (vim.o.foldlevel >= max_level) then
+  if vim.o.foldlevel >= max_level then
     vim.cmd [[normal! zM<CR>]]
     vim.o.foldlevel = min_level
   else
@@ -75,10 +73,10 @@ end
 
 vim.keymap.set('n', '<leader><Tab>', toggle_foldlevel, { silent = true })
 
-vim.keymap.set('n',  '<leader>ct' , function()
-	if vim.o.conceallevel > 0 then
-		vim.o.conceallevel = 0
-	else
-		vim.o.conceallevel = 2
-	end
+vim.keymap.set('n', '<leader>ct', function()
+  if vim.o.conceallevel > 0 then
+    vim.o.conceallevel = 0
+  else
+    vim.o.conceallevel = 2
+  end
 end, { silent = true, noremap = true })

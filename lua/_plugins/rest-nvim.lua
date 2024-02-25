@@ -5,10 +5,10 @@ return {
   ft = { 'http' },
 
   config = function()
-    local rest_nvim = require'rest-nvim'
-    rest_nvim.setup({
+    local rest_nvim = require 'rest-nvim'
+    rest_nvim.setup {
       skip_ssl_verification = false,
-    })
+    }
 
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'http',

@@ -5,12 +5,12 @@ return {
   },
   keys = {
     { '<localleader>ns', ':AerialToggle right<cr>', mode = 'n' },
-    { '<localleader>nt', ':AerialNavToggle<cr>',    mode = 'n' },
+    { '<localleader>nt', ':AerialNavToggle<cr>', mode = 'n' },
   },
 
   config = function()
-    require('aerial').setup({
+    require('aerial').setup {
       disable_max_lines = 30000,
-    })
+    }
   end,
 }

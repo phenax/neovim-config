@@ -6,7 +6,7 @@ return {
   ft = { 'norg', 'markdown' },
 
   config = function()
-    require('headlines').setup({
+    require('headlines').setup {
       markdown = {
         headline_highlights = { 'Headline' },
         dash_highlight = 'Dash',
@@ -28,6 +28,6 @@ return {
         fat_headlines = false,
         bullets = false,
       },
-    })
+    }
   end,
 }

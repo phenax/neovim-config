@@ -7,7 +7,7 @@ return {
   event = 'BufReadPost',
 
   keys = {
-    { mode = 'n', '<leader>tc', ':TSContextToggle<CR>'}
+    { mode = 'n', '<leader>tc', ':TSContextToggle<CR>' },
   },
   opts = {
     enable = true,

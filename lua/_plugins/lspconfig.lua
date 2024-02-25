@@ -8,9 +8,7 @@ local plugin = {
   },
 }
 
-local function defaultCapabilities()
-  return vim.lsp.protocol.make_client_capabilities()
-end
+local function defaultCapabilities() return vim.lsp.protocol.make_client_capabilities() end
 
 local function capDisableFormatting(cap)
   cap.textDocument.formatting = false
@@ -98,8 +96,8 @@ local config = {
 
       eslint = {
         commands = {
-          LspFormat = { function() vim.cmd [[ EslintFixAll ]]; end },
-        }
+          LspFormat = { function() vim.cmd [[ EslintFixAll ]] end },
+        },
       },
 
       tailwindcss = {
@@ -134,11 +132,9 @@ local config = {
       jsonls = {
         commands = {
           LspFormat = {
-            function()
-              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line('$'), 0 })
-            end
-          }
-        }
+            function() vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line '$', 0 }) end,
+          },
+        },
       },
 
       rnix = {},
@@ -180,9 +176,7 @@ function _SetupLspServer(name, opts, autoformat_ft)
   cap = require('cmp_nvim_lsp').default_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', { on_attach = config.on_lsp_attached, capabilities = cap }, options))
 
-  if autoformat_ft then
-    config.setup_file_autoformat(autoformat_ft)
-  end
+  if autoformat_ft then config.setup_file_autoformat(autoformat_ft) end
 end
 
 function plugin.config()
@@ -196,7 +190,7 @@ function plugin.config()
   config.setup_file_autoformat(config.format_on_save_ft)
 
   -- diagnostics config
-  vim.diagnostic.config({
+  vim.diagnostic.config {
     signs = true,
     underline = true,
     severity_sort = true,
@@ -206,7 +200,7 @@ function plugin.config()
     float = {
       source = 'always',
     },
-  })
+  }
 end
 
 function config.on_lsp_attached(client, bufnr)
@@ -242,11 +236,11 @@ function config.on_lsp_attached(client, bufnr)
     vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 
     -- Show types as virtual text
-    require'virtualtypes'.on_attach(client, bufnr)
+    require('virtualtypes').on_attach(client, bufnr)
   end
 
   -- Show function signature
-  require'lsp_signature'.on_attach({
+  require('lsp_signature').on_attach({
     bind = true,
     hi_parameter = 'LspSignatureActiveParameter',
   }, bufnr)
@@ -272,7 +266,7 @@ function config.setup_file_autoformat(fts)
     callback = function(ev)
       vim.api.nvim_create_autocmd('BufWritePre', {
         buffer = ev.buf,
-        callback = config.run_auto_formatter
+        callback = config.run_auto_formatter,
       })
     end,
   })
@@ -289,13 +283,11 @@ function config.toggle_autoformat()
 end
 
 function config.run_auto_formatter()
-  if config.is_autoformat_enabled then
-    config.format_buffer()
-  end
+  if config.is_autoformat_enabled then config.format_buffer() end
 end
 
 function config.format_buffer()
-  if vim.fn.exists(':LspFormat') > 0 then
+  if vim.fn.exists ':LspFormat' > 0 then
     vim.cmd [[sil LspFormat]]
   else
     vim.cmd [[sil lua vim.lsp.buf.format({ async = false })]]

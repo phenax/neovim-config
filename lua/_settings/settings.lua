@@ -1,6 +1,5 @@
-
-vim.g.mapleader = "\\"
-vim.g.maplocalleader = " "
+vim.g.mapleader = '\\'
+vim.g.maplocalleader = ' '
 
 vim.o.compatible = false
 vim.o.encoding = 'UTF-8'
@@ -58,7 +57,7 @@ vim.o.showmode = true
 vim.o.conceallevel = 0
 
 -- Short messages
-vim.opt.shortmess:append('TIc')
+vim.opt.shortmess:append 'TIc'
 
 -- Whitespace characters
 vim.o.list = true
