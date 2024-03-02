@@ -3,6 +3,7 @@ local plugin = {
   dependencies = {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
+    'fdschmidt93/telescope-egrepify.nvim',
   },
 }
 
@@ -43,10 +44,13 @@ function plugin.config()
         i = keymaps,
       },
     },
+    extensions = {
+      egrepify = {},
+    }
   }
 
   -- Search
-  vim.keymap.set('n', '<c-f>', builtin.live_grep)
+  vim.keymap.set('n', '<c-f>', '<cmd>Telescope egrepify<cr>', { silent = true })
 
   -- Fuzzy file finder
   if vim.fn.isdirectory '.git' == 1 or vim.fn.filereadable '.git' == 1 then
@@ -71,17 +75,18 @@ function plugin.config()
   vim.keymap.set('n', '<leader>tr', builtin.resume)
   vim.keymap.set('n', '<leader>tp', builtin.pickers)
 
-  -- Set buffer file type
+  -- File type
   vim.keymap.set('n', '<leader>cf', builtin.filetypes)
 
-  -- Search through buffers
+  -- Buffers
   vim.keymap.set('n', '<leader>bb', builtin.buffers)
 
   -- (Ctrl + /) Search inside current buffer
   vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find)
 
   -- Git branches
-  vim.keymap.set('n', '<localleader>gbb', require('telescope.builtin').git_branches)
+  vim.keymap.set('n', '<localleader>gbb', builtin.git_branches)
+  vim.keymap.set('n', '<localleader>gbs', builtin.git_stash)
 
   -- Spell suggestions
   vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
