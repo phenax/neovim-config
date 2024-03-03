@@ -11,13 +11,19 @@ vim.keymap.set('n', '<M-l>', '<C-w>l')
 vim.keymap.set('n', '<M-k>', '<C-w>k')
 vim.keymap.set('n', '<M-j>', '<C-w>j')
 
--- Prevent typo issues
+-- Disable weird ones
 vim.cmd [[map q: <Nop>]]
 vim.cmd [[nnoremap Q <nop>]]
 vim.cmd [[nnoremap S <nop>]]
+
+-- Manage typos
 vim.cmd [[command! W :w]]
 vim.cmd [[command! Q :q]]
 vim.cmd [[command! Qa :qa]]
+
+-- Preserve selection when changing indentation
+vim.cmd [[xnoremap <  <gv]]
+vim.cmd [[xnoremap >  >gv]]
 
 -- Move line up and down
 vim.keymap.set('v', 'K', [[:m '<-2<CR>gv=gv]], { noremap = true, silent = true })

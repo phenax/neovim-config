@@ -74,6 +74,7 @@ end
 
 function theme.update_hl(schemes)
   for k, v in pairs(schemes) do
+    -- TODO: Set on autocmd ColorScheme
     vim.api.nvim_set_hl(0, k, v)
   end
 end
