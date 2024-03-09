@@ -72,12 +72,6 @@ function plugin.config()
     },
   }
 
-  cmp.setup.filetype('norg', {
-    sources = cmp.config.sources {
-      { name = 'neorg' },
-    },
-  })
-
   -- cmp.setup.cmdline(':', {
   --   mapping = vim.tbl_extend('force', cmp.mapping.preset.cmdline(), mappings),
   --   sources = cmp.config.sources(

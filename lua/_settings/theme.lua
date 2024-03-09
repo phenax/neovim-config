@@ -47,8 +47,6 @@ function theme.setup(colorscheme)
     vim.go.termguicolors = true
   end
 
-  vim.cmd('colorscheme ' .. colorscheme)
-
   theme.update_hl {
     Normal = { bg = 'none', fg = theme.colors.slate[7] },
     NormalFloat = { bg = theme.colors.slate[3], fg = theme.colors.white },
@@ -60,6 +58,8 @@ function theme.setup(colorscheme)
     StatusLine = { bg = 'none', fg = theme.colors.accent },
     StatusLineNC = { bg = 'none', fg = theme.colors.slate[5] },
     VertSplit = { bg = 'none', fg = theme.colors.slate[5] },
+    Pmenu = { bg = theme.colors.slate[3], fg = theme.colors.slate[6] },
+    PmenuSel = { bg = theme.colors.accent, fg = theme.colors.white },
   }
 
   theme.telescope()
@@ -70,13 +70,19 @@ function theme.setup(colorscheme)
   theme.mini_files()
   theme.terminal_colors()
   theme.incline()
+
+  vim.cmd.colorscheme(colorscheme)
 end
 
 function theme.update_hl(schemes)
-  for k, v in pairs(schemes) do
-    -- TODO: Set on autocmd ColorScheme
-    vim.api.nvim_set_hl(0, k, v)
+  local function update()
+    for k, v in pairs(schemes) do
+      vim.api.nvim_set_hl(0, k, v)
+    end
   end
+
+  vim.api.nvim_create_autocmd('ColorScheme', { callback = update })
+  -- update()
 end
 
 function theme.buffer_manager()
