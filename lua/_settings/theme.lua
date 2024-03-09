@@ -60,6 +60,7 @@ function theme.setup(colorscheme)
     VertSplit = { bg = 'none', fg = theme.colors.slate[5] },
     Pmenu = { bg = theme.colors.slate[3], fg = theme.colors.slate[6] },
     PmenuSel = { bg = theme.colors.accent, fg = theme.colors.white },
+    FloatBorder = { fg = theme.colors.accent },
   }
 
   theme.telescope()
