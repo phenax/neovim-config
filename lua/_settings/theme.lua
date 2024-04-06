@@ -49,7 +49,7 @@ function theme.setup(colorscheme)
 
   theme.update_hl {
     Normal = { bg = 'none', fg = theme.colors.slate[7] },
-    NormalFloat = { bg = theme.colors.slate[3], fg = theme.colors.white },
+    NormalFloat = { bg = theme.colors.slate[2], fg = theme.colors.white },
     ColorColumn = { bg = theme.colors.slate[1.5] },
     CursorColumn = { bg = theme.colors.slate[1.5] },
     CursorLine = { bg = theme.colors.slate[1.5] },
@@ -226,6 +226,7 @@ function theme.incline()
   theme.update_hl {
     InclineModeNormal = { bg = c.accent, fg = c.white },
     InclineModeInactive = { bg = c.slate[3], fg = c.slate[6] },
+    InclineModeInverted = { bg = c.white, fg = c.accent },
   }
 end
 

@@ -89,7 +89,12 @@ function M.component.filename(props)
   local file_seg = '' .. filename .. (bo.modified and ' ●' or '') .. (bo.readonly and ' [RO]' or '')
   file_seg = ' ' .. file_seg .. ' '
 
-  if props.focused then return { { file_seg, group = 'InclineModeNormal' } } end
+  if props.focused then
+    return {
+      { file_seg, group = 'InclineModeNormal' },
+      { ' ' .. vim.fn.line '$' .. ' ', group = 'InclineModeInverted' },
+    }
+  end
   return { { file_seg, group = 'InclineModeInactive' } }
 end
 
