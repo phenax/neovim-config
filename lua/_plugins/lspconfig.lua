@@ -137,7 +137,7 @@ local config = {
         },
       },
 
-      rnix = {},
+      nixd = {},
 
       hls = {
         settings = {

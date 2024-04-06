@@ -120,9 +120,9 @@ function M.actions.git_apply_stash_file(stash_id)
       table.insert(files, sel[1])
     end
     local git_command = {
-      'sh', '-c',
-      'git --no-pager diff HEAD..'..stash_id..' -- '..table.concat(files, ' ')..
-        ' | git apply -'
+      'sh',
+      '-c',
+      'git --no-pager diff HEAD..' .. stash_id .. ' -- ' .. table.concat(files, ' ') .. ' | git apply -',
     }
 
     local _, ret, stderr = utils.get_os_command_output(git_command)
