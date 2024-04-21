@@ -41,12 +41,14 @@ local config = {
     'uiua',
     'go',
     'racket',
+    'java',
     -- 'lua',
   },
 
   lsp_servers = function()
     local nvim_lsp = require 'lspconfig'
     return {
+      jdtls = {},
       racket_langserver = {},
       uiua = {},
       zls = {},
@@ -140,6 +142,7 @@ local config = {
       nixd = {},
 
       hls = {
+        -- filetypes = { 'haskell', 'lhaskell', 'liquid' },
         settings = {
           languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
         },
@@ -174,7 +177,10 @@ function _SetupLspServer(name, opts, autoformat_ft)
   local nvim_lsp = require 'lspconfig'
   local cap = options.capabilities or defaultCapabilities()
   cap = require('cmp_nvim_lsp').default_capabilities(cap)
-  nvim_lsp[name].setup(vim.tbl_extend('force', { on_attach = config.on_lsp_attached, capabilities = cap }, options))
+  nvim_lsp[name].setup(vim.tbl_extend('force', {
+    on_attach = config.on_lsp_attached,
+    capabilities = cap,
+  }, options))
 
   if autoformat_ft then config.setup_file_autoformat(autoformat_ft) end
 end
