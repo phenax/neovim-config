@@ -37,7 +37,8 @@ function plugin.config()
     height = 0.5,
     highlight = 'Normal:BufferManagerBorder',
     win_extra_options = {
-      winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual',
+      winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual,CursorLine:BufferManagerCursorLine',
+      cursorline = true,
     },
   }
 
