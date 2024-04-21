@@ -75,7 +75,7 @@ function M.bind_extra_keys(map)
       end,
       -- Copy path to clipboard (relative)
       ['Y'] = function()
-        local path, _ = mini_files.get_fs_entry().path:gsub(vim.fn.getcwd(), '.')
+        local path = vim.fn.fnamemodify(mini_files.get_fs_entry().path, ":~:.")
         vim.cmd(':let @+="' .. path .. '"')
         vim.notify('Copied to clipboard: ' .. path, vim.log.levels.INFO, { title = 'mini.files' })
       end,
