@@ -139,31 +139,6 @@ function theme.lsp()
   }
 end
 
-function theme.get_lualine_theme()
-  local colors = theme.colors
-
-  local thm = require 'lualine.themes.iceberg_dark'
-
-  thm.normal.a = { bg = colors.accent, fg = colors.white, gui = 'bold' }
-  thm.inactive.a = { bg = colors.bg[2], fg = colors.slate[6] }
-
-  local bline = { bg = colors.bg[2], fg = colors.slate[7], gui = 'bold' }
-  thm.normal.b = bline
-  thm.insert.b = bline
-  thm.visual.b = bline
-  thm.replace.b = bline
-  thm.inactive.b = bline
-
-  local cline = { bg = colors.bg[1], fg = colors.slate[6] }
-  thm.normal.c = cline
-  thm.insert.c = cline
-  thm.visual.c = cline
-  thm.replace.c = cline
-  thm.inactive.c = cline
-
-  return thm
-end
-
 function theme.neorg()
   theme.update_hl {
     -- Color for text

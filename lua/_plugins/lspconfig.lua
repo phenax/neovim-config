@@ -53,6 +53,7 @@ local config = {
       uiua = {},
       zls = {},
       clangd = {},
+      -- roc_ls = {},
       unison = {
         settings = {
           maxCompletions = 100,
