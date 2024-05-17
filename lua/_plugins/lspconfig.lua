@@ -42,7 +42,7 @@ local config = {
     'go',
     'racket',
     'java',
-    -- 'lua',
+    'lua',
   },
 
   lsp_servers = function()
