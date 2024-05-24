@@ -232,10 +232,17 @@ function plugin.config()
     underline = true,
     severity_sort = true,
     virtual_text = {
-      prefix = '■',
+      prefix = function(diag)
+        if diag.severity == vim.diagnostic.severity.ERROR then
+          return ' '
+        elseif diag.severity == vim.diagnostic.severity.WARN then
+          return ' '
+        end
+        return '■ '
+      end,
     },
     float = {
-      source = 'always',
+      source = true,
     },
   }
 end
