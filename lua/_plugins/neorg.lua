@@ -91,7 +91,7 @@ function config.get_neorg_config()
         },
       },
 
-      -- ['core.ui.calendar'] = {}, -- TODO: After nvim 0.10
+      ['core.ui.calendar'] = {},
       ['core.summary'] = {},           -- :Neorg generate-workspace-summary
       ['core.esupports.metagen'] = {}, -- :Neorg inject-metadata | :Neorg update-metadata
 
