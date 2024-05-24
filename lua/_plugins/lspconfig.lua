@@ -115,6 +115,18 @@ local config = {
 
       tsserver = {
         capabilities = capDisableFormatting(defaultCapabilities()),
+        init_options = {
+          preferences = {
+            includeInlayParameterNameHints = "all",
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+            importModuleSpecifierPreference = 'non-relative'
+          },
+        },
       },
 
       rust_analyzer = {
@@ -238,12 +250,20 @@ function config.on_lsp_attached(client, bufnr)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- Refresh code lenses
-  if client.server_capabilities.codeLensProvider ~= nil then
+  if client.supports_method('textDocument/codeLens') then
+    -- if client.server_capabilities.codeLensProvider ~= nil then
     vim.lsp.codelens.refresh()
     vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 
     -- Show types as virtual text
     require('virtualtypes').on_attach(client, bufnr)
+  end
+
+  if client.supports_method('textDocument/inlayHints') then
+    vim.lsp.inlay_hint.enable(true)
+    vim.keymap.set('n', '<leader>th', function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    end, opts)
   end
 
   -- Show function signature

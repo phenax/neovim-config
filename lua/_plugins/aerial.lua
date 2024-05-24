@@ -5,7 +5,7 @@ return {
   },
   keys = {
     { '<localleader>ns', ':AerialToggle right<cr>', mode = 'n' },
-    { '<localleader>nt', ':AerialNavToggle<cr>', mode = 'n' },
+    { '<localleader>nt', ':AerialNavToggle<cr>',    mode = 'n' },
   },
 
   config = function()
