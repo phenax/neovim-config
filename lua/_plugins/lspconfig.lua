@@ -2,7 +2,6 @@ local plugin = {
   'neovim/nvim-lspconfig',
   dependencies = {
     'ray-x/lsp_signature.nvim',
-    'jubnzv/virtual-types.nvim',
     'hrsh7th/cmp-nvim-lsp',
   },
 }
@@ -14,34 +13,39 @@ local function capDisableFormatting(cap)
   return cap
 end
 
+local hoverOpt = { border = 'single' }
+local handlers = {
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, hoverOpt),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, hoverOpt),
+}
+
 local config = {
   is_autoformat_enabled = true,
-
   format_on_save_ft = {
-    'haskell',
-    'purescript',
-    'nix',
-    'rust',
+    'astro',
+    'c',
+    'cpp',
+    'crystal',
     'elm',
-    'vue',
-    'svelte',
+    'go',
+    'h',
+    'haskell',
+    'java',
     'javascript',
     'javascriptreact',
+    'lua',
+    'nix',
+    'purescript',
+    'racket',
+    'ruby',
+    'rust',
+    'scala',
+    'svelte',
     'typescript',
     'typescriptreact',
-    'ruby',
-    'astro',
-    'unison',
-    'scala',
-    'crystal',
-    'c',
-    'h',
-    'cpp',
     'uiua',
-    'go',
-    'racket',
-    'java',
-    'lua',
+    'unison',
+    'vue',
   },
 
   lsp_servers = function()
@@ -52,12 +56,7 @@ local config = {
       uiua = {},
       zls = {},
       clangd = {},
-      -- roc_ls = {},
-      unison = {
-        settings = {
-          maxCompletions = 100,
-        },
-      },
+      unison = { settings = { maxCompletions = 100 } },
       ocamlls = {},
       elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
       -- vuels = {
@@ -88,11 +87,6 @@ local config = {
           formatting = false,
         },
       },
-      -- ruby_ls = {
-      --   init_options = {
-      --     formatter = false,
-      --   },
-      -- },
       yamlls = {},
       gopls = {},
 
@@ -114,6 +108,9 @@ local config = {
 
       tsserver = {
         capabilities = capDisableFormatting(defaultCapabilities()),
+        completions = {
+          completeFunctionCalls = true,
+        },
         init_options = {
           preferences = {
             includeInlayParameterNameHints = 'all',
@@ -134,7 +131,15 @@ local config = {
                 context = { only = { 'source.removeUnused.ts' }, diagnostics = {} },
               })
             end,
-          }
+          },
+          LspAddMissingImports = {
+            function()
+              vim.lsp.buf.code_action({
+                apply = true,
+                context = { only = { 'source.addMissingImports.ts' }, diagnostics = {} },
+              })
+            end,
+          },
         },
       },
 
@@ -204,6 +209,7 @@ function _SetupLspServer(name, opts, autoformat_ft)
   cap = require('cmp_nvim_lsp').default_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', {
     on_attach = config.on_lsp_attached,
+    handlers = handlers,
     capabilities = cap,
   }, options))
 
@@ -267,15 +273,12 @@ function config.on_lsp_attached(client, bufnr)
     -- if client.server_capabilities.codeLensProvider ~= nil then
     vim.lsp.codelens.refresh()
     vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-
-    -- Show types as virtual text
-    require('virtualtypes').on_attach(client, bufnr)
   end
 
   if client.supports_method('textDocument/inlayHints') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     vim.keymap.set('n', '<leader>th', function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
     end, opts)
   end
 
