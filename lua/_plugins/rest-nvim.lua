@@ -1,6 +1,11 @@
 return {
   'NTBBloodbath/rest.nvim',
-  dependencies = { 'nvim-lua/plenary.nvim' },
+  dependencies = {
+    -- 'vhyrro/luarocks.nvim',
+    'nvim-lua/plenary.nvim',
+  },
+
+  version = 'v1.2.1',
 
   ft = { 'http' },
 
