@@ -53,9 +53,11 @@ function theme.setup(colorscheme)
     StatusLine = { bg = 'none', fg = theme.colors.accent },
     StatusLineNC = { bg = 'none', fg = theme.colors.slate[5] },
     VertSplit = { bg = 'none', fg = theme.colors.slate[5] },
+    WinSeparator = { bg = 'none', fg = theme.colors.slate[5] },
     Pmenu = { bg = theme.colors.slate[3], fg = theme.colors.slate[6] },
     PmenuSel = { bg = theme.colors.accent, fg = theme.colors.white },
     FloatBorder = { fg = theme.colors.accent },
+    RulerHighlighted = { bg = 'none', fg = theme.colors.white, bold = true },
   }
 
   theme.telescope()

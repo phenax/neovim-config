@@ -1,64 +1,71 @@
 vim.g.mapleader = '\\'
 vim.g.maplocalleader = ' '
 
-vim.o.compatible = false
-vim.o.encoding = 'UTF-8'
+vim.opt.compatible = false
+vim.opt.encoding = 'UTF-8'
 
-vim.o.hidden = true
-vim.o.autoread = true
-vim.o.mouse = 'c'
+vim.opt.hidden = true
+vim.opt.autoread = true
+vim.opt.mouse = 'c'
 
 -- Splits
-vim.o.splitbelow = true
-vim.o.splitright = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.o.foldlevel = 50
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevel = 50
 
-vim.o.number = true
-vim.o.relativenumber = false
+vim.opt.number = true
+vim.opt.relativenumber = false
 
-vim.o.showmatch = true
-vim.o.ignorecase = true
+vim.opt.showmatch = true
+vim.opt.ignorecase = true
 
-vim.o.smartcase = true
-vim.o.hlsearch = true
-vim.o.incsearch = true
-vim.o.history = 800
-vim.o.undolevels = 1000
-vim.o.title = true
-vim.o.visualbell = true
-vim.o.errorbells = false
-vim.o.backspace = 'indent,eol,start'
-vim.o.backup = false
-vim.o.swapfile = false
-vim.o.showmode = false
-vim.o.ruler = true
-vim.o.scrolloff = 15
-vim.o.colorcolumn = '120'
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+vim.opt.history = 800
+vim.opt.undolevels = 1000
+vim.opt.undofile = true
+vim.opt.title = true
+vim.opt.visualbell = true
+vim.opt.errorbells = false
+vim.opt.backspace = 'indent,eol,start'
+vim.opt.backup = false
+vim.opt.swapfile = false
+vim.opt.showmode = false
+vim.opt.ruler = true
+vim.opt.rulerformat = '%30(%=%l/%L, %v %#RulerHighlighted#%y%<%)'
+vim.opt.scrolloff = 15
+vim.opt.colorcolumn = '120'
 
 -- -- Indent
-vim.o.autoindent = true
-vim.o.copyindent = true
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
-vim.o.smarttab = true
-vim.o.expandtab = true
+vim.opt.autoindent = true
+vim.opt.copyindent = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.smarttab = true
+vim.opt.expandtab = true
 
-vim.o.laststatus = 0
-vim.o.cmdheight = 1
-vim.o.updatetime = 300
-vim.o.signcolumn = 'yes'
-vim.o.cursorline = true
-vim.o.cursorcolumn = true
-vim.o.showmode = true
+vim.opt.laststatus = 0
+vim.opt.cmdheight = 1
+vim.opt.updatetime = 300
+vim.opt.signcolumn = 'yes'
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
+vim.opt.showmode = true
 
-vim.o.conceallevel = 0
+vim.opt.conceallevel = 0
 
 -- Short messages
 vim.opt.shortmess:append 'TIc'
 
 -- Whitespace characters
-vim.o.list = true
-vim.o.listchars = 'lead:.,trail:.,tab:| '
+vim.opt.list = true
+-- vim.opt.listchars = 'lead:.,trail:.,tab:| '
+vim.opt.listchars = {
+  lead = '.',
+  trail = '.',
+  tab = '| ',
+}
