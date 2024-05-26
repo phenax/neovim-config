@@ -14,7 +14,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     -- Language
     iabbr('fn', "() => {}", { buffer = true })
-    iabbr('lg', [["console.log('>> [".]] .. filename_expr .. [[."]', {})"]], { buffer = true, expr = true })
+    iabbr('lg', [[luaeval("require'phenax.utils'.js_console_log()")]], { buffer = true, expr = true })
+    iabbr('lgc', [[luaeval("require'phenax.utils'.js_console_log_copied()")]], { buffer = true, expr = true })
 
     -- Api
     iabbr('typ', "type MyType = {}", { buffer = true })
