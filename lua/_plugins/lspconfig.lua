@@ -59,6 +59,7 @@ local config = {
       unison = { settings = { maxCompletions = 100 } },
       ocamlls = {},
       elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
+      asm_lsp = {},
       -- vuels = {
       --   settings = {
       --     vetur = {
@@ -277,19 +278,19 @@ function config.on_lsp_attached(client, bufnr)
 
   -- Refresh code lenses
   if client.supports_method('textDocument/codeLens') then
-    -- if client.server_capabilities.codeLensProvider ~= nil then
     vim.lsp.codelens.refresh()
-    vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+    -- vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   end
 
   if client.supports_method('textDocument/inlayHints') then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    local filter = { bufnr = bufnr }
+    vim.lsp.inlay_hint.enable(true, filter)
     vim.keymap.set('n', '<leader>th', function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
     end, opts)
   end
 
-  -- Show function signature
+  -- Show function signature as a popup
   require('lsp_signature').on_attach({
     bind = true,
     hi_parameter = 'LspSignatureActiveParameter',

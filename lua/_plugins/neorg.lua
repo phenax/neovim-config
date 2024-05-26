@@ -94,9 +94,10 @@ function config.get_neorg_config()
       ['core.ui.calendar'] = {},
       ['core.summary'] = {},           -- :Neorg generate-workspace-summary
       ['core.esupports.metagen'] = {}, -- :Neorg inject-metadata | :Neorg update-metadata
+      -- ['core.text-objects'] = {},
 
-      ['external.timelog'] = {},       -- :Neorg insert_timelog <name>
-      ['external.hop-extras'] = {},    -- extends <cr> to hop
+      ['external.timelog'] = {},    -- :Neorg insert_timelog <name>
+      ['external.hop-extras'] = {}, -- extends <cr> to hop
     },
   }
 end
@@ -122,7 +123,6 @@ function config.neorg_keybindings(keybinds)
 
       -- Notes
       { space 'na',  'core.dirman.new.note' },
-
       { space 'cn',  'core.itero.next-iteration' },
       { space 'li',  'core.itero.next-iteration' },
 
@@ -140,8 +140,8 @@ function config.neorg_keybindings(keybinds)
 
   keybinds.map_to_mode('norg', {
     n = {
-      -- { space 'cn',  '<cmd>lua Notes__on_new_line("  - ( ) ")<cr>' },
-      -- { space 'li',  '<cmd>lua Notes__on_new_line("  - ")<cr>' },
+      -- { space 'cn',  '<cmd>lua Notes__on_new_line('  - ( ) ')<cr>' },
+      -- { space 'li',  '<cmd>lua Notes__on_new_line('  - ')<cr>' },
       { leader 'jn', '<cmd>Neorg journal today<cr>' },
       { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
       { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },

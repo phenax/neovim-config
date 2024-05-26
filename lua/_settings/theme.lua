@@ -7,6 +7,7 @@ local theme = {
       [2] = '#15121f',
       [3] = '#1a1824',
       [4] = '#2a2834',
+      [4.5] = '#35323f',
       [5] = '#3e445e',
       [6] = '#7b8099',
       [7] = '#bbc0d9',
@@ -133,6 +134,7 @@ function theme.lsp()
     DiagnosticUnderlineHint = { fg = lensColors.Hint },
     LspCodeLens = { fg = lensColors.Lens },
     LspSignatureActiveParameter = { fg = lensColors.Info },
+    LspInlayHint = { fg = theme.colors.slate[4.5] },
   }
 end
 
