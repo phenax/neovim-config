@@ -114,14 +114,16 @@ local config = {
         },
         init_options = {
           preferences = {
-            includeInlayParameterNameHints = 'all',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayVariableTypeHints = false, -- Disabled because it's noisy
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
+            -- Inlay hints
+            interactiveInlayHints = true,
+            importModuleSpecifierPreference = 'non-relative',
             includeInlayEnumMemberValueHints = true,
-            importModuleSpecifierPreference = 'non-relative'
+            includeInlayFunctionLikeReturnTypeHints = false,
+            includeInlayFunctionParameterTypeHints = false,
+            includeInlayParameterNameHints = 'all',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayVariableTypeHints = false, -- Disabled because it's noisy
           },
         },
         commands = {
@@ -277,16 +279,16 @@ function config.on_lsp_attached(client, bufnr)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- Refresh code lenses
-  if client.supports_method('textDocument/codeLens') then
-    vim.lsp.codelens.refresh()
-    -- vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  end
+  -- if client.supports_method('textDocument/codeLens') then
+  --   vim.lsp.codelens.refresh()
+  --   vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+  -- end
 
   if client.supports_method('textDocument/inlayHints') then
     local filter = { bufnr = bufnr }
-    vim.lsp.inlay_hint.enable(true, filter)
+    vim.lsp.inlay_hint.enable(false, filter)
     vim.keymap.set('n', '<leader>th', function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), {})
     end, opts)
   end
 

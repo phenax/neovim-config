@@ -15,6 +15,7 @@ return {
       'nui.nvim',
       'plenary.nvim',
       'pathlib.nvim',
+      -- 'tiktoken_core',
     },
   }
 }

@@ -134,7 +134,7 @@ function theme.lsp()
     DiagnosticUnderlineHint = { fg = lensColors.Hint },
     LspCodeLens = { fg = lensColors.Lens },
     LspSignatureActiveParameter = { fg = lensColors.Info },
-    LspInlayHint = { fg = theme.colors.slate[4.5] },
+    -- LspInlayHint = { fg = theme.colors.slate[4.5] },
   }
 end
 
