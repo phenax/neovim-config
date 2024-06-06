@@ -7,7 +7,7 @@ local plugin = {
   'echasnovski/mini.files',
   version = '*',
   keys = {
-    { '<localleader>nc', function() M.toggle_cwd() end, noremap = true, mode = 'n' },
+    { '<localleader>nc', function() M.toggle_cwd() end,     noremap = true, mode = 'n' },
     { '<localleader>nn', function() M.toggle_current() end, noremap = true, mode = 'n' },
   },
 }
@@ -127,7 +127,7 @@ M.init_event_handlers = function()
   vim.api.nvim_create_autocmd('User', {
     pattern = { 'MiniFilesActionRename', 'MiniFilesActionMove' },
     callback = function(args)
-      for _, client in ipairs(vim.lsp.get_active_clients()) do
+      for _, client in ipairs(vim.lsp.get_clients()) do
         M.handle_lsp_rename(client, args)
       end
     end,
