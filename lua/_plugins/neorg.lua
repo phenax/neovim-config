@@ -6,7 +6,6 @@ local plugin = {
     'nvim-treesitter/nvim-treesitter',
     'nvim-telescope/telescope.nvim',
     'nvim-neorg/neorg-telescope',
-    'folke/zen-mode.nvim',
     'phenax/neorg-timelog',
     'phenax/neorg-hop-extras',
   },
@@ -38,12 +37,6 @@ function config.get_neorg_config()
       ['core.completion'] = {
         config = {
           engine = 'nvim-cmp',
-        },
-      },
-
-      ['core.presenter'] = {
-        config = {
-          zen_mode = 'zen-mode',
         },
       },
 

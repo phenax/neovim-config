@@ -26,7 +26,7 @@ local function get_ts_config()
       enable = true,
       keymaps = {
         init_selection = '<localleader><CR>',
-        scope_incremental = '<localleader><CR>',
+        scope_incremental = '<C-TAB>',
         node_incremental = '<TAB>',
         node_decremental = '<S-TAB>',
       },

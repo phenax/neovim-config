@@ -7,8 +7,6 @@ local function iabbr(name, expr, opts)
   vim.cmd.inoreabbrev(prefix .. name .. '!', expr)
 end
 
-local filename_expr = [[expand('%:t').':'.line('.').':'.col('.')]]
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
   callback = function()
