@@ -1,7 +1,6 @@
 local plugin = {
   'nvim-neorg/neorg',
   dependencies = {
-    'vhyrro/luarocks.nvim',
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',
     'nvim-telescope/telescope.nvim',

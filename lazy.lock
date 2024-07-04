@@ -21,7 +21,6 @@
   "lsp_signature.nvim": { "branch": "master", "commit": "a38da0a61c172bb59e34befc12efe48359884793" },
   "lspkind-nvim": { "branch": "master", "commit": "1735dd5a5054c1fb7feaf8e8658dbab925f4f0cf" },
   "lua-utils.nvim": { "branch": "main", "commit": "e565749421f4bbb5d2e85e37c3cef9d56553d8bd" },
-  "luarocks.nvim": { "branch": "main", "commit": "1db9093915eb16ba2473cfb8d343ace5ee04130a" },
   "material.vim": { "branch": "main", "commit": "07e70d5d675fadb1e81191b2d990b2a72edccf0d" },
   "mini.files": { "branch": "main", "commit": "05c861ff4066a9d20233ec776e9ec894ab9f19fe" },
   "neorg": { "branch": "main", "commit": "8635908dd793a88031735ec2eaedf97292bc3ea9" },
