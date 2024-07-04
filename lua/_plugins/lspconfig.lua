@@ -80,7 +80,7 @@ local config = {
       -- gleam = {},
       -- crystalline = {},
       -- astro = {},
-      -- svelte = {},
+      svelte = {},
 
       rubocop = {},
       solargraph = {
@@ -91,6 +91,7 @@ local config = {
       yamlls = {},
       gopls = {},
 
+      biome = {},
       eslint = {
         commands = {
           LspFormat = { function() vim.cmd [[ EslintFixAll ]] end },
@@ -107,6 +108,7 @@ local config = {
         single_file_support = false,
       },
 
+      -- denols = {},
       tsserver = {
         capabilities = capDisableFormatting(defaultCapabilities()),
         completions = {
@@ -220,6 +222,8 @@ function _SetupLspServer(name, opts, autoformat_ft)
 end
 
 function plugin.config()
+  vim.g.markdown_fenced_languages = { "ts=typescript", "js=javascript" }
+
   -- Lsp
   for name, options in pairs(config.lsp_servers()) do
     _SetupLspServer(name, options)
