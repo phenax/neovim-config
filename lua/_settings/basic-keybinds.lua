@@ -86,3 +86,36 @@ vim.keymap.set('n', '<leader>ct', function()
     vim.o.conceallevel = 2
   end
 end, { silent = true, noremap = true })
+
+-- Convert search mode to command mode
+local function enforce_cmd_mode(callback)
+  local cmd_type = vim.fn.getcmdtype()
+  if cmd_type == '/' or cmd_type == '?' then
+    local cmd = vim.fn.getcmdline()
+    local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+    vim.api.nvim_feedkeys(esc, 'n', false)
+    vim.schedule(function()
+      vim.api.nvim_feedkeys(':' .. cmd, 'n', false)
+      callback()
+    end)
+  else
+    callback()
+  end
+end
+
+-- Toggle between '<,'>s and %s
+local function toggle_cmd_range()
+  local cmd = vim.fn.getcmdline()
+  local cmd_type = vim.fn.getcmdtype()
+
+  if cmd:match("^'<,'>") then return cmd:gsub("^'<,'>", "%%") end
+  if cmd:match("^%%") then return cmd:gsub("^%%", "'<,'>") end
+  return "%" .. cmd
+end
+
+vim.keymap.set('c', '<C-i>', function()
+  enforce_cmd_mode(function()
+    local new_cmd = toggle_cmd_range()
+    vim.fn.setcmdline(new_cmd)
+  end)
+end, { noremap = true })
