@@ -91,7 +91,7 @@ function M.component.filename(props)
 
   if props.focused then
     return {
-      { file_seg, group = 'InclineModeNormal' },
+      { file_seg,                      group = 'InclineModeNormal' },
       { ' ' .. vim.fn.line '$' .. ' ', group = 'InclineModeInverted' },
     }
   end

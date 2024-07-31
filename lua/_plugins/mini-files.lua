@@ -25,8 +25,8 @@ function plugin.config()
     mappings = {
       close = 'q',
       go_in = '<C-l>',
-      go_in_plus = 'l',
-      go_out = 'h',
+      go_in_plus = 'L',
+      go_out = 'H',
       go_out_plus = '<C-h>',
       reset = '@',
       reveal_cwd = '<BS>',
@@ -96,13 +96,13 @@ function M.bind_extra_keys(map)
       -- Weird key bindings workaround
       ['<C-k>'] = 'k',
       ['<C-j>'] = 'j',
-      ['H'] = 'h',
-      ['L'] = 'l',
-      ['K'] = 'k',
-      ['J'] = 'j',
+      -- ['H'] = 'h',
+      -- ['L'] = 'l',
+      -- ['K'] = 'k',
+      -- ['J'] = 'j',
       ['<localleader><Tab>'] = '<nop>',
       ['<C-i>'] = '<nop>',
-      ['<C-o>'] = '<nop>',
+      ['<C-o>'] = 'L',
     },
   }
 end
