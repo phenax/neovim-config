@@ -8,7 +8,8 @@ local plugin = {
     'phenax/neorg-timelog',
     'phenax/neorg-hop-extras',
   },
-  version = '*',
+  -- version = '*',
+  commit = "8635908dd793a88031735ec2eaedf97292bc3ea9",
   ft = { 'norg' },
 }
 

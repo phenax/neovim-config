@@ -21,4 +21,5 @@ require('lazy').setup('_plugins', {
     enabled = false,
     notify = false,
   },
+  -- rocks = { enabled = true },
 })
