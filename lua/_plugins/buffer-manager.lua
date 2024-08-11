@@ -28,7 +28,8 @@ end
 function plugin.config()
   require('buffer_manager').setup {
     select_menu_item_commands = {
-      { key = '<CR>', command = 'edit' },
+      { key = '<CR>',  command = 'edit' },
+      { key = 'L',     command = 'edit' },
       { key = '<C-v>', command = 'vsplit' },
       { key = '<C-h>', command = 'split' },
     },

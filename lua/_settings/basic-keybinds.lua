@@ -113,7 +113,7 @@ local function toggle_cmd_range()
   return "%" .. cmd
 end
 
-vim.keymap.set('c', '<C-i>', function()
+vim.keymap.set('c', '<C-s>', function()
   enforce_cmd_mode(function()
     local new_cmd = toggle_cmd_range()
     vim.fn.setcmdline(new_cmd)
