@@ -20,6 +20,8 @@ local theme = {
     green = {
       [1] = '#d0bf78',
       [2] = '#51E980',
+      [3] = '#55efc4',
+      [4] = '#00b894',
     },
     yellow = {
       [1] = '#ffaf68',
@@ -146,6 +148,8 @@ function theme.neorg()
     ['@neorg.markup.underline'] = { fg = theme.colors.red[1], underline = true },
     -- Links
     ['@neorg.anchors.declaration'] = { fg = theme.colors.violet[3] },
+    ['@markup.link'] = { fg = theme.colors.violet[3] },
+    ['@neorg.links.location.timestamp.norg'] = { fg = theme.colors.green[4] },
     ['@neorg.links.description.norg'] = { fg = theme.colors.violet[3] },
     ['@neorg.links.location.url.norg'] = { fg = theme.colors.blue[1], underline = true },
     ['@neorg.todo_items.pending.norg'] = { fg = theme.colors.yellow[1] },

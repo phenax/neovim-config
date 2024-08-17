@@ -10,6 +10,8 @@ local plugin = {
     'onsails/lspkind-nvim',
     'hrsh7th/cmp-cmdline',
     'L3MON4D3/LuaSnip',
+    'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-nvim-lsp-document-symbol',
   },
 }
 
@@ -58,6 +60,7 @@ function plugin.config()
       { name = 'path' },
       { name = 'buffer' },
       { name = 'calc' },
+      { name = 'nvim_lsp_signature_help' },
     },
     snippet = {
       expand = function(args)
@@ -71,17 +74,21 @@ function plugin.config()
     },
   }
 
-  -- cmp.setup.cmdline(':', {
-  --   mapping = vim.tbl_extend('force', cmp.mapping.preset.cmdline(), mappings),
-  --   sources = cmp.config.sources(
-  --     { { name = 'path' } },
-  --     { { name = 'cmdline', option = { ignore_cmds = { 'Man', '!' } } } }
-  --   )
-  -- })
-  -- cmp.setup.cmdline({'/', '?'}, {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = { { name = 'buffer' } },
-  -- })
+  cmp.setup.cmdline(':', {
+    mapping = vim.tbl_extend('force', cmp.mapping.preset.cmdline(), mappings),
+    sources = cmp.config.sources {
+      { name = 'path' },
+      { name = 'cmdline', option = { ignore_cmds = { 'Man', '!' } } }
+    }
+  })
+
+  cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources {
+      { name = 'buffer' },
+      { name = 'nvim_lsp_document_symbol' },
+    },
+  })
 end
 
 return plugin

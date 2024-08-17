@@ -5,11 +5,11 @@ local plugin = {
     'nvim-treesitter/nvim-treesitter',
     'nvim-telescope/telescope.nvim',
     'nvim-neorg/neorg-telescope',
-    'phenax/neorg-timelog',
+    -- 'phenax/neorg-timelog',
     'phenax/neorg-hop-extras',
   },
   -- version = '*',
-  commit = "8635908dd793a88031735ec2eaedf97292bc3ea9",
+  -- commit = "8635908dd793a88031735ec2eaedf97292bc3ea9",
   ft = { 'norg' },
 }
 
@@ -22,7 +22,10 @@ function plugin.config()
 
   vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'norg' },
-    callback = function() vim.opt.conceallevel = 2 end,
+    callback = function()
+      vim.opt.conceallevel = 2
+      config.neorg_keybindings()
+    end,
   })
 end
 
@@ -78,75 +81,68 @@ function config.get_neorg_config()
         },
       },
 
-      ['core.keybinds'] = {
-        config = {
-          hook = config.neorg_keybindings,
-        },
-      },
-
       ['core.ui.calendar'] = {},
       ['core.summary'] = {},           -- :Neorg generate-workspace-summary
       ['core.esupports.metagen'] = {}, -- :Neorg inject-metadata | :Neorg update-metadata
       -- ['core.text-objects'] = {},
 
-      ['external.timelog'] = {},    -- :Neorg insert_timelog <name>
+      -- ['external.timelog'] = {},    -- :Neorg insert_timelog <name>
       ['external.hop-extras'] = {}, -- extends <cr> to hop
     },
   }
 end
 
-local function space(key) return '<LocalLeader>' .. key end
+local function space(key) return '<localleader>' .. key end
 local function leader(key) return '<leader>' .. key end
 
-function config.neorg_keybindings(keybinds)
-  keybinds.map_event_to_mode('norg', {
+local keybindings = function(mappings)
+  for mode, mode_map in pairs(mappings) do
+    for k, v in pairs(mode_map) do
+      vim.keymap.set(mode, k, v, {
+        silent = true,
+        noremap = true,
+        buffer = true,
+      })
+    end
+  end
+end
+
+function config.neorg_keybindings()
+  -- vim.keymap.del('n', '<LocalLeader>nn', { buffer = true })
+  keybindings {
     n = {
       -- Tasks
-      { space 'cu',  'core.qol.todo_items.todo.task_undone' },
-      { space 'cp',  'core.qol.todo_items.todo.task_pending' },
-      { space 'cd',  'core.qol.todo_items.todo.task_done' },
-      { space 'ci',  'core.qol.todo_items.todo.task_important' },
-      { space 'ch',  'core.qol.todo_items.todo.task_on_hold' },
-      { space 'cc',  'core.qol.todo_items.todo.task_cancelled' },
-      { space 'cr',  'core.qol.todo_items.todo.task_recurring' },
-
-      -- GTD views
-      { leader 'tt', 'core.integrations.telescope.find_aof_tasks' },
-      { leader 'tc', 'core.integrations.telescope.find_context_tasks' },
+      [space 'cu'] = '<plug>(neorg.qol.todo-items.todo.task-undone)',
+      [space 'cp'] = '<plug>(neorg.qol.todo-items.todo.task-pending)',
+      [space 'cd'] = '<plug>(neorg.qol.todo-items.todo.task-done)',
+      [space 'ci'] = '<plug>(neorg.qol.todo-items.todo.task-important)',
+      [space 'ch'] = '<plug>(neorg.qol.todo-items.todo.task-on-hold)',
+      [space 'cc'] = '<plug>(neorg.qol.todo-items.todo.task-cancelled)',
+      [space 'cr'] = '<plug>(neorg.qol.todo-items.todo.task-recurring)',
 
       -- Notes
-      { space 'na',  'core.dirman.new.note' },
-      { space 'cn',  'core.itero.next-iteration' },
-      { space 'li',  'core.itero.next-iteration' },
+      [space 'na'] = '<plug>(neorg.dirman.new.note)',
+      [space 'cn'] = '<plug>(neorg.itero.next-iteration)',
+      [space 'li'] = '<plug>(neorg.itero.next-iteration)',
+
+      -- Defaults
+      -- <localleader>id -> insert date
+      -- <localleader>cm -> open code block inside split buffer
 
       -- Navigation
-      { '<Tab>',     'core.integrations.treesitter.next.link' },
-      { '<S-Tab>',   'core.integrations.treesitter.previous.link' },
-      { ']]',        'core.integrations.treesitter.next.heading' },
-      { '[[',        'core.integrations.treesitter.previous.heading' },
-      -- { '<cr>',     'core.esupports.hop.hop-link' },
-    },
-  }, {
-    silent = true,
-    noremap = true,
-  })
+      ['<Tab>'] = '<plug>(neorg.treesitter.next.link)',
+      ['<S-Tab>'] = '<plug>(neorg.treesitter.previous.link)',
+      [']]'] = '<plug>(neorg.treesitter.next.heading)',
+      ['[['] = '<plug>(neorg.treesitter.previous.heading)',
+      -- ['<cr>'] = 'neorg.esupports.hop.hop-link',
 
-  keybinds.map_to_mode('norg', {
-    n = {
-      -- { space 'cn',  '<cmd>lua Notes__on_new_line('  - ( ) ')<cr>' },
-      -- { space 'li',  '<cmd>lua Notes__on_new_line('  - ')<cr>' },
-      { leader 'jn', '<cmd>Neorg journal today<cr>' },
-      { leader 'th', '<cmd>Telescope neorg search_headings<cr>' },
-      { leader 'tf', '<cmd>Telescope neorg find_linkable<cr>' },
-      { leader 'ti', '<cmd>Telescope neorg insert_link<cr>' },
-      { leader 'tl', '<cmd>Neorg timelog insert *<cr>' }, -- NOTE: Updates all timelogs
-    },
-  }, {
-    silent = true,
-    noremap = true,
-  })
+      [leader 'jn'] = '<cmd>Neorg journal today<cr>',
+      [leader 'tf'] = '<cmd>Telescope neorg insert_file_link<cr>',
+      [leader 'tt'] = '<plug>(neorg.telescope.backlinks.file_backlinks)',
 
-  keybinds.unmap('norg', 'n', '<LocalLeader>nn')
+      [leader 'tl'] = '<cmd>Neorg timelog insert *<cr>', -- NOTE: Updates all timelogs
+    },
+  }
 end
 
 return plugin

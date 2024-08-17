@@ -1,7 +1,7 @@
 local plugin = {
   'neovim/nvim-lspconfig',
   dependencies = {
-    'ray-x/lsp_signature.nvim',
+    -- 'ray-x/lsp_signature.nvim',
     'hrsh7th/cmp-nvim-lsp',
   },
 }
@@ -297,10 +297,10 @@ function config.on_lsp_attached(client, bufnr)
   end
 
   -- Show function signature as a popup
-  require('lsp_signature').on_attach({
-    bind = true,
-    hi_parameter = 'LspSignatureActiveParameter',
-  }, bufnr)
+  -- require('lsp_signature').on_attach({
+  --   bind = true,
+  --   hi_parameter = 'LspSignatureActiveParameter',
+  -- }, bufnr)
 end
 
 function config.setup_file_autoformat(fts)

@@ -1,10 +1,6 @@
 return {
   'moll/vim-bbye',
   keys = {
-    { '<C-d>', ':Bdelete<CR>', mode = { 'i', 'n' } },
+    { '<C-d>', '<cmd>Bdelete<cr>', mode = { 'n' } },
   },
-  -- 'qpkorr/vim-bufkill',
-  -- keys = {
-  --   { '<C-d>', ':BD<CR>', mode = { 'i', 'n' } },
-  -- },
 }
