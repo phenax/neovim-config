@@ -6,6 +6,7 @@ local M = {
 local plugin = {
   'echasnovski/mini.files',
   version = '*',
+  event = 'VeryLazy',
   keys = {
     { '<localleader>nc', function() M.toggle_cwd() end,     noremap = true, mode = 'n' },
     { '<localleader>nn', function() M.toggle_current() end, noremap = true, mode = 'n' },
