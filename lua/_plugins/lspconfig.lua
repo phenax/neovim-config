@@ -135,6 +135,7 @@ local config = {
                 apply = true,
                 context = { only = { 'source.removeUnused.ts' }, diagnostics = {} },
               })
+              -- vim.lsp.buf.code_action({ apply = true, context = { only = { 'source.organizeImports.ts' }, diagnostics = {} } })
             end,
           },
           LspAddMissingImports = {

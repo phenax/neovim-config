@@ -1,5 +1,5 @@
 return {
-  'NTBBloodbath/rest.nvim',
+  'rest-nvim/rest.nvim',
   dependencies = {
     -- 'vhyrro/luarocks.nvim',
     'nvim-lua/plenary.nvim',

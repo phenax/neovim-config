@@ -144,6 +144,7 @@ function theme.neorg()
   theme.update_hl {
     -- Color for text
     ['@neorg.markup.bold'] = { fg = theme.colors.green[2], bold = true },
+    ['@markup.strong'] = { fg = theme.colors.green[2], bold = true },
     ['@neorg.markup.italic'] = { fg = theme.colors.yellow[1] },
     ['@neorg.markup.underline'] = { fg = theme.colors.red[1], underline = true },
     -- Links
