@@ -7,6 +7,7 @@ local plugin = {
 
 local config = {
   bf_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
+  enable_git_indicators = true,
 }
 
 -- Key bindings
@@ -37,6 +38,14 @@ function plugin.config()
     width = 0.7,
     height = 0.5,
     highlight = 'Normal:BufferManagerBorder',
+    format_function = function(path)
+      local segments = vim.split(path, '/')
+      local file_short = segments[#segments]
+      if #segments > 1 then
+        file_short = segments[#segments - 1] .. '/' .. segments[#segments]
+      end
+      return file_short .. '    ' .. path
+    end,
     win_extra_options = {
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual,CursorLine:BufferManagerCursorLine',
       cursorline = true,
@@ -66,6 +75,8 @@ function plugin.config()
 end
 
 function config.show_git_signs(bufnr)
+  if not config.enable_git_indicators then return end;
+
   vim.api.nvim_buf_clear_namespace(bufnr, config.bf_ns, 0, -1)
 
   local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)

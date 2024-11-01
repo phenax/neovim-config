@@ -79,6 +79,11 @@ local function get_short_path(path, win_width)
   end
 end
 
+local function get_buffer_count_info()
+  local total = vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 }))
+  return total
+end
+
 function M.component.filename(props)
   local width = vim.fn.winwidth(props.win)
   local filename = get_short_path(vim.api.nvim_buf_get_name(props.buf), width)
@@ -89,13 +94,15 @@ function M.component.filename(props)
   local file_seg = '' .. filename .. (bo.modified and ' ●' or '') .. (bo.readonly and ' [RO]' or '')
   file_seg = ' ' .. file_seg .. ' '
 
+  local buf_count = ' ' .. get_buffer_count_info() .. ' ';
+
   if props.focused then
     return {
-      { file_seg,                      group = 'InclineModeNormal' },
-      { ' ' .. vim.fn.line '$' .. ' ', group = 'InclineModeInverted' },
+      { file_seg,  group = 'InclineModeNormal' },
+      { buf_count, group = 'InclineModeInverted' },
     }
   end
-  return { { file_seg, group = 'InclineModeInactive' } }
+  return { { file_seg, group = 'InclineModeInactive' }, { buf_count, group = 'InclineModeInverted' } }
 end
 
 function M.to_render_segments(props, segments)
