@@ -56,6 +56,7 @@ local config = {
       uiua = {},
       zls = {},
       clangd = {},
+      -- ccls = {},
       unison = { settings = { maxCompletions = 100 } },
       ocamlls = {},
       elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
@@ -109,7 +110,7 @@ local config = {
       },
 
       -- denols = {},
-      tsserver = {
+      ts_ls = {
         capabilities = capDisableFormatting(defaultCapabilities()),
         completions = {
           completeFunctionCalls = true,
@@ -274,7 +275,8 @@ function config.on_lsp_attached(client, bufnr)
   vim.keymap.set('n', '<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.keymap.set('n', '<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.keymap.set('n', '<localleader>f', config.format_buffer, { silent = true, noremap = true })
-  vim.keymap.set('n', '<leader>tu', '<cmd>LspRemoveUnused<cr>', opts) -- Remove unused imports
+  vim.keymap.set('n', '<leader>tu', '<cmd>LspRemoveUnused<cr>', opts)      -- Remove unused imports
+  vim.keymap.set('n', '<leader>ta', '<cmd>LspAddMissingImports<cr>', opts) -- Add missing imports
 
   -- Diagnostics
   vim.keymap.set('n', '<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -292,7 +294,7 @@ function config.on_lsp_attached(client, bufnr)
   if client.supports_method('textDocument/inlayHints') then
     local filter = { bufnr = bufnr }
     vim.lsp.inlay_hint.enable(false, filter)
-    vim.keymap.set('n', '<leader>th', function()
+    vim.keymap.set('n', '<C-t>h', function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), {})
     end, opts)
   end
