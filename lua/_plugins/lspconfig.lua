@@ -235,6 +235,8 @@ function plugin.config()
   vim.keymap.set('n', '<leader>df', config.toggle_autoformat)
   config.setup_file_autoformat(config.format_on_save_ft)
 
+  vim.api.nvim_create_user_command('LspInfoV', 'vert botright checkhealth lspconfig', {});
+
   -- diagnostics config
   vim.diagnostic.config {
     signs = true,
