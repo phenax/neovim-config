@@ -24,13 +24,14 @@ local theme = {
       [4] = '#00b894',
     },
     yellow = {
-      [1] = '#ffaf68',
+      [1] = '#D9B18E',
     },
     red = {
       [1] = '#ff5370',
       [2] = '#db4b4b',
       [3] = '#d63031',
       [4] = '#7c162e',
+      [5] = '#C46262',
     },
     blue = {
       [1] = '#82aaff',
@@ -118,7 +119,7 @@ end
 
 function theme.lsp()
   local lensColors = {
-    Error = theme.colors.red[2],
+    Error = theme.colors.red[5],
     Warn = theme.colors.yellow[1],
     Info = theme.colors.green[1],
     Hint = theme.colors.violet[2],
