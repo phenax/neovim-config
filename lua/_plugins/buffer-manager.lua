@@ -6,8 +6,10 @@ local plugin = {
 }
 
 local config = {
-  bf_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
+  bf_git_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
+  bf_file_ns = vim.api.nvim_create_namespace 'buffer_manager/file',
   enable_git_indicators = true,
+  enable_file_indicators = true,
 }
 
 -- Key bindings
@@ -38,14 +40,6 @@ function plugin.config()
     width = 0.7,
     height = 0.5,
     highlight = 'Normal:BufferManagerBorder',
-    format_function = function(path)
-      local segments = vim.split(path, '/')
-      local file_short = segments[#segments]
-      if #segments > 1 then
-        file_short = segments[#segments - 1] .. '/' .. segments[#segments]
-      end
-      return file_short .. '    ' .. path
-    end,
     win_extra_options = {
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual,CursorLine:BufferManagerCursorLine',
       cursorline = true,
@@ -67,17 +61,47 @@ function plugin.config()
       -- Show git signs for files on buffer_manager
       vim.api.nvim_create_autocmd({ 'TextChanged', 'InsertLeave' }, {
         buffer = opts.buf,
-        callback = function() config.show_git_signs(opts.buf) end,
+        callback = function()
+          config.show_file_hint(opts.buf)
+          config.show_git_signs(opts.buf)
+        end,
       })
+      config.show_file_hint(opts.buf)
       config.show_git_signs(opts.buf)
     end,
   })
 end
 
+function config.show_file_hint(bufnr)
+  if not config.enable_file_indicators then return end;
+
+  vim.api.nvim_buf_clear_namespace(bufnr, config.bf_file_ns, 0, -1)
+
+  local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  if #buf_files == 0 or (#buf_files == 1 and buf_files[1] == '') then return end
+
+  for index, file in ipairs(buf_files) do
+    if file ~= '' then
+      local segments = vim.split(file, '/')
+      local file_short = segments[#segments]
+      if #segments > 1 then
+        file_short = segments[#segments - 1] .. '/' .. segments[#segments]
+      end
+
+      vim.api.nvim_buf_set_extmark(bufnr, config.bf_file_ns, index - 1, 0, {
+        virt_text = { { file_short, 'BufferManagerHighlight' }, { ' | ' } },
+        virt_text_pos = 'inline',
+        virt_lines_above = true,
+        virt_lines_leftcol = false,
+      })
+    end
+  end
+end
+
 function config.show_git_signs(bufnr)
   if not config.enable_git_indicators then return end;
 
-  vim.api.nvim_buf_clear_namespace(bufnr, config.bf_ns, 0, -1)
+  vim.api.nvim_buf_clear_namespace(bufnr, config.bf_git_ns, 0, -1)
 
   local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   if #buf_files == 0 or (#buf_files == 1 and buf_files[1] == '') then return end
@@ -90,7 +114,7 @@ function config.show_git_signs(bufnr)
 
       for _, gs in ipairs(matches) do
         local status, _ = unpack(gs)
-        vim.api.nvim_buf_set_extmark(bufnr, config.bf_ns, index - 1, 0, {
+        vim.api.nvim_buf_set_extmark(bufnr, config.bf_git_ns, index - 1, 0, {
           virt_text = { config.get_virt_text(status) },
         })
       end

@@ -99,6 +99,7 @@ function theme.buffer_manager()
     BufferManagerDiffAdd = { fg = c.green[2], bold = true },
     BufferManagerDiffDelete = { fg = c.red[2], bold = true },
     BufferManagerCursorLine = { bg = c.slate[2], fg = c.white },
+    BufferManagerHighlight = { fg = c.violet[3], bold = true },
   }
 end
 
