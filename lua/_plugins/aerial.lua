@@ -11,6 +11,11 @@ return {
   config = function()
     require('aerial').setup {
       disable_max_lines = 30000,
+      layout = {
+        min_width = 40,
+        resize_to_content = false,
+        preserve_equality = true,
+      }
     }
   end,
 }

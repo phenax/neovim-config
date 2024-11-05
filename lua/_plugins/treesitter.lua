@@ -50,29 +50,19 @@ local function get_ts_config()
       },
       swap = {
         enable = true,
-        swap_next = {
-          ['<C-l>'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<C-h>'] = '@parameter.inner',
-        },
+        swap_next = { ['<C-l>'] = '@parameter.inner' },
+        swap_previous = { ['<C-h>'] = '@parameter.inner' },
       },
       move = {
         enable = true,
         set_jumps = true,
-        goto_previous_start = {
-          ['[['] = '@function.outer',
-        },
-        goto_next_start = {
-          [']]'] = '@function.outer',
-        },
+        goto_previous_start = { ['[['] = '@function.outer' },
+        goto_next_start = { [']]'] = '@function.outer' },
       },
       lsp_interop = {
         enable = true,
         border = 'none',
-        peek_definition_code = {
-          ['<leader>dt'] = '@function.outer',
-        },
+        peek_definition_code = { ['<leader>dt'] = '@function.outer' },
       },
     },
   }
