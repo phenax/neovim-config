@@ -90,7 +90,7 @@ end
 function theme.buffer_manager()
   local c = theme.colors
   theme.update_hl {
-    BufferManagerModified = { fg = c.accent },
+    BufferManagerModified = { fg = c.yellow[1], bold = true },
     BufferManagerNormal = { bg = c.slate[3], fg = c.slate[6] },
     BufferManagerBorder = { bg = c.slate[3], fg = c.slate[3] },
     BufferManagerLineNr = { bg = c.slate[3], fg = c.white },

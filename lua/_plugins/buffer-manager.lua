@@ -14,7 +14,12 @@ local config = {
 
 -- Key bindings
 plugin.keys = {
-  { mode = 'n', '<localleader>b', function() require('buffer_manager.ui').toggle_quick_menu() end, noremap = true },
+  {
+    mode = 'n',
+    '<localleader>b',
+    function() require('buffer_manager.ui').toggle_quick_menu() end,
+    noremap = true,
+  },
 }
 for i = 0, 9 do
   local bidx = i
