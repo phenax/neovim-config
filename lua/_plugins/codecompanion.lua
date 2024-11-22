@@ -20,7 +20,7 @@ return {
     {
       mode = { 'n', 'x' },
       '<a-c>e',
-      '<cmd>CodeCompanion /explain',
+      '<cmd>CodeCompanion /explain<cr>',
     },
   },
 }
