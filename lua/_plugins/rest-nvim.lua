@@ -1,3 +1,12 @@
+vim.g.rest_nvim = {
+  request = {
+    skip_ssl_verification = false,
+    hooks = {
+      set_content_type = true,
+    },
+  },
+}
+
 return {
   'rest-nvim/rest.nvim',
   dependencies = {
@@ -18,8 +27,8 @@ return {
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'http',
       callback = function()
-        vim.cmd [[command! RunHttp :lua require('rest-nvim').run()]]
         vim.keymap.set('n', '<CR>', rest_nvim.run, { buffer = true })
+        -- vim.keymap.set('n', '<CR>', '<cmd>Rest run<cr>', { buffer = true })
       end,
     })
   end,
