@@ -7,6 +7,7 @@ local plugin = {
   'echasnovski/mini.files',
   version = '*',
   event = 'VeryLazy',
+  dependencies = { 'folke/snacks.nvim' },
   keys = {
     { '<localleader>nc', function() M.toggle_cwd() end,     noremap = true, mode = 'n' },
     { '<localleader>nn', function() M.toggle_current() end, noremap = true, mode = 'n' },
@@ -130,10 +131,11 @@ M.init_event_handlers = function()
   -- Handle on rename/move
   vim.api.nvim_create_autocmd('User', {
     pattern = { 'MiniFilesActionRename', 'MiniFilesActionMove' },
-    callback = function(args)
-      for _, client in ipairs(vim.lsp.get_clients()) do
-        M.handle_lsp_rename(client, args)
-      end
+    callback = function(event)
+      Snacks.rename.on_rename_file(event.data.from, event.data.to)
+      -- for _, client in ipairs(vim.lsp.get_clients()) do
+      --   M.handle_lsp_rename(client, event)
+      -- end
     end,
   })
 end
@@ -153,30 +155,30 @@ function M.toggle_current()
   M.minifiles_toggle(path, true)
 end
 
-local function get_path(obj, path)
-  local current = obj
-  for _, key in ipairs(path) do
-    if current[key] == nil then return nil end
-    current = current[key]
-  end
-  return current
-end
-
-function M.handle_lsp_rename(client, args)
-  if get_path(client, { 'server_capabilities', 'workspace', 'fileOperations', 'willRename' }) == nil then return end
-
-  local success, resp = pcall(client.request_sync, 'workspace/willRenameFiles', {
-    files = {
-      {
-        oldUri = vim.uri_from_fname(args.data.from),
-        newUri = vim.uri_from_fname(args.data.to),
-      },
-    },
-  }, M.lsp_timeout)
-
-  if success and resp and resp.result ~= nil then
-    vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
-  end
-end
+-- local function get_path(obj, path)
+--   local current = obj
+--   for _, key in ipairs(path) do
+--     if current[key] == nil then return nil end
+--     current = current[key]
+--   end
+--   return current
+-- end
+--
+-- function M.handle_lsp_rename(client, args)
+--   if get_path(client, { 'server_capabilities', 'workspace', 'fileOperations', 'willRename' }) == nil then return end
+--
+--   local success, resp = pcall(client.request_sync, 'workspace/willRenameFiles', {
+--     files = {
+--       {
+--         oldUri = vim.uri_from_fname(args.data.from),
+--         newUri = vim.uri_from_fname(args.data.to),
+--       },
+--     },
+--   }, M.lsp_timeout)
+--
+--   if success and resp and resp.result ~= nil then
+--     vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+--   end
+-- end
 
 return plugin

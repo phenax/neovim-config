@@ -2,6 +2,9 @@
 vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
 vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
 
+-- tab close
+vim.keymap.set('n', '<leader>qq', '<cmd>tabclose<cr>')
+
 -- Toggle between last 2 buffers
 vim.keymap.set('n', '<localleader><tab>', ':b#<CR>')
 
@@ -50,7 +53,7 @@ vim.keymap.set('n', '<leader>sw', ':mksession! .vim.session<cr>')
 vim.keymap.set('n', '<leader>sl', ':source .vim.session<cr>')
 
 -- No highlight
-vim.keymap.set('n', '<c-\\>', '<cmd>noh | echo fnamemodify(expand("%"), ":~:.")<cr>')
+vim.keymap.set('n', '<c-\\>', '<cmd>noh<cr>') --  | echo fnamemodify(expand("%"), ":~:.")
 
 -- Replace word
 vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
