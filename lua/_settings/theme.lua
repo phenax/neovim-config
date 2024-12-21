@@ -115,10 +115,10 @@ function theme.highlight.lsp()
     DiagnosticWarn = { fg = lensColors.Warn },
     DiagnosticInfo = { fg = lensColors.Info },
     DiagnosticHint = { fg = lensColors.Hint },
-    DiagnosticUnderlineError = { fg = lensColors.Error },
-    DiagnosticUnderlineWarn = { fg = lensColors.Warn },
-    DiagnosticUnderlineInfo = { fg = lensColors.Info },
-    DiagnosticUnderlineHint = { fg = lensColors.Hint },
+    DiagnosticUnderlineError = { fg = lensColors.Error, underline = true, bold = true },
+    DiagnosticUnderlineWarn = { fg = lensColors.Warn, underline = true, bold = true },
+    DiagnosticUnderlineInfo = { fg = lensColors.Info, underline = true, bold = true },
+    DiagnosticUnderlineHint = { fg = lensColors.Hint, underline = true, bold = true },
     LspCodeLens = { fg = lensColors.Lens },
     LspSignatureActiveParameter = { fg = lensColors.Info },
     LspReferenceText = { underline = true },
@@ -145,7 +145,7 @@ function theme.highlight.neorg()
     ['@neorg.tags.ranged_verbatim.code_block'] = { bg = colors.slate[300] },
     ['@neorg.markup.verbatim'] = { bg = colors.slate[300] },
     ['@neorg.headings.1.title.norg'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
-    ['@neorg.headings.1.prefix.norg'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
+    ['@neorg.headings.1.prefix.norg'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true, force = true },
   }
 end
 

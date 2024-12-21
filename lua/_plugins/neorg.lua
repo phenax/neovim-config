@@ -92,9 +92,6 @@ function config.get_neorg_config()
   }
 end
 
-local function space(key) return '<localleader>' .. key end
-local function leader(key) return '<leader>' .. key end
-
 local keybindings = function(mappings)
   for mode, mode_map in pairs(mappings) do
     for k, v in pairs(mode_map) do
@@ -112,18 +109,18 @@ function config.neorg_keybindings()
   keybindings {
     n = {
       -- Tasks
-      [space 'cu'] = '<plug>(neorg.qol.todo-items.todo.task-undone)',
-      [space 'cp'] = '<plug>(neorg.qol.todo-items.todo.task-pending)',
-      [space 'cd'] = '<plug>(neorg.qol.todo-items.todo.task-done)',
-      [space 'ci'] = '<plug>(neorg.qol.todo-items.todo.task-important)',
-      [space 'ch'] = '<plug>(neorg.qol.todo-items.todo.task-on-hold)',
-      [space 'cc'] = '<plug>(neorg.qol.todo-items.todo.task-cancelled)',
-      [space 'cr'] = '<plug>(neorg.qol.todo-items.todo.task-recurring)',
+      ['<localleader>cu'] = '<plug>(neorg.qol.todo-items.todo.task-undone)',
+      ['<localleader>cp'] = '<plug>(neorg.qol.todo-items.todo.task-pending)',
+      ['<localleader>cd'] = '<plug>(neorg.qol.todo-items.todo.task-done)',
+      ['<localleader>ci'] = '<plug>(neorg.qol.todo-items.todo.task-important)',
+      ['<localleader>ch'] = '<plug>(neorg.qol.todo-items.todo.task-on-hold)',
+      ['<localleader>cc'] = '<plug>(neorg.qol.todo-items.todo.task-cancelled)',
+      ['<localleader>cr'] = '<plug>(neorg.qol.todo-items.todo.task-recurring)',
 
       -- Notes
-      [space 'na'] = '<plug>(neorg.dirman.new.note)',
-      [space 'cn'] = '<plug>(neorg.itero.next-iteration)',
-      [space 'li'] = '<plug>(neorg.itero.next-iteration)',
+      ['<localleader>na'] = '<plug>(neorg.dirman.new.note)',
+      ['<localleader>cn'] = '<plug>(neorg.itero.next-iteration)',
+      ['<localleader>li'] = '<plug>(neorg.itero.next-iteration)',
 
       -- Defaults
       -- <localleader>id -> insert date
@@ -136,11 +133,11 @@ function config.neorg_keybindings()
       ['[['] = '<plug>(neorg.treesitter.previous.heading)',
       -- ['<cr>'] = 'neorg.esupports.hop.hop-link',
 
-      [leader 'jn'] = '<cmd>Neorg journal today<cr>',
-      [leader 'tf'] = '<cmd>Telescope neorg insert_file_link<cr>',
-      [leader 'tt'] = '<plug>(neorg.telescope.backlinks.file_backlinks)',
+      ['<leader>jn'] = '<cmd>Neorg journal today<cr>',
+      ['<leader>tf'] = '<cmd>Telescope neorg insert_file_link<cr>',
+      ['<leader>tt'] = '<plug>(neorg.telescope.backlinks.file_backlinks)',
 
-      [leader 'tl'] = '<cmd>Neorg timelog insert *<cr>', -- NOTE: Updates all timelogs
+      ['<leader>tl'] = '<cmd>Neorg timelog insert *<cr>', -- NOTE: Updates all timelogs
     },
   }
 end
