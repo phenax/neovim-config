@@ -57,7 +57,7 @@ vim.opt.cursorcolumn = true
 vim.opt.showmode = true
 
 vim.opt.conceallevel = 0
-vim.opt.concealcursor = 'i'
+vim.opt.concealcursor = 'c'
 
 -- Short messages
 vim.opt.shortmess:append 'TIc'

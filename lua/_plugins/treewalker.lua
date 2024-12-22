@@ -1,7 +1,7 @@
 return {
   'aaronik/treewalker.nvim',
   opts = {
-    highlight = false,
+    highlight = true,
   },
   keys = {
     { mode = 'n', '<Down>',  '<cmd>Treewalker Down<cr>',  noremap = true },
