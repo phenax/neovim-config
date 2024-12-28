@@ -1,7 +1,7 @@
 return {
   'folke/flash.nvim',
   keys = {
-    { '<c-b>', function() require('flash').jump() end, mode = { 'n', 'i', 'v' } },
+    { '<c-b>', function() require('flash').jump() end,   mode = { 'n', 'i', 'v' } },
     { '<c-b>', function() require('flash').toggle() end, mode = 'c' },
   },
   opts = {
