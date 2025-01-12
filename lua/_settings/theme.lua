@@ -32,6 +32,7 @@ function theme.highlight.ui()
     PmenuSel = { bg = colors.accent, fg = colors.white },
     FloatBorder = { fg = colors.accent },
     RulerHighlighted = { bg = 'none', fg = colors.white, bold = true },
+    netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
   }
 end
 
@@ -88,16 +89,17 @@ function theme.highlight.buffer_manager()
 end
 
 function theme.highlight.telescope()
+  local bg = colors.bg[100]
   theme.update_hl {
-    TelescopeNormal = { bg = colors.bg[300] },
-    TelescopeBorder = { bg = colors.bg[300], fg = colors.bg[300] },
-    TelescopePreviewNormal = { bg = colors.bg[300] },
+    TelescopeNormal = { bg = bg },
+    TelescopeBorder = { bg = bg, fg = colors.accent },
+    TelescopePreviewNormal = { bg = bg },
     TelescopePreviewTitle = { bg = colors.accent, fg = colors.white },
-    TelescopeResultsTitle = { bg = colors.bg[300], fg = colors.bg[300] },
-    TelescopePromptNormal = { bg = colors.bg[300] },
+    TelescopeResultsTitle = { bg = bg, fg = bg },
+    TelescopeResultsBorder = { bg = bg, fg = bg },
+    TelescopePromptNormal = { bg = bg },
     TelescopePromptTitle = { bg = colors.accent, fg = colors.white },
-    TelescopePromptBorder = { bg = colors.bg[300], fg = colors.bg[300] },
-    TelescopePromptPrefix = { bg = colors.bg[300] },
+    TelescopePromptPrefix = { bg = bg },
   }
 end
 
@@ -150,11 +152,12 @@ function theme.highlight.neorg()
 end
 
 function theme.highlight.mini_files()
+  local bg = colors.bg[300]
   theme.update_hl {
-    MiniFilesBorder = { bg = colors.bg[300], fg = colors.bg[300] },
+    MiniFilesBorder = { bg = bg, fg = bg },
     MiniFilesBorderModified = { bg = colors.accent, fg = colors.accent },
-    MiniFilesNormal = { bg = colors.bg[300], fg = colors.slate[600] },
-    MiniFilesTitle = { bg = colors.bg[300], fg = colors.white, bold = true },
+    MiniFilesNormal = { bg = bg, fg = colors.slate[600] },
+    MiniFilesTitle = { bg = bg, fg = colors.white, bold = true },
     MiniFilesTitleFocused = { bg = colors.accent, fg = colors.white, bold = true },
     MiniFilesCursorLine = { bg = colors.slate[200], bold = true },
   }

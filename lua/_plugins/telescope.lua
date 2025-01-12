@@ -22,18 +22,25 @@ function plugin.config()
 
   telescope.setup {
     defaults = {
-      prompt_prefix = ' λ ',
+      prompt_prefix = ' λ  ',
       sorting_strategy = 'ascending',
       cache_picker = {
         num_pickers = 10,
       },
+      borderchars = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
       layout_config = {
-        width = 0.8,
+        width = { padding = 0 },
+        height = { 0.7, min = 25 },
+        anchor = 'S',
+        anchor_padding = 0,
         prompt_position = 'top',
         preview_cutoff = 120,
       },
       color_devicons = true,
       use_less = true,
+      preview = {
+        treesitter = false,
+      },
 
       mappings = {
         n = keymaps,
