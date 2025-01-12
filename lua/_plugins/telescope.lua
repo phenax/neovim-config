@@ -1,7 +1,6 @@
 local plugin = {
   'nvim-telescope/telescope.nvim',
   dependencies = {
-    'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
     'fdschmidt93/telescope-egrepify.nvim',
   },
@@ -98,7 +97,7 @@ function plugin.config()
   vim.keymap.set('n', '<leader>cf', builtin.filetypes)
 
   -- Buffers
-  vim.keymap.set('n', '<leader>bb', builtin.buffers)
+  vim.keymap.set('n', '<leader>bb', function() builtin.buffers({ sort_mru = true }) end)
 
   -- (Ctrl + /) Search inside current buffer
   vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find)

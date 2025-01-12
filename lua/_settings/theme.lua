@@ -33,6 +33,8 @@ function theme.highlight.ui()
     FloatBorder = { fg = colors.accent },
     RulerHighlighted = { bg = 'none', fg = colors.white, bold = true },
     netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
+    WinBar = { bg = colors.bg[100], fg = colors.slate[600] },
+    WinBarNC = { bg = colors.bg[100], fg = colors.slate[400] },
   }
 end
 
@@ -57,6 +59,14 @@ function theme.highlight.code()
     ['@tag.builtin'] = { fg = colors.blue[300] },
     ['@tag.attribute'] = { fg = colors.blue[200] },
     ['@variable.member'] = { fg = colors.white },
+  }
+end
+
+function theme.highlight.quickfix()
+  theme.update_hl {
+    BqfPreviewFloat = { bg = colors.bg[100], fg = colors.slate[400] },
+    BqfPreviewBorder = { bg = colors.bg[100], fg = colors.accent },
+    BqfPreviewTitle = { bg = colors.accent, fg = colors.white },
   }
 end
 
