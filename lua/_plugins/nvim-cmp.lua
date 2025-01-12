@@ -12,6 +12,7 @@ local plugin = {
     'L3MON4D3/LuaSnip',
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-nvim-lsp-document-symbol',
+    'nvim-orgmode/orgmode',
   },
 }
 
@@ -61,6 +62,7 @@ function plugin.config()
       { name = 'buffer' },
       { name = 'calc' },
       { name = 'nvim_lsp_signature_help' },
+      { name = 'orgmode' },
     },
     snippet = {
       expand = function(args)

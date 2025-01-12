@@ -200,6 +200,20 @@ function theme.highlight.incline()
   }
 end
 
+function theme.highlight.orgmode()
+  theme.update_hl {
+    ['@org.keyword.todo'] = { fg = colors.red[300] },
+    ['@org.keyword.done'] = { fg = colors.green[400] },
+    ['@org.plan'] = { fg = colors.slate[600] },
+    ['@org.properties'] = { fg = colors.red[100] },
+    ['@org.tag'] = { fg = colors.accent },
+    ['@org.timestamp.active'] = { fg = colors.accent },
+    ['@org.drawer'] = { fg = colors.slate[400] },
+    ['@org.agenda.scheduled'] = { fg = colors.green[400] },
+    ['@org.agenda.deadline'] = { fg = colors.red[300] },
+  }
+end
+
 function theme.highlight_all()
   for _, value in pairs(theme.highlight) do
     value()
