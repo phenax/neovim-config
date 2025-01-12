@@ -1,6 +1,5 @@
 local plugin = {
   'b0o/incline.nvim',
-  enabled = false,
   event = 'VeryLazy',
   keys = {
     { '<leader>ti', '<cmd>lua require"incline".toggle()<cr>', mode = 'n' },
