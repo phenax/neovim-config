@@ -136,7 +136,6 @@ local config = {
                 apply = true,
                 context = { only = { 'source.removeUnused.ts' }, diagnostics = {} },
               })
-              -- vim.lsp.buf.code_action({ apply = true, context = { only = { 'source.organizeImports.ts' }, diagnostics = {} } })
             end,
           },
           LspAddMissingImports = {
@@ -179,6 +178,17 @@ local config = {
         -- filetypes = { 'haskell', 'lhaskell', 'liquid' },
         settings = {
           languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
+        },
+        commands = {
+          LspRemoveUnused = {
+            function()
+              vim.lsp.buf.code_action({
+                apply = true,
+                context = { only = { 'quickfix' }, diagnostics = {} },
+                filter = function(cmd) return cmd.title == 'Remove all redundant imports' end,
+              })
+            end,
+          },
         },
       },
 
