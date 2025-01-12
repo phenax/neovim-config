@@ -1,11 +1,9 @@
 local plugin = {
   'b0o/incline.nvim',
+  enabled = false,
   event = 'VeryLazy',
   keys = {
     { '<leader>ti', '<cmd>lua require"incline".toggle()<cr>', mode = 'n' },
-  },
-  dependencies = {
-    'kyazdani42/nvim-web-devicons',
   },
 }
 
@@ -24,31 +22,31 @@ end
 function plugin.config()
   require('incline').setup {
     ignore = {
-      filetypes = { 'fugitive', 'aerial', 'fugitiveblame', 'Trouble', 'netrw' },
-      unlisted_buffers = true,
+      filetypes = { 'fugitive', 'aerial', 'fugitiveblame', 'Trouble' },
+      unlisted_buffers = false,
     },
     window = {
       padding = 0,
       margin = { horizontal = 0, vertical = 0 },
     },
-    render = function(props) return M.to_render_segments(props, M.segments()) end,
+    render = function(props) return M.render(props) end,
   }
   vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
   vim.o.showmode = true
 end
 
-function M.component.filetype(props)
-  if not props.focused then return { '' } end
-  local name = vim.api.nvim_buf_get_name(props.buf)
-  local ft = vim.bo[props.buf].filetype
-  if not ft or ft == '' then return { '' } end
-  local icon_c = { '' }
-  if M.show_filetype_icon then
-    local icon, color = require('nvim-web-devicons').get_icon_color(name, ft)
-    icon_c = { ' ' .. icon, guifg = color }
-  end
-  return { icon_c, { ' ' .. ft .. ' ', group = 'InclineModeInactive' } }
-end
+-- function M.component.filetype(props)
+--   if not props.focused then return { '' } end
+--   local name = vim.api.nvim_buf_get_name(props.buf)
+--   local ft = vim.bo[props.buf].filetype
+--   if not ft or ft == '' then return { '' } end
+--   local icon_c = { '' }
+--   if M.show_filetype_icon then
+--     local icon, color = require('nvim-web-devicons').get_icon_color(name, ft)
+--     icon_c = { ' ' .. icon, guifg = color }
+--   end
+--   return { icon_c, { ' ' .. ft .. ' ', group = 'InclineModeInactive' } }
+-- end
 
 function M.component.diagnostics(props)
   local icons = { Error = '', Warn = '', Info = '', Hint = '' }
@@ -63,7 +61,42 @@ function M.component.diagnostics(props)
   return diagnostics
 end
 
-local function get_short_path(path, win_width)
+function M.component.filename(props)
+  local width = vim.fn.winwidth(props.win)
+  local filename = M.getShortPath(vim.api.nvim_buf_get_name(props.buf), width)
+  local bo = vim.bo[props.buf]
+
+  local modified = bo.modified and '● ' or ''
+  local readonly = bo.readonly and '[RO] ' or ''
+
+  if string.len(filename) == 0 then
+    return { ' λ ' .. modified, group = 'InclineModeNormal' }
+  end
+
+  local file_seg = ' ' .. filename .. ' ' .. modified .. readonly
+  local buf_count = ' ' .. M.getBufferCountInfo() .. ' ';
+
+  if props.focused then
+    return { { file_seg, group = 'InclineModeNormal' }, { buf_count, group = 'InclineModeInverted' } }
+  end
+
+  return { { file_seg, group = 'InclineModeInactive' }, { buf_count, group = 'InclineModeInverted' } }
+end
+
+function M.render(props)
+  return M.to_render_segments(props, M.segments())
+end
+
+function M.to_render_segments(props, segments)
+  local result = {}
+  for _, seg in ipairs(segments) do
+    local ok, arr = pcall(seg, props)
+    if ok and type(arr) == 'table' then table.insert(result, arr) end
+  end
+  return result
+end
+
+function M.getShortPath(path, win_width)
   local segments = vim.split(path, '/')
   if #segments == 0 then
     return path
@@ -80,43 +113,9 @@ local function get_short_path(path, win_width)
   end
 end
 
-local function get_buffer_count_info()
+function M.getBufferCountInfo()
   local total = vim.fn.len(vim.fn.getbufinfo({ buflisted = 1 }))
   return total
-end
-
-function M.component.filename(props)
-  local width = vim.fn.winwidth(props.win)
-  local filename = get_short_path(vim.api.nvim_buf_get_name(props.buf), width)
-  local bo = vim.bo[props.buf]
-
-  local modified = bo.modified and '● ' or ''
-  local readonly = bo.readonly and '[RO] ' or ''
-
-  if string.len(filename) == 0 then
-    return { ' λ ' .. modified, group = 'InclineModeNormal' }
-  end
-
-  local file_seg = ' ' .. filename .. ' ' .. modified .. readonly
-  local buf_count = ' ' .. get_buffer_count_info() .. ' ';
-
-  if props.focused then
-    return {
-      { file_seg,  group = 'InclineModeNormal' },
-      { buf_count, group = 'InclineModeInverted' },
-    }
-  end
-
-  return { { file_seg, group = 'InclineModeInactive' }, { buf_count, group = 'InclineModeInverted' } }
-end
-
-function M.to_render_segments(props, segments)
-  local result = {}
-  for _, seg in ipairs(segments) do
-    local ok, arr = pcall(seg, props)
-    if ok and type(arr) == 'table' then table.insert(result, arr) end
-  end
-  return result
 end
 
 return plugin
