@@ -5,6 +5,7 @@ local M = {
 
 local plugin = {
   'echasnovski/mini.files',
+  enabled = false,
   version = '*',
   event = 'VeryLazy',
   dependencies = { 'folke/snacks.nvim' },

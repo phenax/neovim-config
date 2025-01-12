@@ -24,7 +24,8 @@ end
 function plugin.config()
   require('incline').setup {
     ignore = {
-      filetypes = { 'fugitive', 'NvimTree', 'aerial', 'fugitiveblame', 'Trouble' },
+      filetypes = { 'fugitive', 'aerial', 'fugitiveblame', 'Trouble', 'netrw' },
+      unlisted_buffers = true,
     },
     window = {
       padding = 0,
@@ -89,11 +90,14 @@ function M.component.filename(props)
   local filename = get_short_path(vim.api.nvim_buf_get_name(props.buf), width)
   local bo = vim.bo[props.buf]
 
-  if string.len(filename) == 0 then return { '' } end
+  local modified = bo.modified and '● ' or ''
+  local readonly = bo.readonly and '[RO] ' or ''
 
-  local file_seg = '' .. filename .. (bo.modified and ' ●' or '') .. (bo.readonly and ' [RO]' or '')
-  file_seg = ' ' .. file_seg .. ' '
+  if string.len(filename) == 0 then
+    return { ' λ ' .. modified, group = 'InclineModeNormal' }
+  end
 
+  local file_seg = ' ' .. filename .. ' ' .. modified .. readonly
   local buf_count = ' ' .. get_buffer_count_info() .. ' ';
 
   if props.focused then
@@ -102,6 +106,7 @@ function M.component.filename(props)
       { buf_count, group = 'InclineModeInverted' },
     }
   end
+
   return { { file_seg, group = 'InclineModeInactive' }, { buf_count, group = 'InclineModeInverted' } }
 end
 
