@@ -1,37 +1,30 @@
-return {
+local M = {}
+local plugin = {
   'github/copilot.vim',
-  enabled = true,
+  event = 'VeryLazy',
   keys = {
-    {
-      mode = 'n',
-      '<leader>sm',
-      function()
-        if (vim.g.copilot_enabled) then
-          vim.cmd [[Copilot disable]]
-          print 'Copilot disabled'
-          vim.g.copilot_enabled = false
-        else
-          vim.cmd [[Copilot enable]]
-          print 'Copilot enabled'
-          vim.g.copilot_enabled = true
-        end
-      end,
-    },
-    { mode = 'i', '<C-Tab>' },
+    { mode = 'n', '<leader>sm', function() M.toggleCopilot() end },
+    { mode = 'i', '<C-l>',      '<Plug>(copilot-accept-word)' },
+    { mode = 'i', '<m-]>',      '<Plug>(copilot-next)' },
+    { mode = 'i', '<m-[>',      '<Plug>(copilot-previous)' },
+    { mode = 'i', '<C-y>',      'copilot#Accept("")',            expr = true },
   },
   config = function()
     vim.g.copilot_enabled = false
-
-    -- Extra key alongside Tab in case of the occasional conflict
-    vim.keymap.set('i', '<C-Tab>', 'copilot#Accept("\\<CR>")', {
-      expr = true,
-      replace_keycodes = false,
-    })
+    vim.g.copilot_no_tab_map = true
   end,
 }
 
--- Tab, <C-Tab> => Accept
--- <M-]> => Next suggestion
--- <M-[> => Prev suggestion
--- <M-Right> => Next word
--- <M-C-Right> => Next line
+function M.toggleCopilot()
+  if (vim.g.copilot_enabled) then
+    vim.cmd [[Copilot disable]]
+    print 'Copilot disabled'
+    vim.g.copilot_enabled = false
+  else
+    vim.cmd [[Copilot enable]]
+    print 'Copilot enabled'
+    vim.g.copilot_enabled = true
+  end
+end
+
+return plugin

@@ -1,7 +1,7 @@
 local M = {
   path = vim.fn.expand '~/nixos/extras/notes',
-  -- path = vim.fn.expand '~/nixos/config/nvim/test',
 }
+
 local plugin = {
   'nvim-orgmode/orgmode',
   event = 'VeryLazy',
@@ -59,6 +59,10 @@ function M.keybinds()
       org_clock_in = '<leader>ci',
       org_clock_out = '<leader>co',
       org_clock_cancel = '<leader>cx',
+      org_next_visible_heading = ']]',
+      org_previous_visible_heading = '[[',
+      org_forward_heading_same_level = ']}',
+      org_backward_heading_same_level = '[{',
     },
   }
 end
@@ -86,7 +90,10 @@ function M.captureTemplates()
 ** Goals for tomorrow
 -
 
-        ]],
+
+-----
+
+]],
     },
 
     W = {
