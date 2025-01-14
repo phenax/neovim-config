@@ -10,23 +10,21 @@ local plugin = {
 }
 
 M.keys = {
-  ['g?'] = { 'actions.show_help', mode = 'n' },
-
+  -- Navigation
   ['H'] = { 'actions.parent', mode = 'n' },
   ['L'] = { 'actions.select', mode = 'n' },
-  ['<c-o>'] = { 'actions.select', opts = { close = false }, mode = 'n' },
-  ['<CR>'] = { 'actions.select', mode = 'n' },
   ['J'] = { 'j', remap = true },
   ['K'] = { 'k', remap = true },
+  ['~'] = { 'actions.open_cwd', mode = 'n' },
 
+  -- Select/consume
+  ['<CR>'] = { 'actions.select', mode = { 'n', 'v' } },
+  ['<C-p>'] = { 'actions.preview', mode = 'n' },
   ['<C-v>'] = { 'actions.select', opts = { vertical = true }, mode = 'n' },
   ['<C-h>'] = { 'actions.select', opts = { horizontal = true }, mode = 'n' },
-
-  ['<C-p>'] = { 'actions.preview', mode = 'n' },
-  ['<C-c>'] = { 'actions.close', mode = 'n' },
-  ['R'] = { 'actions.refresh', mode = 'n' },
-
-  ['<localleader>q'] = { 'actions.close', mode = 'n' },
+  ['gx'] = { 'actions.open_external', mode = 'n' },
+  ['<localleader>:'] = { 'actions.open_cmdline', mode = 'n', opts = { shorten_path = false } },
+  ['<c-t><c-t>'] = { 'actions.open_terminal', mode = 'n' },
   ['<c-q>'] = {
     function()
       require 'oil.util'.send_to_quickfix({ target = 'quickfix', action = 'r' })
@@ -34,34 +32,32 @@ M.keys = {
     end,
     mode = 'n'
   },
-  ['~'] = { 'actions.open_cwd', mode = 'n' },
-  ['cd'] = { 'actions.cd', mode = 'n' },
-  ['gs'] = { 'actions.change_sort', mode = 'n' },
-  ['gx'] = { 'actions.open_external', mode = 'n' },
-  ['<localleader>:'] = { 'actions.open_cmdline', mode = 'n' },
-  ['<c-t><c-t>'] = { 'actions.open_terminal', mode = 'n' },
-
-  -- Copy path to clipboard (absolute)
-  ['<C-y>'] = function()
-    local path = vim.fn.fnamemodify(M.getCursorPath(), ':p')
-    M.copyText(path)
-  end,
-  -- Copy path to clipboard (relative)
-  ['Y'] = function()
-    local path = vim.fn.fnamemodify(M.getCursorPath(), ':~:.')
-    M.copyText(path)
-  end,
-
+  -- Copy path to clipboard
+  ['<C-y>'] = { function() M.copyPath({ absolute = true }) end, mode = 'n' },
+  ['Y'] = { function() M.copyPath({ absolute = false }) end, mode = 'n' },
   -- Telescope grep inside dir
   ['<leader><C-f>'] = function()
     local path = M.getCurrentDir()
-    require('telescope.builtin').live_grep { search_dirs = { path }, prompt_title = 'Grep: ' .. path }
+    require('telescope.builtin').live_grep {
+      search_dirs = { path },
+      prompt_title = 'Grep: ' .. path,
+    }
   end,
   -- Telescope find files inside dir
   ['<leader><leader>f'] = function()
     local path = M.getCurrentDir()
-    require('telescope.builtin').find_files { search_dirs = { path }, prompt_title = 'Find: ' .. path }
+    require('telescope.builtin').find_files {
+      search_dirs = { path },
+      prompt_title = 'Find: ' .. path,
+    }
   end,
+
+  -- Controls
+  ['g?'] = { 'actions.show_help', mode = 'n' },
+  ['R'] = { 'actions.refresh', mode = 'n' },
+  ['<c-d>'] = { 'actions.close', mode = 'n' },
+  ['cd'] = { 'actions.cd', mode = 'n' },
+  ['gs'] = { 'actions.change_sort', mode = 'n' },
 }
 
 function M.setup()
@@ -97,7 +93,10 @@ function M.getCursorPath()
   return vim.fs.joinpath(M.getCurrentDir(), fname)
 end
 
-function M.copyText(text)
+function M.copyPath(opts)
+  local modify = ':~:.'
+  if opts and opts.absolute then modify = ':p' end
+  local text = vim.fn.fnamemodify(M.getCursorPath(), modify)
   vim.cmd(':let @+="' .. text .. '"')
   vim.notify('Copied to clipboard: ' .. text, vim.log.levels.INFO, { title = 'oil' })
 end
