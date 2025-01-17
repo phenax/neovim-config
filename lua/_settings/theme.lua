@@ -202,15 +202,18 @@ end
 
 function theme.highlight.orgmode()
   theme.update_hl {
-    ['@org.keyword.todo'] = { fg = colors.red[300] },
+    ['@org.keyword.todo'] = { fg = colors.red[200], bold = true },
     ['@org.keyword.done'] = { fg = colors.green[400] },
     ['@org.plan'] = { fg = colors.slate[600] },
     ['@org.properties'] = { fg = colors.red[100] },
     ['@org.tag'] = { fg = colors.accent },
     ['@org.timestamp.active'] = { fg = colors.accent },
     ['@org.drawer'] = { fg = colors.slate[400] },
-    ['@org.agenda.scheduled'] = { fg = colors.green[400] },
-    ['@org.agenda.deadline'] = { fg = colors.red[300] },
+    ['@org.agenda.scheduled'] = { fg = colors.green[500] },
+    ['@org.agenda.deadline'] = { fg = colors.red[200] },
+    ['@org.agenda.scheduled_past'] = { fg = colors.yellow[300] },
+    ['@org.agenda.today'] = { fg = colors.green[200], bold = true, underline = true },
+    ['@org.agenda.weekend'] = { fg = colors.slate[700] },
   }
 end
 

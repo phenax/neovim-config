@@ -1,5 +1,6 @@
 local plugin = {
   'nvim-neorg/neorg',
+  enabled = true,
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',

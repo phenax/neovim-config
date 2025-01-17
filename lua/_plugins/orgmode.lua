@@ -22,6 +22,8 @@ local plugin = {
       org_capture_templates = M.captureTemplates(),
     }
 
+    require 'phenax.orgmodelinks'.setup()
+
     vim.api.nvim_create_autocmd('FileType', {
       pattern = { 'org', 'orgagenda' },
       callback = function()
@@ -51,7 +53,7 @@ function M.keybinds()
       org_todo = '<localleader>tt',
       org_toggle_checkbox = '<localleader>cc',
       -- org_insert_link = '<localleader>li',
-      org_open_at_point = '<CR>',
+      org_open_at_point = '<M-o>',
       -- org_set_tags_command = '<localleader>cn',
       org_insert_todo_heading_respect_content = '<localleader>tn',
       org_deadline = '<localleader>id',
@@ -63,6 +65,8 @@ function M.keybinds()
       org_previous_visible_heading = '[[',
       org_forward_heading_same_level = ']}',
       org_backward_heading_same_level = '[{',
+      org_cycle = '<leader>zza',
+      org_global_cycle = '<leader>zzg'
     },
   }
 end
@@ -88,6 +92,9 @@ function M.captureTemplates()
 -
 
 ** Goals for tomorrow
+-
+
+** Feedback/Retro points for work
 -
 
 
