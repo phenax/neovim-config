@@ -22,7 +22,7 @@ function plugin.config()
   require('incline').setup {
     ignore = {
       filetypes = { 'fugitive', 'aerial', 'fugitiveblame', 'Trouble' },
-      unlisted_buffers = false,
+      unlisted_buffers = true,
     },
     window = {
       padding = 0,

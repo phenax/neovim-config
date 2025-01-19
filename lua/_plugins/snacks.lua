@@ -17,10 +17,6 @@ return {
       debounce = 80,
       modes = { 'n' },
     },
-    win = {
-      enabled = true,
-      minimal = true,
-    },
   },
   keys = {
     { mode = { 'n', 'v' }, '<leader>gb', function() Snacks.gitbrowse() end },
