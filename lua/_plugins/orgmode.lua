@@ -1,3 +1,5 @@
+local colors = require '_settings.colors'
+
 local M = {
   path = vim.fn.expand '~/nixos/extras/notes',
 }
@@ -10,8 +12,12 @@ local plugin = {
     require 'orgmode'.setup {
       org_agenda_files = vim.fs.joinpath(M.path, '**/*.org'),
       org_default_notes_file = vim.fs.joinpath(M.path, 'index.org'),
-      org_todo_keywords = { 'TODO', '|', 'DONE', 'BLOCKED' },
-      org_todo_keyword_faces = { BLOCKED = ':foreground gray', CANCELLED = ':foreground gray' },
+      org_todo_keywords = { 'TODO', 'ACTIVE', '|', 'DONE', 'BLOCKED' },
+      org_todo_keyword_faces = {
+        BLOCKED = ':foreground gray',
+        ACTIVE = ':foreground ' .. colors.yellow[200],
+        CANCELLED = ':foreground gray',
+      },
       org_hide_leading_stars = true,
       org_startup_indented = true,
       calendar_week_start_day = 0, -- Start on sunday

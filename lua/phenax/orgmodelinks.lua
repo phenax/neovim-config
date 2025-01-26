@@ -8,15 +8,29 @@ function M.setup()
       vim.keymap.set('n', '<S-Tab>', function() M.jumpToPreviousLink() end, { buffer = true })
       vim.keymap.set('n', '<CR>', function() M.openAtCursor() end, { buffer = true })
       vim.keymap.set('n', '<M-e>', function() M.executeBlockAtCursor() end, { buffer = true })
+      vim.keymap.set('n', 'gx', function() M.openAtCursorExt() end, { buffer = true })
+      vim.keymap.set('n', '<leader>gi', function() M.openAtCursorImage() end, { buffer = true })
     end,
   })
 end
 
+function _OpenImage(path) vim.cmd('!feh -x -F --image-bg "#0f0c19" ' .. path) end
+
+function M.openAtCursorExt()
+  local cursorLink = M.linkAtCursor()
+  if cursorLink and cursorLink.url then
+    local fullPath = cursorLink.url:get_real_path() or cursorLink.url:get_file_path()
+    if fullPath then
+      vim.ui.open(fullPath)
+    end
+  end
+end
+
 function M.openAtCursor()
   local cursorLink = M.linkAtCursor()
-  if cursorLink and cursorLink.url and cursorLink.url.url:find("^+") ~= nil then
+  if cursorLink and cursorLink.url and cursorLink.url.url:find('^+') ~= nil then
     local cmd = cursorLink.url.url:sub(2)
-    print("Running: " .. cmd)
+    print('Running: ' .. cmd)
     return vim.cmd(cmd)
   end
   return require 'orgmode'.action('org_mappings.open_at_point')
