@@ -59,6 +59,13 @@ function theme.highlight.code()
     ['@tag.builtin'] = { fg = colors.blue[300] },
     ['@tag.attribute'] = { fg = colors.blue[200] },
     ['@variable.member'] = { fg = colors.white },
+
+    RainbowDelimiter1 = { fg = colors.slate[800] },
+    RainbowDelimiter2 = { fg = colors.violet[200] },
+    RainbowDelimiter3 = { fg = colors.red[500] },
+    RainbowDelimiter4 = { fg = colors.slate[600] },
+    RainbowDelimiter5 = { fg = colors.blue[600] },
+    RainbowDelimiter6 = { fg = colors.green[600] },
   }
 end
 
