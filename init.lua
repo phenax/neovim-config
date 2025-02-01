@@ -17,6 +17,7 @@ require '_settings'
 require('_settings.theme').setup 'default'
 require 'phenax.orgmodelinks'
 require 'phenax.orgmodepresent'
+require 'phenax.repl'
 
 require('lazy').setup('_plugins', {
   lockfile = vim.fn.expand '~' .. '/nixos/config/nvim/lazy.lock',

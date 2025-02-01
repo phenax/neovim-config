@@ -92,3 +92,6 @@ vim.keymap.set('n', '<leader>ct', function()
     vim.o.conceallevel = 2
   end
 end, { silent = true, noremap = true })
+
+-- Load local config file
+vim.keymap.set('n', '<leader>cz', '<cmd>source .local.lua | echo "Loaded local config"<cr>')
