@@ -60,7 +60,10 @@ end
 
 ---@param buffer number
 function M.present(buffer)
-  M.contentBuffer = vim.fn.bufnr(buffer)
+  M.contentBuffer = 0
+  if buffer ~= 0 then
+    M.contentBuffer = vim.fn.bufnr(buffer)
+  end
   M.state.slides = M.prepareSlides()
 
   M.group = vim.api.nvim_create_augroup('phenax/orgmodepresent', { clear = true })
