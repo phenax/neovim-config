@@ -7,6 +7,11 @@ vim.g.rainbow_delimiters = {
     'RainbowDelimiter5',
     'RainbowDelimiter6',
   },
+  whitelist = {
+    'racket',
+    'scheme',
+    'lisp',
+  },
 }
 
 return {

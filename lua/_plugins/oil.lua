@@ -20,8 +20,8 @@ M.keys = {
   -- Select/consume
   ['<CR>'] = { 'actions.select', mode = { 'n', 'v' } },
   ['<C-p>'] = { 'actions.preview', mode = 'n' },
-  ['<C-v>'] = { 'actions.select', opts = { vertical = true }, mode = 'n' },
-  ['<C-h>'] = { 'actions.select', opts = { horizontal = true }, mode = 'n' },
+  -- ['<C-S-v>'] = { 'actions.select', opts = { vertical = true }, mode = 'n' },
+  -- ['<C-h>'] = { 'actions.select', opts = { horizontal = true }, mode = 'n' },
   ['gx'] = { 'actions.open_external', mode = 'n' },
   ['<localleader>:'] = { 'actions.open_cmdline', mode = 'n', opts = { shorten_path = false } },
   ['<c-t><c-t>'] = { 'actions.open_terminal', mode = 'n' },

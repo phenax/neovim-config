@@ -35,6 +35,7 @@ function theme.highlight.ui()
     netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
     WinBar = { bg = colors.bg[100], fg = colors.slate[600] },
     WinBarNC = { bg = colors.bg[100], fg = colors.slate[400] },
+    Folded = { bg = colors.bg[300], fg = colors.slate[600] },
   }
 end
 
