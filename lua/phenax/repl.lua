@@ -9,6 +9,10 @@ local defaultConfig = {
   vertical = true,
   -- Preprocess input before running
   preprocess = function(input) return input end,
+
+  -- Dimensions
+  width = function(cols) return cols * 0.4 end,
+  height = function(lines) return lines * 0.4 end,
 }
 
 _G.Repl = vim.tbl_extend('force', defaultConfig, {
@@ -18,8 +22,15 @@ _G.Repl = vim.tbl_extend('force', defaultConfig, {
     shell = {
       config = { command = vim.env['SHELL'] },
       preprocess = function(input)
-        return input:gsub("\\\n", "\n"):gsub("\n", "\\\n")
+        return input:gsub('\\\n', '\n'):gsub('\n', '\\\n')
       end,
+    },
+    spider_repl = {
+      config = {
+        command = 'nix-shell --pure -p nodejs_23 --run "npx spider-repl"',
+        vertical = true,
+        width = function(w) return w * 0.3 end,
+      },
     },
   },
 })
@@ -31,6 +42,8 @@ local M = {
   config = _G.Repl,
   visible = false,
 }
+
+_G.Repl.apply_repl_mode = function(name) M.apply_repl_mode(name) end
 
 function M.init()
   vim.keymap.set('n', '<c-t><c-t>', function() M.start_term() end)
@@ -46,12 +59,12 @@ function M.init()
 
   vim.api.nvim_create_user_command('ReplClearToggle', function()
     M.config.clear_screen = not M.config.clear_screen
-    print('[repl] clear screen: ' .. (M.config.clear_screen and "enabled" or "disabled"))
+    print('[repl] clear screen: ' .. (M.config.clear_screen and 'enabled' or 'disabled'))
   end, { force = true })
 
   vim.api.nvim_create_user_command('ReplVertToggle', function()
     M.config.vertical = not M.config.vertical
-    print('[repl] split: ' .. (M.config.vertical and "vertical" or "horizontal"))
+    print('[repl] split: ' .. (M.config.vertical and 'vertical' or 'horizontal'))
     if M.is_window_valid() then
       M.toggle_window()
       M.toggle_window()
@@ -101,9 +114,9 @@ function M.toggle_window()
 
     M.window = vim.api.nvim_open_win(M.buffer, false, { vertical = M.config.vertical })
     if M.config.vertical then
-      vim.api.nvim_win_set_width(M.window, math.floor(vim.o.columns * 0.4))
+      vim.api.nvim_win_set_width(M.window, math.floor(M.config.width(vim.o.columns)))
     else
-      vim.api.nvim_win_set_height(M.window, math.floor(vim.o.lines * 0.4))
+      vim.api.nvim_win_set_height(M.window, math.floor(M.config.height(vim.o.lines)))
     end
     vim.api.nvim_set_option_value('winfixbuf', true, { win = M.window })
     vim.api.nvim_set_option_value('number', false, { win = M.window })
@@ -115,8 +128,10 @@ function M.toggle_window()
 end
 
 function M.send_selection()
+  local oldPos = nil
   local isVisualMode = vim.fn.mode():match('[vV]')
   if not isVisualMode then
+    oldPos = vim.api.nvim_win_get_cursor(0)
     -- Select paragraph if not in visual mode
     vim.cmd.normal(M.config.default_selection_cmd)
   end
@@ -125,6 +140,10 @@ function M.send_selection()
   vim.cmd.normal(vim.api.nvim_replace_termcodes('<esc>', true, false, true))
 
   local selected_text = M.get_selection_text()
+  -- Reset cursor position
+  if oldPos then
+    vim.api.nvim_win_set_cursor(0, oldPos)
+  end
   M.send(selected_text, true)
 end
 
@@ -153,18 +172,18 @@ function M.send(contents, with_return)
 end
 
 function M.get_selection_text()
-  local _, ls, cs = unpack(vim.fn.getpos("'<"))
-  local _, le, ce = unpack(vim.fn.getpos("'>"))
-  local lines = vim.api.nvim_buf_get_lines(0, ls - 1, le, false)
+  local _, lineStart, colStart = unpack(vim.fn.getpos("'<"))
+  local _, lineEnd, colEnd = unpack(vim.fn.getpos("'>"))
+  local lines = vim.api.nvim_buf_get_lines(0, lineStart - 1, lineEnd, false)
 
   if #lines == 0 then
-    return ""
+    return ''
   elseif #lines == 1 then
-    return string.sub(lines[1], cs, ce)
+    return string.sub(lines[1], colStart, colEnd)
   else
-    lines[1] = string.sub(lines[1], cs)
-    lines[#lines] = string.sub(lines[#lines], 1, ce)
-    return table.concat(lines, "\n")
+    lines[1] = string.sub(lines[1], colStart)
+    lines[#lines] = string.sub(lines[#lines], 1, colEnd)
+    return table.concat(lines, '\n')
   end
 end
 
@@ -179,22 +198,27 @@ end
 function M.select_repl_mode()
   local options = vim.tbl_keys(M.config.replModes)
   table.sort(options)
-  vim.ui.select(options, { prompt = 'Repl mode:' }, function(choice)
-    if not choice then return end
-    local mode = M.config.replModes[choice]
-    if not mode then
-      print('Invalid repl mode' .. choice)
-      return
-    end
-
-    local newConfig = vim.tbl_extend('force', {}, defaultConfig, mode.config or {})
-    -- Apply config
-    for k, v in pairs(newConfig) do M.config[k] = v end
-    -- Custom setup function
-    if type(mode.setup) == 'function' then mode.setup() end
-    -- Close existing repl if any
-    M.close_term(true)
+  vim.ui.select(options, { prompt = 'Repl mode:' }, function(modeName)
+    M.apply_repl_mode(modeName)
+    vim.defer_fn(function() M.start_term() end, 200)
   end)
+end
+
+function M.apply_repl_mode(modeName)
+  if not modeName then return end
+  local mode = M.config.replModes[modeName]
+  if not mode then
+    print('Invalid repl mode' .. modeName)
+    return
+  end
+
+  local newConfig = vim.tbl_extend('force', {}, defaultConfig, mode.config or {})
+  -- Apply config
+  for k, v in pairs(newConfig) do M.config[k] = v end
+  -- Custom setup function
+  if type(mode.setup) == 'function' then mode.setup() end
+  -- Close existing repl if any
+  M.close_term(true)
 end
 
 return M
