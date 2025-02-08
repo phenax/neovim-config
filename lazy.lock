@@ -24,6 +24,7 @@
   "lazy.nvim": { "branch": "main", "commit": "d8f26efd456190241afd1b0f5235fe6fdba13d4a" },
   "lspkind-nvim": { "branch": "master", "commit": "d79a1c3299ad0ef94e255d045bed9fa26025dab6" },
   "lua-utils.nvim": { "branch": "main", "commit": "e565749421f4bbb5d2e85e37c3cef9d56553d8bd" },
+  "mini.ai": { "branch": "main", "commit": "c5eca32719cad6976fee95d88fd82db921a5edf7" },
   "mini.icons": { "branch": "main", "commit": "910db5df9724d65371182948f921fce23c2c881e" },
   "neorg": { "branch": "main", "commit": "3f0f1b9165f37bbcc1e18f1e654e70cf45b5b60d" },
   "neorg-hop-extras": { "branch": "main", "commit": "f349ab3e9a52d214f1af6122cd087218b2722c81" },
