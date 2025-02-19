@@ -1,9 +1,9 @@
 -- Delete all buffers except for the current one
 vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
-vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
+-- vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
 
-vim.keymap.set({ 'n', 'v' }, 'gh', '_')
-vim.keymap.set({ 'n', 'v' }, 'gl', '$')
+-- vim.keymap.set({ 'n', 'v' }, 'gh', '_')
+-- vim.keymap.set({ 'n', 'v' }, 'gl', '$')
 
 -- tab close
 vim.keymap.set('n', '<leader>qq', '<cmd>tabclose<cr>')

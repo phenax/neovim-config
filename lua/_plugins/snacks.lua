@@ -17,6 +17,15 @@ return {
       debounce = 80,
       modes = { 'n' },
     },
+    -- image = {
+    --   enabled = true,
+    --   force = true,
+    --   doc = {
+    --     enabled = true,
+    --     inline = false,
+    --     float = true,
+    --   }
+    -- },
   },
   keys = {
     { mode = { 'n', 'v' }, '<leader>gb', function() Snacks.gitbrowse() end },

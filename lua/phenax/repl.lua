@@ -199,6 +199,7 @@ function M.select_repl_mode()
   local options = vim.tbl_keys(M.config.replModes)
   table.sort(options)
   vim.ui.select(options, { prompt = 'Repl mode:' }, function(modeName)
+    if not modeName then return end
     M.apply_repl_mode(modeName)
     vim.defer_fn(function() M.start_term() end, 200)
   end)
