@@ -54,9 +54,6 @@ function plugin.config()
   vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'buffer_manager' },
     callback = function(opts)
-      -- Close all buffers except for the one under the cursor
-      vim.keymap.set('n', '<leader>cr', ':v/\\%#/d<cr>', { buffer = true })
-
       -- Load files from git status into buffer manager
       vim.keymap.set('n', '<localleader>gg', function()
         local files = vim.tbl_map(function(st) return st[2] end, config.get_git_status())

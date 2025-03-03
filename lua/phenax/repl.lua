@@ -27,7 +27,7 @@ _G.Repl = vim.tbl_extend('force', defaultConfig, {
     },
     spider_repl = {
       config = {
-        command = 'nix-shell --pure -p nodejs_23 --run "npx spider-repl"',
+        command = 'nix-shell -p nodejs_23 --run "LD_LIBRARY_PATH="" npx spider-repl -b brave"',
         vertical = true,
         width = function(w) return w * 0.3 end,
       },
@@ -160,6 +160,7 @@ function M.send(contents, with_return)
 
   -- Send clear screen sequence
   if M.config.clear_screen then
+    -- TODO: Scroll to bottom?
     vim.api.nvim_chan_send(M.channel_id, '\x0c')
   end
 

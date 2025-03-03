@@ -146,7 +146,8 @@ function M.cursorDistance(a, b)
   if a[1] == b[1] then
     return math.abs(b[2] - a[2])
   end
-  return 2 * math.abs(b[1] - a[1]) -- + math.abs(b[2] - a[2])
+  -- return 500 * math.abs(b[1] - a[1]) + math.abs(b[2] - a[2])
+  return 2 * math.abs(b[1] - a[1])
 end
 
 return M

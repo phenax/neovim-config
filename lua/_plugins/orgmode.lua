@@ -88,16 +88,19 @@ function M.captureTemplates()
 ** What went well today?
 - %?
 
-** Challenges
--
-
 ** Grateful for?
 -
 
-** How are you feeling?
+** Positive emotions felt today
 -
 
-** Goals for tomorrow
+** Negative emotions felt today
+-
+
+** Challenges
+-
+
+** Goals for tomorrow (copy to sidekick)
 -
 
 ** Feedback/Retro points for work
