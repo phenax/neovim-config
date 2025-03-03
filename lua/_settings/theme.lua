@@ -84,10 +84,13 @@ function theme.highlight.fugitive()
     fugitiveUnstagedHeading = { fg = colors.yellow[200], bold = true },
     fugitiveStagedHeading = { fg = colors.green[200], bold = true },
     fugitiveHeading = { bold = true },
-    DiffAdd = { bg = colors.green[600], bold = true },
-    DiffChange = { bg = colors.slate[500], bold = true },
-    DiffDelete = { bg = colors.red[600], bold = true },
-    DiffText = { bg = colors.yellow[600], bold = true },
+    DiffAdd = { bg = colors.green[600] },
+    DiffChange = { bg = colors.slate[500] },
+    DiffDelete = { bg = colors.red[400] },
+    DiffText = { fg = colors.green[700], bg = colors.slate[500], bold = true },
+    diffAdded = { bg = colors.green[600] },
+    -- diffChange = { bg = colors.slate[500] },
+    diffRemoved = { bg = colors.red[400] },
   }
 end
 
