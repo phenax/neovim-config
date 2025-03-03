@@ -2,34 +2,54 @@ local M = {}
 local plugin = {
   'tpope/vim-fugitive',
   keys = {
-    { mode = 'n', '<localleader>gs',  '<cmd>G<cr>' },
-    { mode = 'n', '<localleader>gaf', '<cmd>Git add %<cr>' },
-    { mode = 'n', '<localleader>gcc', '<cmd>Git commit<cr>' },
-    { mode = 'n', '<localleader>gca', '<cmd>Git commit --amend<cr>' },
-    { mode = 'n', '<localleader>gpp', '<cmd>Git push<cr>' },
-    { mode = 'n', '<localleader>gpu', '<cmd>Git pull<cr>' },
-    { mode = 'n', '<localleader>gl',  '<cmd>Git log<cr>' },
-    { mode = 'n', '<localleader>goe', '<cmd>GFiles<cr>' },
-    { mode = 'n', '<localleader>gow', '<cmd>GFiles w<cr>' },
+    { mode = 'n', '<localleader>gs',        '<cmd>G<cr>' },
+    { mode = 'n', '<localleader>gaf',       '<cmd>Git add %<cr>' },
+    { mode = 'n', '<localleader>gcc',       '<cmd>Git commit<cr>' },
+    { mode = 'n', '<localleader>gca',       '<cmd>Git commit --amend<cr>' },
+    { mode = 'n', '<localleader>gpp',       '<cmd>Git push<cr>' },
+    { mode = 'n', '<localleader>gpu',       '<cmd>Git pull<cr>' },
+
+    { mode = 'n', '<localleader>glm',       '<cmd>Git log --oneline HEAD...origin/master<cr>' },
+    { mode = 'n', '<localleader>gl<space>', ':Git log --oneline ' },
+
+    { mode = 'n', '<localleader>goe',       '<cmd>GFiles<cr>' },
+    { mode = 'n', '<localleader>gow',       '<cmd>GFiles w<cr>' },
 
     -- Diffresult merge in left/right (Technically not fugitive but its fine)
-    { mode = 'n', '<leader>gl',       '<cmd>diffget //2<cr>' },
-    { mode = 'n', '<leader>gr',       '<cmd>diffget //3<cr>' },
+    { mode = 'n', '<leader>gl',             '<cmd>diffget //2<cr>' },
+    { mode = 'n', '<leader>gr',             '<cmd>diffget //3<cr>' },
   },
   cmd = { 'Git', 'G', 'GFiles' },
   config = function()
-    vim.cmd [[ autocmd BufReadPost fugitive://* set bufhidden=delete ]]
+    vim.api.nvim_create_autocmd('BufReadPost', {
+      pattern = 'fugitive://*',
+      callback = function()
+        local opts = { remap = true, buffer = true, nowait = true }
+        vim.keymap.set('n', 'a', '-', opts)
+        vim.keymap.set('n', '<Down>', ')', opts)
+        vim.keymap.set('n', '<Up>', '(', opts)
+        vim.keymap.set('n', '<Right>', '>', opts)
+        vim.keymap.set('n', '<Left>', '<', opts)
+        vim.keymap.set('n', 'q', 'gq', opts)
+        vim.opt_local.bufhidden = 'delete'
+        vim.opt_local.buflisted = false
+      end
+    })
 
     vim.api.nvim_create_user_command('GFiles', function(opts)
       local rev = opts.args
-      if opts.args == "w" then
-        rev = vim.fn.expand("<cword>")
+      if opts.args == 'w' then
+        rev = vim.fn.expand('<cword>')
       end
-      print('Opening ' .. rev)
+      print('Opening ' .. (rev or 'last commit') .. '...')
       M.openFilesInCommit(rev)
     end, { force = true, nargs = '*' })
   end,
 }
+
+-- gu: go to untracked changes
+-- gU: go to unstaged changes
+-- gs: go to staged changes
 
 -- rr: rebase continue
 -- ri: interactive on commit
