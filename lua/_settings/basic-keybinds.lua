@@ -35,10 +35,6 @@ vim.cmd [[xnoremap >  >gv]]
 vim.keymap.set('v', 'K', [[:m '<-2<CR>gv=gv]], { noremap = true, silent = true })
 vim.keymap.set('v', 'J', [[:m '>+1<CR>gv=gv]], { noremap = true, silent = true })
 
--- Copy file path
-vim.cmd [[command! CpPath :let @+=expand("%")]]
-vim.cmd [[command! CpPathAbs :let @+=expand("%:p")]]
-
 -- Save
 vim.keymap.set('n', '<C-s>', ':w<CR>', { noremap = true, silent = true })
 
@@ -56,15 +52,24 @@ vim.keymap.set('n', '<leader>sw', ':mksession! .vim.session<cr>')
 vim.keymap.set('n', '<leader>sl', ':source .vim.session<cr>')
 
 -- No highlight
-vim.keymap.set('n', '<c-\\>', ':noh<cr>') --  | echo fnamemodify(expand("%"), ":~:.")
+vim.keymap.set('n', '<c-\\>', ':noh<cr>')
 
 -- Replace word
 vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
 
+-- Sort selection
+vim.keymap.set('v', 'gs', ':sort<cr>')
+
+-- Search in selection only
+vim.keymap.set('x', 'g/', '<Esc>/\\%V')
+
+-- go to command line window (overrides changelist navigation keybind)
+vim.keymap.set('n', 'g;', ':<c-f>i')
+
 -- Code folding
 vim.keymap.set('n', '<S-Tab>', 'zR')
-vim.keymap.set('n', 'zx', 'zo')
-vim.keymap.set('n', 'zc', 'zc')
+-- vim.keymap.set('n', 'zx', 'zo')
+-- vim.keymap.set('n', 'zc', 'zc')
 
 -- Spell checker
 vim.keymap.set('n', '<leader>==', ':setlocal spell! spelllang=en_us<CR>')
@@ -84,14 +89,3 @@ local function toggle_foldlevel()
 end
 
 vim.keymap.set('n', '<leader><Tab>', toggle_foldlevel, { silent = true })
-
-vim.keymap.set('n', '<leader>ct', function()
-  if vim.o.conceallevel > 0 then
-    vim.o.conceallevel = 0
-  else
-    vim.o.conceallevel = 2
-  end
-end, { silent = true, noremap = true })
-
--- Load local config file
-vim.keymap.set('n', '<leader>cz', '<cmd>source .local.lua | echo "Loaded local config"<cr>')
