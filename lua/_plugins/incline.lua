@@ -1,6 +1,7 @@
 local plugin = {
   'b0o/incline.nvim',
   event = 'VeryLazy',
+  enabled = false,
   keys = {
     { '<leader>ti', '<cmd>lua require"incline".toggle()<cr>', mode = 'n' },
   },
@@ -30,8 +31,6 @@ function plugin.config()
     },
     render = function(props) return M.render(props) end,
   }
-  vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
-  vim.o.showmode = true
 end
 
 -- function M.component.filetype(props)
