@@ -20,10 +20,12 @@ _G.Repl = vim.tbl_extend('force', defaultConfig, {
   replModes = {
     node = { config = { command = 'node' } },
     shell = {
-      config = { command = vim.env['SHELL'] },
-      preprocess = function(input)
-        return input:gsub('\\\n', '\n'):gsub('\n', '\\\n')
-      end,
+      config = {
+        command = vim.env['SHELL'],
+        preprocess = function(input)
+          return input:gsub('\\\n', '\n'):gsub('\n', '\\\n')
+        end,
+      },
     },
     spider_repl = {
       config = {
@@ -50,6 +52,7 @@ function M.init()
   vim.keymap.set({ 'v', 'n' }, '<c-t><cr>', function() M.send_selection() end)
   vim.keymap.set('n', '<c-t>q', function() M.close_term() end)
   vim.keymap.set('n', '<c-t><Tab>', function() M.select_repl_mode() end)
+  vim.keymap.set('n', '<c-t>c', function() M.send_interrupt() end)
 
   vim.api.nvim_create_user_command('ReplCmd', function(opts)
     if opts.nargs == 0 then return end
@@ -76,7 +79,7 @@ M.init()
 
 function M.close_term(close)
   if M.channel_id then
-    vim.fn.jobstop(M.channel_id)
+    pcall(vim.fn.jobstop, M.channel_id)
   end
   M.visible = false
   M.channel_id = nil
@@ -90,8 +93,8 @@ function M.close_term(close)
   end
 end
 
-function M.start_term()
-  M.toggle_window()
+function M.start_term(force_open)
+  M.toggle_window(force_open)
 
   if M.channel_id then return end
 
@@ -102,7 +105,9 @@ function M.start_term()
   end)
 end
 
-function M.toggle_window()
+function M.toggle_window(force_open)
+  if force_open and M.visible and M.is_window_valid() then return end
+
   if M.channel_id and M.visible and M.is_window_valid() then
     vim.api.nvim_win_close(M.window, true)
     M.window = nil
@@ -147,8 +152,15 @@ function M.send_selection()
   M.send(selected_text, true)
 end
 
+function M.send_interrupt()
+  if M.channel_id == nil then return end
+
+  local ctrl_c = vim.api.nvim_replace_termcodes('<c-c>', true, false, true)
+  vim.api.nvim_chan_send(M.channel_id, ctrl_c)
+end
+
 function M.send(contents, with_return)
-  if M.channel_id == nil then
+  if M.channel_id == nil or M.channel_id <= 0 then
     print('Starting term...')
     M.start_term()
   end
@@ -202,7 +214,7 @@ function M.select_repl_mode()
   vim.ui.select(options, { prompt = 'Repl mode:' }, function(modeName)
     if not modeName then return end
     M.apply_repl_mode(modeName)
-    vim.defer_fn(function() M.start_term() end, 200)
+    vim.defer_fn(function() M.start_term(true) end, 200)
   end)
 end
 
@@ -215,12 +227,16 @@ function M.apply_repl_mode(modeName)
   end
 
   local newConfig = vim.tbl_extend('force', {}, defaultConfig, mode.config or {})
+
+  -- Close existing repl if the command has changed
+  if newConfig.command ~= M.config.command then
+    M.close_term(true)
+  end
+
   -- Apply config
   for k, v in pairs(newConfig) do M.config[k] = v end
   -- Custom setup function
   if type(mode.setup) == 'function' then mode.setup() end
-  -- Close existing repl if any
-  M.close_term(true)
 end
 
 return M
