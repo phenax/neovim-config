@@ -48,8 +48,6 @@ vim.opt.backspace = 'indent,eol,start'
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.showmode = false
-vim.opt.ruler = true
-vim.opt.rulerformat = '%30(%=%l/%L, %v %#RulerHighlighted#%y%<%)'
 vim.opt.scrolloff = 15
 vim.opt.colorcolumn = '120'
 
@@ -61,6 +59,8 @@ vim.opt.tabstop = 2
 vim.opt.smarttab = true
 vim.opt.expandtab = true
 
+vim.opt.ruler = true
+vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
 vim.opt.laststatus = 0
 vim.opt.cmdheight = 1
 vim.opt.updatetime = 300

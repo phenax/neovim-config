@@ -31,11 +31,13 @@ function theme.highlight.ui()
     Pmenu = { bg = colors.slate[300], fg = colors.slate[600] },
     PmenuSel = { bg = colors.accent, fg = colors.white },
     FloatBorder = { fg = colors.accent },
-    RulerHighlighted = { bg = 'none', fg = colors.white, bold = true },
     netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
     WinBar = { bg = colors.bg[100], fg = colors.slate[600] },
     WinBarNC = { bg = colors.bg[100], fg = colors.slate[400] },
     Folded = { bg = colors.bg[300], fg = colors.slate[600] },
+    RulerFileType = { bg = 'none', fg = colors.white, bold = true },
+    RulerFilePath = { bg = colors.accent, fg = colors.white, bold = true },
+    RulerFileStatus = { bg = colors.yellow[100], fg = colors.bg[100], bold = true },
   }
 end
 

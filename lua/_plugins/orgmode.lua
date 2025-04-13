@@ -82,7 +82,7 @@ function M.captureTemplates()
     d = {
       description = 'Daily',
       target = vim.fs.joinpath(M.path, 'daily/%<%Y-%m>.org'),
-      template = [[
+      template = [=[
 * %<%Y-%m-%d> %<%A> :daily:
 
 ** What went well today?
@@ -91,25 +91,34 @@ function M.captureTemplates()
 ** Grateful for?
 -
 
-** Positive emotions felt today
+** Positive emotions felt today + why
 -
 
-** Negative emotions felt today
+** Negative emotions felt today + why
 -
 
 ** Challenges
 -
 
-** Goals for tomorrow (copy to sidekick)
--
+** Stats [[+lua require 'phenax.orgmoderpg'.evaluateScore()][see current stats]]
+#+begin_src lua
+health_points(0)      -- physical condition
+persistance(0)        -- habits, routine
+money(0)              -- finances, stability
+experience_points(0)  -- outdoors, life experience, growth, creative expression, hobbies
+assist_points(0)      -- helping others, positive interactions, donations
+social_points(0)      -- family, friends, romantic
+essence(0)            -- mental health, sense of self
+productivity(0)       -- goals accomplished, work, career, growth, leadership
+#+end_src
 
-** Feedback/Retro points for work
+** Goals for tomorrow (copy to sidekick)
 -
 
 
 -----
 
-]],
+]=],
     },
 
     W = {
@@ -148,6 +157,27 @@ function M.captureTemplates()
 
 ]],
     },
+
+    N = {
+      description = 'Blackhole',
+      target = vim.fs.joinpath(M.path, 'blackhole/logs.org'),
+      template = [=[
+* %T
+
+** What happened?
+-
+
+** REAL consequence of that event
+-
+
+** Learnings and positive effects on you from that event
+-
+
+** Type "This does not define me. This is a small stepping stone that I stumbled on. Get back up and keep walking.". Do not copy paste please.
+
+
+]=],
+    }
   }
 end
 
