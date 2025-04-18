@@ -52,11 +52,3 @@ vim.api.nvim_create_autocmd('FileType', {
     iabbr('scr', [[{% dofile("./lua/_notes/http.lua").init(context)<CR><CR>%}]], { buffer = true })
   end,
 })
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'norg' },
-  callback = function()
-    iabbr('tt', '- ( )', { buffer = true })
-    iabbr('td', 'strftime("- ( |@%d %b)")', { buffer = true, expr = true })
-  end,
-})

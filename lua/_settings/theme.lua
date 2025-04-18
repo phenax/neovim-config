@@ -57,6 +57,8 @@ function theme.highlight.code()
     -- Title = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
     ['@markup.heading.1.markdown'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
     ['@markup.heading.2.markdown'] = { bg = colors.blue[300], fg = colors.slate[100], bold = true },
+    ['@markup.strong'] = { fg = colors.green[200], bold = true },
+    ['@markup.link'] = { fg = colors.violet[300] },
 
     Tag = { fg = colors.blue[100] },
     ['@tag.builtin'] = { fg = colors.blue[300] },
@@ -148,29 +150,6 @@ function theme.highlight.lsp()
     LspSignatureActiveParameter = { fg = lensColors.Info },
     LspReferenceText = { underline = true },
     LspInlayHint = { fg = colors.slate[500] },
-  }
-end
-
-function theme.highlight.neorg()
-  theme.update_hl {
-    -- Color for text
-    ['@neorg.markup.bold'] = { fg = colors.green[200], bold = true },
-    ['@markup.strong'] = { fg = colors.green[200], bold = true },
-    ['@neorg.markup.italic'] = { fg = colors.yellow[300] },
-    ['@neorg.markup.underline'] = { fg = colors.red[100], underline = true },
-    -- Links
-    ['@neorg.anchors.declaration'] = { fg = colors.violet[300] },
-    ['@markup.link'] = { fg = colors.violet[300] },
-    ['@neorg.links.location.timestamp.norg'] = { fg = colors.green[400] },
-    ['@neorg.links.description.norg'] = { fg = colors.violet[300] },
-    ['@neorg.links.location.url.norg'] = { fg = colors.blue[100], underline = true },
-    ['@neorg.todo_items.pending.norg'] = { fg = colors.yellow[300] },
-    ['@neorg.todo_items.urgent.norg'] = { fg = colors.red[100], bold = true },
-    -- Code highlights
-    ['@neorg.tags.ranged_verbatim.code_block'] = { bg = colors.slate[300] },
-    ['@neorg.markup.verbatim'] = { bg = colors.slate[300] },
-    ['@neorg.headings.1.title.norg'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
-    ['@neorg.headings.1.prefix.norg'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true, force = true },
   }
 end
 
