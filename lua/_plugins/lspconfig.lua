@@ -13,12 +13,6 @@ local function capDisableFormatting(cap)
   return cap
 end
 
-local hoverOpt = { border = 'single' }
-local handlers = {
-  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, hoverOpt),
-  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, hoverOpt),
-}
-
 local config = {
   is_autoformat_enabled = true,
   format_on_save_ft = {
@@ -226,7 +220,6 @@ function _SetupLspServer(name, opts, autoformat_ft)
   cap = require('cmp_nvim_lsp').default_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', {
     on_attach = config.on_lsp_attached,
-    handlers = handlers,
     capabilities = cap,
   }, options))
 

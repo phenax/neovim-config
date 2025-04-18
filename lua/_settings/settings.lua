@@ -42,9 +42,8 @@ vim.opt.tabstop = 2
 vim.opt.smarttab = true
 vim.opt.expandtab = true
 
-vim.opt.ruler = true
-vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
-vim.opt.laststatus = 0
+-- vim.o.statusline = [[%{repeat('─', winwidth(0))}]]
+-- vim.opt.laststatus = 0
 vim.opt.cmdheight = 1
 vim.opt.updatetime = 300
 vim.opt.signcolumn = 'yes'
