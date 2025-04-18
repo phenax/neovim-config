@@ -184,14 +184,6 @@ function theme.highlight.terminal_colors()
   vim.g.terminal_color_15 = '#ebdbb2'
 end
 
-function theme.highlight.incline()
-  theme.update_hl {
-    InclineModeNormal = { bg = colors.accent, fg = colors.white },
-    InclineModeInactive = { bg = colors.bg[300], fg = colors.slate[600] },
-    InclineModeInverted = { bg = colors.white, fg = colors.accent },
-  }
-end
-
 function theme.highlight.orgmode()
   theme.update_hl {
     ['@org.keyword.todo'] = { fg = colors.red[200], bold = true },
