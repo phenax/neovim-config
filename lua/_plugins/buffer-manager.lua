@@ -41,10 +41,10 @@ function plugin.config()
       { key = '<C-v>', command = 'vsplit' },
       { key = '<C-h>', command = 'split' },
     },
-    borderchars = { '', '', '', '', '', '', '', '' },
+    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
     width = 0.7,
     height = 0.5,
-    highlight = 'Normal:BufferManagerBorder',
+    highlight = 'Normal:BufferManagerBorder,FloatTitle:BufferManagerBorderTitle,FloatBorder:BufferManagerBorderTitle',
     win_extra_options = {
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual,CursorLine:BufferManagerCursorLine',
       cursorline = true,

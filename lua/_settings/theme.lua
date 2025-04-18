@@ -25,9 +25,9 @@ function theme.highlight.ui()
     SignColumn = { bg = 'none' },
     LineNr = { bg = 'none', fg = colors.slate[500] },
     StatusLine = { bg = 'none', fg = colors.accent },
-    StatusLineNC = { bg = 'none', fg = colors.slate[500] },
-    VertSplit = { bg = 'none', fg = colors.slate[500] },
-    WinSeparator = { bg = 'none', fg = colors.slate[500] },
+    StatusLineNC = { bg = 'none', fg = colors.slate[400] },
+    VertSplit = { bg = 'none', fg = colors.slate[400] },
+    WinSeparator = { bg = 'none', fg = colors.slate[400] },
     Pmenu = { bg = colors.slate[300], fg = colors.slate[600] },
     PmenuSel = { bg = colors.accent, fg = colors.white },
     FloatBorder = { fg = colors.accent },
@@ -99,11 +99,13 @@ function theme.highlight.fugitive()
 end
 
 function theme.highlight.buffer_manager()
+  local bg = colors.bg[100]
   theme.update_hl {
     BufferManagerModified = { fg = colors.yellow[300], bold = true },
-    BufferManagerNormal = { bg = colors.bg[300], fg = colors.slate[600] },
-    BufferManagerBorder = { bg = colors.bg[300], fg = colors.slate[300] },
-    BufferManagerLineNr = { bg = colors.bg[300], fg = colors.white },
+    BufferManagerNormal = { bg = bg, fg = colors.slate[600] },
+    BufferManagerBorder = { bg = bg, fg = colors.accent },
+    BufferManagerBorderTitle = { bg = colors.red[200], fg = colors.slate[500] },
+    BufferManagerLineNr = { bg = bg, fg = colors.white },
     BufferManagerVisual = { bg = colors.slate[400], fg = colors.white },
     BufferManagerDiffChange = { fg = colors.yellow[300], bold = true },
     BufferManagerDiffAdd = { fg = colors.green[200], bold = true },
