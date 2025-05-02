@@ -1,14 +1,13 @@
 local plugin = {
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- 'ray-x/lsp_signature.nvim',
-    'hrsh7th/cmp-nvim-lsp',
+    'saghen/blink.cmp',
   },
 }
 
-local function defaultCapabilities() return vim.lsp.protocol.make_client_capabilities() end
+local function default_capabilities() return vim.lsp.protocol.make_client_capabilities() end
 
-local function capDisableFormatting(cap)
+local function cap_disable_formatting(cap)
   cap.textDocument.formatting = false
   return cap
 end
@@ -40,6 +39,19 @@ local config = {
     'uiua',
     'unison',
     'vue',
+  },
+
+  alt_formatters = {
+    eslint = function() vim.cmd 'EslintFixAll' end,
+    -- biome = function()
+    --   local bufnr = vim.api.nvim_get_current_buf()
+    --   local clients = vim.lsp.get_clients({ bufnr = bufnr, name = 'biome' })
+    --   if #clients == 0 then return end
+    --   local params = vim.lsp.util.make_formatting_params()
+    --   local response = clients[1]:request_sync('textDocument/formatting', params, bufnr)
+    --   if not response or not response.result then return end
+    --   vim.lsp.util.apply_text_edits(response.result, bufnr, clients[1].offset_encoding)
+    -- end,
   },
 
   lsp_servers = function()
@@ -87,11 +99,7 @@ local config = {
       gopls = {},
 
       biome = {},
-      eslint = {
-        commands = {
-          LspFormat = { function() vim.cmd [[ EslintFixAll ]] end },
-        },
-      },
+      eslint = {},
 
       tailwindcss = {
         root_dir = nvim_lsp.util.root_pattern(
@@ -105,7 +113,7 @@ local config = {
 
       -- denols = {},
       ts_ls = {
-        capabilities = capDisableFormatting(defaultCapabilities()),
+        capabilities = cap_disable_formatting(default_capabilities()),
         completions = {
           completeFunctionCalls = true,
         },
@@ -159,11 +167,7 @@ local config = {
       },
 
       jsonls = {
-        commands = {
-          LspFormat = {
-            function() vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line '$', 0 }) end,
-          },
-        },
+        init_options = { provideFormatter = true },
       },
 
       nixd = {},
@@ -190,7 +194,7 @@ local config = {
         settings = {
           Lua = {
             diagnostics = {
-              globals = { "vim" },
+              globals = { "vim", "web" },
             },
             hint = {
               enable = true,
@@ -216,8 +220,8 @@ local config = {
 function _SetupLspServer(name, opts, autoformat_ft)
   local options = opts or {}
   local nvim_lsp = require 'lspconfig'
-  local cap = options.capabilities or defaultCapabilities()
-  cap = require('cmp_nvim_lsp').default_capabilities(cap)
+  local cap = options.capabilities or default_capabilities()
+  cap = require('blink.cmp').get_lsp_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', {
     on_attach = config.on_lsp_attached,
     capabilities = cap,
@@ -238,7 +242,7 @@ function plugin.config()
   vim.keymap.set('n', '<leader>df', config.toggle_autoformat)
   config.setup_file_autoformat(config.format_on_save_ft)
 
-  vim.api.nvim_create_user_command('LspInfoV', 'vert botright checkhealth lspconfig', {});
+  vim.api.nvim_create_user_command('LspInfoV', 'vert botright checkhealth vim.lsp', {});
 
   -- diagnostics config
   vim.diagnostic.config {
@@ -285,16 +289,8 @@ function config.on_lsp_attached(client, bufnr)
 
   -- Diagnostics
   vim.keymap.set('n', '<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  -- vim.keymap.set('n', '<localleader>d', '<cmd>Telescope diagnostics<cr>', opts)
-  vim.keymap.set('n', '<leader>xx', '<cmd>Telescope diagnostics<cr>', opts)
   vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-
-  -- Refresh code lenses
-  -- if client.supports_method('textDocument/codeLens') then
-  --   vim.lsp.codelens.refresh()
-  --   vim.cmd [[autocmd InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  -- end
 
   if client.supports_method('textDocument/inlayHints') then
     local filter = { bufnr = bufnr }
@@ -303,12 +299,6 @@ function config.on_lsp_attached(client, bufnr)
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), {})
     end, opts)
   end
-
-  -- Show function signature as a popup
-  -- require('lsp_signature').on_attach({
-  --   bind = true,
-  --   hi_parameter = 'LspSignatureActiveParameter',
-  -- }, bufnr)
 end
 
 function config.setup_file_autoformat(fts)
@@ -334,14 +324,30 @@ function config.toggle_autoformat()
 end
 
 function config.run_auto_formatter()
-  if config.is_autoformat_enabled then config.format_buffer() end
+  if not config.is_autoformat_enabled then return end
+
+  config.format_buffer()
+end
+
+function config.has_alt_formatter(client)
+  return config.alt_formatters[client.name]
 end
 
 function config.format_buffer()
-  if vim.fn.exists ':LspFormat' > 0 then
-    vim.cmd [[sil LspFormat]]
-  else
-    vim.cmd [[sil lua vim.lsp.buf.format({ async = false })]]
+  local buf = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = buf })
+  if #clients == 0 then return end
+
+  local is_formatted = false
+  for _, client in ipairs(clients) do
+    if config.has_alt_formatter(client) then
+      config.alt_formatters[client.name]()
+      is_formatted = true
+    end
+  end
+
+  if not is_formatted then
+    vim.lsp.buf.format({ async = false })
   end
 end
 
