@@ -3,19 +3,23 @@ local plugin = {
   'github/copilot.vim',
   event = 'VeryLazy',
   keys = {
-    { mode = 'n', '<leader>sm', function() M.toggleCopilot() end },
-    { mode = 'i', '<C-l>',      '<Plug>(copilot-accept-word)' },
-    { mode = 'i', '<m-]>',      '<Plug>(copilot-next)' },
-    { mode = 'i', '<m-[>',      '<Plug>(copilot-previous)' },
-    { mode = 'i', '<C-y>',      'copilot#Accept("")',            expr = true },
+    { mode = 'n', '<leader>sm', function() M.toggle_copilot() end },
   },
   config = function()
-    vim.g.copilot_enabled = false
+    vim.g.copilot_enabled = true
     vim.g.copilot_no_tab_map = true
+
+    vim.api.nvim_create_autocmd({ 'FileType', 'BufUnload' }, {
+      group = vim.api.nvim_create_augroup('github_copilot', { clear = true }),
+      callback = function(args)
+        vim.fn['copilot#On' .. args.event]()
+      end,
+    })
+    vim.fn['copilot#OnFileType']()
   end,
 }
 
-function M.toggleCopilot()
+function M.toggle_copilot()
   if (vim.g.copilot_enabled) then
     vim.cmd [[Copilot disable]]
     print 'Copilot disabled'
