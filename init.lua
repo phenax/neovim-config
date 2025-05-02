@@ -14,11 +14,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require '_settings'
-require('_settings.theme').setup 'default'
+require '_settings.theme'.setup 'default'
 require 'phenax'
 
-require('lazy').setup('_plugins', {
-  lockfile = vim.fn.expand '~' .. '/nixos/config/nvim/lazy.lock',
+require 'lazy'.setup('_plugins', {
+  lockfile = vim.fn.expand '~/nixos/config/nvim/lazy.lock',
   change_detection = {
     enabled = false,
     notify = false,
