@@ -1,19 +1,33 @@
+local M = { actions = {}, previewers = {} }
+
 local plugin = {
   'nvim-telescope/telescope.nvim',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'fdschmidt93/telescope-egrepify.nvim',
   },
+  keys = {
+    { mode = 'n', '<c-f>',            '<cmd>Telescope egrepify<cr>' },
+    { mode = 'n', '<leader>f' },
+    { mode = 'n', '<leader>tr',       '<cmd>Telescope resume<cr>' },
+    { mode = 'n', '<leader>tp',       '<cmd>Telescope pickers<cr>' },
+    { mode = 'n', '<leader>cf',       '<cmd>Telescope filetypes<cr>' },
+    { mode = 'n', '<leader>bb',       function() M.buffer_picker() end },
+    { mode = 'n', '<C-_>',            '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
+    { mode = 'n', '<localleader>gbb', '<cmd>Telescope git_branches<cr>' },
+    { mode = 'n', '<localleader>gbs', '<cmd>Telescope git_stash<cr>' },
+    { mode = 'n', 'z=',               '<cmd>Telescope spell_suggest<cr>' },
+    { mode = 'n', '<leader>xx',       '<cmd>Telescope diagnostics<cr>' },
+  },
+  cmd = { 'Telescope' },
 }
-
-local M = { actions = {}, previewers = {} }
 
 function plugin.config()
   local telescope = require 'telescope'
   local actions = require 'telescope.actions'
   local builtin = require 'telescope.builtin'
 
-  local keymaps = {
+  local common_keymaps = {
     ['<C-h>'] = actions.select_horizontal,
     ['<C-o>'] = M.actions.open_and_resume,
     ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
@@ -42,8 +56,8 @@ function plugin.config()
       },
 
       mappings = {
-        n = keymaps,
-        i = keymaps,
+        n = common_keymaps,
+        i = common_keymaps,
       },
     },
     pickers = {
@@ -67,9 +81,6 @@ function plugin.config()
     },
   }
 
-  -- Search
-  vim.keymap.set('n', '<c-f>', '<cmd>Telescope egrepify<cr>', { silent = true })
-
   -- Fuzzy file finder
   if vim.fn.isdirectory '.git' == 1 or vim.fn.filereadable '.git' == 1 then
     vim.keymap.set(
@@ -88,26 +99,14 @@ function plugin.config()
       }
     end)
   end
+end
 
-  -- Resume last telescope search
-  vim.keymap.set('n', '<leader>tr', builtin.resume)
-  vim.keymap.set('n', '<leader>tp', builtin.pickers)
-
-  -- File type
-  vim.keymap.set('n', '<leader>cf', builtin.filetypes)
-
-  -- Buffers
-  vim.keymap.set('n', '<leader>bb', function() builtin.buffers({ sort_mru = true }) end)
-
-  -- (Ctrl + /) Search inside current buffer
-  vim.keymap.set('n', '<C-_>', builtin.current_buffer_fuzzy_find)
-
-  -- Git branches
-  vim.keymap.set('n', '<localleader>gbb', builtin.git_branches)
-  vim.keymap.set('n', '<localleader>gbs', builtin.git_stash)
-
-  -- Spell suggestions
-  vim.keymap.set('n', 'z=', ':Telescope spell_suggest<CR>')
+function M.buffer_picker()
+  require 'telescope.builtin'.buffers({
+    select_current = true,
+    sort_mru = true,
+    -- sort_buffers = function(bufnr_a, bufnr_b) return bufnr_a < bufnr_b end,
+  })
 end
 
 function M.actions.git_apply_stash_file(stash_id)
