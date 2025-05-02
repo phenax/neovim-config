@@ -30,10 +30,6 @@ local function get_ts_config()
       },
     },
 
-    autotag = {
-      enable = true,
-    },
-
     textobjects = {
       enable = true,
       select = {
@@ -78,6 +74,16 @@ local function get_ts_config()
   }
 end
 
-function plugin.config() require('nvim-treesitter.configs').setup(get_ts_config()) end
+function plugin.config()
+  require('nvim-treesitter.configs').setup(get_ts_config())
+
+  require('nvim-ts-autotag').setup({
+    opts = {
+      enable_close = true,
+      enable_rename = true,
+      enable_close_on_slash = true,
+    },
+  })
+end
 
 return plugin
