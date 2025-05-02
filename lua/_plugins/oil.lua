@@ -52,6 +52,9 @@ M.keys = {
     }
   end,
 
+  -- Toggle listing on oil buffer (behaves weirdly)
+  ['<c-l>'] = function() vim.bo.buflisted = not vim.bo.buflisted end,
+
   -- Controls
   ['g?'] = { 'actions.show_help', mode = 'n' },
   ['R'] = { 'actions.refresh', mode = 'n' },

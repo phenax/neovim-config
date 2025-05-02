@@ -7,8 +7,8 @@ local plugin = {
   },
 }
 
-local function get_ts_config()
-  return {
+function plugin.config()
+  require('nvim-treesitter.configs').setup {
     ensure_installed = 'all',
 
     highlight = {
@@ -72,10 +72,6 @@ local function get_ts_config()
       },
     },
   }
-end
-
-function plugin.config()
-  require('nvim-treesitter.configs').setup(get_ts_config())
 
   require('nvim-ts-autotag').setup({
     opts = {

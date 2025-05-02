@@ -57,16 +57,15 @@ local config = {
   lsp_servers = function()
     local nvim_lsp = require 'lspconfig'
     return {
-      jdtls = {},
       racket_langserver = {},
       uiua = {},
-      zls = {},
       clangd = {},
-      -- ccls = {},
       unison = { settings = { maxCompletions = 100 } },
-      ocamlls = {},
       elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
-      asm_lsp = {},
+      -- jdtls = {},
+      -- zls = {},
+      -- ocamlls = {},
+      -- asm_lsp = {},
       -- vuels = {
       --   settings = {
       --     vetur = {
@@ -87,7 +86,7 @@ local config = {
       -- gleam = {},
       -- crystalline = {},
       -- astro = {},
-      svelte = {},
+      -- svelte = {},
 
       rubocop = {},
       solargraph = {
@@ -194,16 +193,16 @@ local config = {
         settings = {
           Lua = {
             diagnostics = {
-              globals = { "vim", "web" },
+              globals = { 'vim', 'web' },
             },
             hint = {
               enable = true,
             },
             workspace = {
               library = {
-                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-                [vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy"] = true,
+                [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                [vim.fn.stdpath('data') .. '/lazy/lazy.nvim/lua/lazy'] = true,
               },
               maxPreload = 100000,
               preloadFileSize = 10000,
@@ -231,7 +230,7 @@ function _SetupLspServer(name, opts, autoformat_ft)
 end
 
 function plugin.config()
-  vim.g.markdown_fenced_languages = { "ts=typescript", "js=javascript" }
+  vim.g.markdown_fenced_languages = { 'ts=typescript', 'js=javascript' }
 
   -- Lsp
   for name, options in pairs(config.lsp_servers()) do

@@ -3,35 +3,35 @@ local plugin = {
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
-}
-
-local config = {
-  bf_git_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
-  bf_file_ns = vim.api.nvim_create_namespace 'buffer_manager/file',
-  enable_git_indicators = true,
-  enable_file_indicators = true,
-}
-
--- Key bindings
-plugin.keys = {
-  {
-    mode = 'n',
-    '<localleader>b',
-    function() require('buffer_manager.ui').toggle_quick_menu() end,
-    noremap = true,
+  keys = {
+    {
+      mode = 'n',
+      '<localleader>b',
+      function() require 'buffer_manager.ui'.toggle_quick_menu() end,
+      noremap = true,
+    },
   },
 }
+
+-- `<localleader> index` keys
 for i = 0, 9 do
   local bidx = i
   if i == 0 then bidx = 10 end
   table.insert(plugin.keys, {
     mode = 'n',
     '<localleader>' .. i,
-    function() require('buffer_manager.ui').nav_file(bidx) end,
+    function() require 'buffer_manager.ui'.nav_file(bidx) end,
     noremap = true,
     silent = true,
   })
 end
+
+local M = {
+  bf_git_ns = vim.api.nvim_create_namespace 'buffer_manager/git',
+  enable_git_indicators = true,
+  bf_file_ns = vim.api.nvim_create_namespace 'buffer_manager/file',
+  enable_file_indicators = true,
+}
 
 function plugin.config()
   require('buffer_manager').setup {
@@ -44,7 +44,7 @@ function plugin.config()
     borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
     width = 0.7,
     height = 0.5,
-    highlight = 'Normal:BufferManagerBorder,FloatTitle:BufferManagerBorderTitle,FloatBorder:BufferManagerBorderTitle',
+    highlight = 'Normal:BufferManagerBorder',
     win_extra_options = {
       winhighlight = 'Normal:BufferManagerNormal,LineNr:BufferManagerLineNr,Visual:BufferManagerVisual,CursorLine:BufferManagerCursorLine',
       cursorline = true,
@@ -56,7 +56,7 @@ function plugin.config()
     callback = function(opts)
       -- Load files from git status into buffer manager
       vim.keymap.set('n', '<localleader>gg', function()
-        local files = vim.tbl_map(function(st) return st[2] end, config.get_git_status())
+        local files = vim.tbl_map(function(st) return st[2] end, M.get_git_status())
         vim.api.nvim_buf_set_lines(opts.buf, -1, -1, false, files)
       end, { buffer = true })
 
@@ -64,20 +64,20 @@ function plugin.config()
       vim.api.nvim_create_autocmd({ 'TextChanged', 'InsertLeave' }, {
         buffer = opts.buf,
         callback = function()
-          config.show_file_hint(opts.buf)
-          config.show_git_signs(opts.buf)
+          M.show_file_hint(opts.buf)
+          M.show_git_signs(opts.buf)
         end,
       })
-      config.show_file_hint(opts.buf)
-      config.show_git_signs(opts.buf)
+      M.show_file_hint(opts.buf)
+      M.show_git_signs(opts.buf)
     end,
   })
 end
 
-function config.show_file_hint(bufnr)
-  if not config.enable_file_indicators then return end;
+function M.show_file_hint(bufnr)
+  if not M.enable_file_indicators then return end;
 
-  vim.api.nvim_buf_clear_namespace(bufnr, config.bf_file_ns, 0, -1)
+  vim.api.nvim_buf_clear_namespace(bufnr, M.bf_file_ns, 0, -1)
 
   local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   if #buf_files == 0 or (#buf_files == 1 and buf_files[1] == '') then return end
@@ -90,7 +90,7 @@ function config.show_file_hint(bufnr)
         file_short = segments[#segments - 1] .. '/' .. segments[#segments]
       end
 
-      vim.api.nvim_buf_set_extmark(bufnr, config.bf_file_ns, index - 1, 0, {
+      vim.api.nvim_buf_set_extmark(bufnr, M.bf_file_ns, index - 1, 0, {
         virt_text = { { file_short, 'BufferManagerHighlight' }, { ' | ' } },
         virt_text_pos = 'inline',
         virt_lines_above = true,
@@ -100,15 +100,15 @@ function config.show_file_hint(bufnr)
   end
 end
 
-function config.show_git_signs(bufnr)
-  if not config.enable_git_indicators then return end;
+function M.show_git_signs(bufnr)
+  if not M.enable_git_indicators then return end;
 
-  vim.api.nvim_buf_clear_namespace(bufnr, config.bf_git_ns, 0, -1)
+  vim.api.nvim_buf_clear_namespace(bufnr, M.bf_git_ns, 0, -1)
 
   local buf_files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   if #buf_files == 0 or (#buf_files == 1 and buf_files[1] == '') then return end
 
-  local git_status = config.get_git_status()
+  local git_status = M.get_git_status()
 
   for index, file in ipairs(buf_files) do
     if file ~= '' then
@@ -116,15 +116,15 @@ function config.show_git_signs(bufnr)
 
       for _, gs in ipairs(matches) do
         local status, _ = unpack(gs)
-        vim.api.nvim_buf_set_extmark(bufnr, config.bf_git_ns, index - 1, 0, {
-          virt_text = { config.get_virt_text(status) },
+        vim.api.nvim_buf_set_extmark(bufnr, M.bf_git_ns, index - 1, 0, {
+          virt_text = { M.get_virt_text(status) },
         })
       end
     end
   end
 end
 
-function config.get_virt_text(status)
+function M.get_virt_text(status)
   if status == 'M' then
     return { '~', 'BufferManagerDiffChange' }
   elseif status == 'A' or status == '?' then
@@ -136,7 +136,7 @@ function config.get_virt_text(status)
   end
 end
 
-function config.get_git_status()
+function M.get_git_status()
   local ok, git_status = pcall(vim.fn.systemlist, { 'git', 'status', '--porcelain=v1' })
   if not ok then return {} end
   return vim.tbl_map(function(l)
