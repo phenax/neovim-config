@@ -48,7 +48,7 @@ function Slide:getLines()
   return self.lines
 end
 
-function M.setup(config)
+function M.initialize(config)
   M.config = vim.tbl_extend('force', M.config, config or {})
 
   vim.api.nvim_set_hl(M.namespace_id, 'NormalFloat', { bg = 'none', fg = '#ffffff' })

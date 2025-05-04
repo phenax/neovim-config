@@ -1,6 +1,5 @@
 -- Delete all buffers except for the current one
 vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
--- vim.keymap.set('n', '<leader>ca', [[ :CloseAll<cr> ]])
 
 -- vim.keymap.set({ 'n', 'v' }, 'gh', '_')
 -- vim.keymap.set({ 'n', 'v' }, 'gl', '$')
@@ -36,7 +35,7 @@ vim.keymap.set('v', 'K', [[:m '<-2<CR>gv=gv]], { noremap = true, silent = true }
 vim.keymap.set('v', 'J', [[:m '>+1<CR>gv=gv]], { noremap = true, silent = true })
 
 -- Save
-vim.keymap.set('n', '<C-s>', ':w<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-s>', '<cmd>w<cr>', { noremap = true, silent = true })
 
 -- Clipboard
 vim.keymap.set('v', '<C-c>', '"+y')
@@ -66,26 +65,5 @@ vim.keymap.set('x', 'g/', '<Esc>/\\%V')
 -- go to command line window (overrides changelist navigation keybind)
 vim.keymap.set('n', 'g;', ':<c-f>i')
 
--- Code folding
-vim.keymap.set('n', '<S-Tab>', 'zR')
--- vim.keymap.set('n', 'zx', 'zo')
--- vim.keymap.set('n', 'zc', 'zc')
-
 -- Spell checker
 vim.keymap.set('n', '<leader>==', ':setlocal spell! spelllang=en_us<CR>')
-
--- Toggle foldlevel: all or none
-local function toggle_foldlevel()
-  local max_level = 20
-  local min_level = 1
-
-  if vim.o.foldlevel >= max_level then
-    vim.cmd [[normal! zM<CR>]]
-    vim.o.foldlevel = min_level
-  else
-    vim.cmd [[normal! zR<CR>]]
-    vim.o.foldlevel = max_level
-  end
-end
-
-vim.keymap.set('n', '<leader><Tab>', toggle_foldlevel, { silent = true })

@@ -47,7 +47,7 @@ local M = {
 
 _G.Repl.apply_repl_mode = function(name) M.apply_repl_mode(name) end
 
-function M.init()
+function M.initialize()
   vim.keymap.set('n', '<c-t><c-t>', function() M.start_term() end)
   vim.keymap.set({ 'v', 'n' }, '<c-t><cr>', function() M.send_selection() end)
   vim.keymap.set('n', '<c-t>q', function() M.close_term() end)
@@ -74,8 +74,6 @@ function M.init()
     end
   end, { force = true })
 end
-
-M.init()
 
 function M.close_term(close)
   if M.channel_id then

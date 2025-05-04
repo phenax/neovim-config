@@ -25,10 +25,8 @@ local plugin = {
       win_split_mode = '25split',
       org_deadline_warning_days = 7,
       mappings = M.keybinds(),
-      org_capture_templates = M.captureTemplates(),
+      org_capture_templates = require 'phenax.orgmode.capture-templates'.capture_templates(M.path),
     }
-
-    require 'phenax.orgmodelinks'.setup()
 
     vim.api.nvim_create_autocmd('FileType', {
       pattern = { 'org', 'orgagenda' },
@@ -36,6 +34,11 @@ local plugin = {
         vim.opt_local.conceallevel = 2
       end,
     })
+
+    -- Extra modules
+    require 'phenax.orgmode.links'.initialize()
+    require 'phenax.orgmode.present'.initialize()
+    require 'phenax.orgmode.rpg'.initialize()
   end,
 }
 
@@ -74,110 +77,6 @@ function M.keybinds()
       org_cycle = '<leader>zza',
       org_global_cycle = '<leader>zzg'
     },
-  }
-end
-
-function M.captureTemplates()
-  return {
-    d = {
-      description = 'Daily',
-      target = vim.fs.joinpath(M.path, 'daily/%<%Y-%m>.org'),
-      template = [=[
-* %<%Y-%m-%d> %<%A> :daily:
-
-** What went well today?
-- %?
-
-** Grateful for?
--
-
-** Positive emotions felt today + why
--
-
-** Negative emotions felt today + why
--
-
-** Challenges
--
-
-** Stats [[+lua require 'phenax.orgmoderpg'.evaluateScore()][see current stats]]
-#+begin_src lua
-health_points(0)      -- physical condition
-persistance(0)        -- habits, routine
-money(0)              -- finances, stability
-experience_points(0)  -- outdoors, life experience, growth, creative expression, hobbies
-assist_points(0)      -- helping others, positive interactions, donations
-social_points(0)      -- family, friends, romantic
-essence(0)            -- mental health, sense of self
-productivity(0)       -- goals accomplished, work, career, growth, leadership
-#+end_src
-
-** Goals for tomorrow (copy to sidekick)
--
-
-
------
-
-]=],
-    },
-
-    W = {
-      description = 'Work project',
-      target = vim.fs.joinpath(M.path, 'projects/work/%^{Project name}.org'),
-      template = [[
-* %? :work:
-
-*** TODO Planning
-**** TODO ?
-*** TODO ?
-
-** Maybe
-
-** Resources
-
-** Notes
-
-]],
-    },
-
-    P = {
-      description = 'Personal project',
-      target = vim.fs.joinpath(M.path, 'projects/%^{Project name}.org'),
-      template = [[
-* %? :project:
-
-*** TODO
-- [ ]
-
-** Maybe
-
-** Resources
-
-** Notes
-
-]],
-    },
-
-    N = {
-      description = 'Blackhole',
-      target = vim.fs.joinpath(M.path, 'blackhole/logs.org'),
-      template = [=[
-* %T
-
-** What happened?
--
-
-** REAL consequence of that event
--
-
-** Learnings and positive effects on you from that event
--
-
-** Type "This does not define me. This is a small stepping stone that I stumbled on. Get back up and keep walking.". Do not copy paste please.
-
-
-]=],
-    }
   }
 end
 

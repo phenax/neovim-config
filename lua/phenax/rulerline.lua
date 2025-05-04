@@ -60,7 +60,7 @@ function M.set_ruler_format()
   vim.opt.statusline = '%<' .. [[%{repeat('─', winwidth(0))}]] .. '%= ' .. format
 end
 
-function M.init()
+function M.initialize()
   vim.opt.ruler = true
   vim.opt.laststatus = 1
   M.set_ruler_format()
@@ -96,7 +96,5 @@ function M.get_short_path(path, win_width)
     return dir .. '/' .. fname
   end
 end
-
-M.init()
 
 return M

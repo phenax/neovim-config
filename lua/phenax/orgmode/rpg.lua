@@ -17,6 +17,9 @@ local M = {
   },
 }
 
+function M.initialize()
+end
+
 function M.evaluateScore(dir)
   dir = dir or vim.fn.expand '~/nixos/extras/notes/daily'
   local orgmode_api = require 'orgmode.api'
@@ -53,6 +56,7 @@ function M.statsVisualChunk(score_keys, scores)
         local hl = '@markup.strong'
         if score <= 0 then hl = 'WarningMsg' end
         return {
+          ---@diagnostic disable-next-line: redundant-parameter
           { vim.fn.printf('%s %-14s', p.icon, p.label .. ':'), '' },
           { vim.fn.printf('%-10s', score),                     hl },
         }

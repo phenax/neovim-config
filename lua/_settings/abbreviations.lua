@@ -39,16 +39,16 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'http' },
   callback = function()
     -- Language
-    iabbr('get', "GET http://", { buffer = true })
-    iabbr('post', "POST http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
+    iabbr('get', "### \nGET http://", { buffer = true })
+    iabbr('post', "### \nPOST http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
       { buffer = true })
-    iabbr('put', "PUT http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
+    iabbr('put', "### \nPUT http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
       { buffer = true })
-    iabbr('patch', "PATCH http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
+    iabbr('patch', "### \nPATCH http://<CR>Content-Type: application/json<CR><CR>{<CR>  \"key\": \"value\"<CR>}<CR>",
       { buffer = true })
-    iabbr('del', "DELETE http://", { buffer = true })
+    iabbr('del', "### \nDELETE http://", { buffer = true })
 
     -- Api
-    iabbr('scr', [[{% dofile("./lua/_notes/http.lua").init(context)<CR><CR>%}]], { buffer = true })
+    iabbr('scr', '# @lang=lua\n> {%\nHTTP._(response, client)\n\n%}', { buffer = true })
   end,
 })

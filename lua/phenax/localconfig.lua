@@ -6,7 +6,7 @@ local M = {
   local_config_file = '.local.lua',
 }
 
-function M.init()
+function M.initialize()
   vim.keymap.set('n', '<leader>cz', function()
     M.prompt_add_safe(vim.fn.getcwd())
     M.load_local_config()
@@ -18,8 +18,6 @@ function M.init()
     end,
   })
 end
-
-M.init()
 
 function M.load_local_config()
   if not M.file_exists(M.local_config_file) then return end

@@ -1,6 +1,4 @@
-require 'phenax.localconfig'
-require 'phenax.orgmodelinks'
-require 'phenax.orgmodepresent'
-require 'phenax.orgmoderpg'
-require 'phenax.repl'
-require 'phenax.rulerline'
+require 'phenax.localconfig'.initialize()
+require 'phenax.repl'.initialize()
+require 'phenax.rulerline'.initialize()
+require 'phenax.folding'.initialize()

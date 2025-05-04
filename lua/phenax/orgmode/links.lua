@@ -1,8 +1,9 @@
 local M = {}
 
-function M.setup()
+function M.initialize()
   vim.api.nvim_create_autocmd('FileType', {
     pattern = 'org',
+    group = vim.api.nvim_create_augroup('phenax/orgmode_links', { clear = true }),
     callback = function()
       vim.keymap.set('n', '<Tab>', function() M.jumpToNextLink() end, { buffer = true })
       vim.keymap.set('n', '<S-Tab>', function() M.jumpToPreviousLink() end, { buffer = true })
