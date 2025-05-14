@@ -153,13 +153,12 @@ local config = {
       rust_analyzer = {
         settings = {
           ['rust-analyzer'] = {
-            cargo = { autoreload = true, allFeatures = true },
+            cargo = { autoreload = true },
             procMacro = { enable = true },
-            checkOnSave = { command = 'clippy' },
+            checkOnSave = true,
             diagnostics = {
               enable = true,
               disabled = { 'unresolved-proc-macro' },
-              enableExperimental = true,
             },
           },
         },
@@ -270,18 +269,16 @@ function config.on_lsp_attached(client, bufnr)
   -- Navigation
   vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 
-  vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', opts)
-  -- vim.keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-
+  vim.keymap.set('n', 'grr', '<cmd>Telescope lsp_references<cr>', opts)
   vim.keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', opts)
-  -- vim.keymap.set('n', '<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-
   vim.keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', opts)
+  -- vim.keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  -- vim.keymap.set('n', '<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   -- vim.keymap.set('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 
   -- Refactor actions
-  vim.keymap.set('n', '<localleader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.keymap.set('n', '<localleader>aa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  -- vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts) -- (now default)
+  -- vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts) -- (now default)
   vim.keymap.set('n', '<localleader>f', config.format_buffer, { silent = true, noremap = true })
   vim.keymap.set('n', '<leader>tu', '<cmd>LspRemoveUnused<cr>', opts)      -- Remove unused imports
   vim.keymap.set('n', '<leader>ta', '<cmd>LspAddMissingImports<cr>', opts) -- Add missing imports
