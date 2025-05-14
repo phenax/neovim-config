@@ -4,6 +4,7 @@ local plugin = {
   dependencies = {
     'rafamadriz/friendly-snippets',
     'fang2hou/blink-copilot',
+    'github/copilot.vim',
   },
 }
 
@@ -19,8 +20,13 @@ function plugin.config()
       ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
     },
     completion = {
-      documentation = { auto_show = true },
-      ghost_text = { enabled = false },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 80,
+      },
+      ghost_text = {
+        enabled = false,
+      },
     },
     fuzzy = { implementation = 'prefer_rust_with_warning' },
     sources = {
@@ -29,15 +35,14 @@ function plugin.config()
         org = { 'orgmode', 'path', 'snippets', 'buffer', 'copilot' },
       },
       providers = {
-        lsp = { score_offset = 20 },
-        snippets = { score_offset = 15 },
-        path = { score_offset = 10 },
-        buffer = { score_offset = 0 },
+        lsp = { score_offset = 20, fallbacks = { 'buffer' } },
+        snippets = { score_offset = 10 },
+        path = { score_offset = 5 },
         copilot = {
+          score_offset = 15,
           name = 'Copilot',
           module = 'blink-copilot',
           enabled = function() return vim.g.copilot_enabled end,
-          score_offset = 16,
           async = true,
           transform_items = function(_, items)
             for _, item in ipairs(items) do
@@ -46,6 +51,7 @@ function plugin.config()
             return items
           end,
         },
+        buffer = { score_offset = -5 },
         orgmode = {
           name = 'Orgmode',
           module = 'orgmode.org.autocompletion.blink',
