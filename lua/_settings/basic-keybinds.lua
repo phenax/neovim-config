@@ -1,6 +1,10 @@
 -- Delete all buffers except for the current one
 vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
 
+-- Case conversion on selection
+vim.keymap.set('x', '<leader>cc', [[:<c-u>s#\%V[_]\+\(.\)#\U\1#g<cr>]])
+vim.keymap.set('x', '<leader>cu', [[:<c-u>s#\%V[A-Z]\+#_\l\0#g<cr>]])
+
 -- vim.keymap.set({ 'n', 'v' }, 'gh', '_')
 -- vim.keymap.set({ 'n', 'v' }, 'gl', '$')
 
