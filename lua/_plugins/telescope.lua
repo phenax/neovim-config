@@ -8,7 +8,7 @@ local plugin = {
   },
   keys = {
     { mode = 'n', '<c-f>',            '<cmd>Telescope egrepify<cr>' },
-    { mode = 'n', '<leader>f' },
+    { mode = 'n', '<leader>f',        function() M.find_files() end },
     { mode = 'n', '<leader>tr',       '<cmd>Telescope resume<cr>' },
     { mode = 'n', '<leader>tp',       '<cmd>Telescope pickers<cr>' },
     { mode = 'n', '<leader>cf',       '<cmd>Telescope filetypes<cr>' },
@@ -25,7 +25,6 @@ local plugin = {
 function plugin.config()
   local telescope = require 'telescope'
   local actions = require 'telescope.actions'
-  local builtin = require 'telescope.builtin'
 
   local common_keymaps = {
     ['<C-h>'] = actions.select_horizontal,
@@ -78,26 +77,22 @@ function plugin.config()
     },
     extensions = {
       egrepify = {},
+      -- ['ui-select'] = {},
     },
   }
 
-  -- Fuzzy file finder
-  if vim.fn.isdirectory '.git' == 1 or vim.fn.filereadable '.git' == 1 then
-    vim.keymap.set(
-      'n',
-      '<leader>f',
-      function()
-        builtin.git_files {
-          show_untracked = true,
-        }
-      end
-    )
+  -- require('telescope').load_extension('ui-select')
+end
+
+function M.is_git()
+  return vim.fn.isdirectory '.git' == 1 or vim.fn.filereadable '.git' == 1
+end
+
+function M.find_files()
+  if M.is_git() then
+    require 'telescope.builtin'.git_files { show_untracked = true }
   else
-    vim.keymap.set('n', '<leader>f', function()
-      builtin.find_files {
-        hidden = true,
-      }
-    end)
+    require 'telescope.builtin'.find_files { hidden = true }
   end
 end
 
