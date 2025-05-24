@@ -1,14 +1,18 @@
-local plugin = {
+local blink_plugin = {
   'saghen/blink.cmp',
   version = '1.*',
   dependencies = {
-    'rafamadriz/friendly-snippets',
     'fang2hou/blink-copilot',
     'github/copilot.vim',
   },
 }
 
-function plugin.config()
+local plugin = {
+  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
+  blink_plugin,
+}
+
+function blink_plugin.config()
   require 'blink.cmp'.setup {
     keymap = {
       preset = 'default',

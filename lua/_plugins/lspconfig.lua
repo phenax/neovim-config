@@ -277,8 +277,8 @@ function config.on_lsp_attached(client, bufnr)
   -- vim.keymap.set('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 
   -- Refactor actions
-  -- vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts) -- (now default)
-  -- vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts) -- (now default)
+  vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   vim.keymap.set('n', '<localleader>f', config.format_buffer, { silent = true, noremap = true })
   vim.keymap.set('n', '<leader>tu', '<cmd>LspRemoveUnused<cr>', opts)      -- Remove unused imports
   vim.keymap.set('n', '<leader>ta', '<cmd>LspAddMissingImports<cr>', opts) -- Add missing imports
@@ -288,6 +288,7 @@ function config.on_lsp_attached(client, bufnr)
   vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
+  -- Toggle inlay hints
   if client.supports_method('textDocument/inlayHints') then
     local filter = { bufnr = bufnr }
     vim.lsp.inlay_hint.enable(false, filter)
