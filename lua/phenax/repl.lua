@@ -97,7 +97,8 @@ function M.start_term(force_open)
   if M.channel_id then return end
 
   M.channel_id = vim.api.nvim_buf_call(M.buffer, function()
-    return vim.fn.termopen(M.config.command, {
+    return vim.fn.jobstart(M.config.command, {
+      term = true,
       on_exit = function(_, status) M.close_term(status == 0) end,
     })
   end)
@@ -121,9 +122,9 @@ function M.toggle_window(force_open)
     else
       vim.api.nvim_win_set_height(M.window, math.floor(M.config.height(vim.o.lines)))
     end
-    vim.api.nvim_set_option_value('winfixbuf', true, { win = M.window })
-    vim.api.nvim_set_option_value('number', false, { win = M.window })
-    vim.api.nvim_set_option_value('signcolumn', 'no', { win = M.window })
+    -- vim.api.nvim_set_option_value('winfixbuf', true, { win = M.window })
+    -- vim.api.nvim_set_option_value('number', false, { win = M.window })
+    -- vim.api.nvim_set_option_value('signcolumn', 'no', { win = M.window })
     vim.api.nvim_set_option_value('winbar', M.config.command, { win = M.window })
 
     M.visible = true
