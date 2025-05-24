@@ -1,4 +1,5 @@
 return {
+  { 'sheerun/vim-polyglot' },
   {
     'mlochbaum/BQN',
     ft = { 'bqn' },
