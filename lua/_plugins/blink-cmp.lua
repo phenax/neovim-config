@@ -1,10 +1,6 @@
 local blink_plugin = {
   'saghen/blink.cmp',
   version = '1.*',
-  dependencies = {
-    'fang2hou/blink-copilot',
-    'github/copilot.vim',
-  },
 }
 
 local plugin = {
@@ -28,33 +24,18 @@ function blink_plugin.config()
         auto_show = true,
         auto_show_delay_ms = 80,
       },
-      ghost_text = {
-        enabled = false,
-      },
+      ghost_text = { enabled = false },
     },
     fuzzy = { implementation = 'prefer_rust_with_warning' },
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
       per_filetype = {
-        org = { 'orgmode', 'path', 'snippets', 'buffer', 'copilot' },
+        org = { 'orgmode', 'path', 'snippets', 'buffer' },
       },
       providers = {
-        lsp = { score_offset = 20, fallbacks = { 'buffer' } },
+        lsp = { score_offset = 20, fallbacks = {} },
+        path = { score_offset = 15 },
         snippets = { score_offset = 10 },
-        path = { score_offset = 5 },
-        copilot = {
-          score_offset = 15,
-          name = 'Copilot',
-          module = 'blink-copilot',
-          enabled = function() return vim.g.copilot_enabled end,
-          async = true,
-          transform_items = function(_, items)
-            for _, item in ipairs(items) do
-              item.kind_hl = '@phenax.pmenukind.copilot'
-            end
-            return items
-          end,
-        },
         buffer = { score_offset = -5 },
         orgmode = {
           name = 'Orgmode',

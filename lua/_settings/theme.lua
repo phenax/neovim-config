@@ -30,7 +30,6 @@ function theme.highlight.ui()
     WinSeparator = { bg = 'none', fg = colors.slate[400] },
     Pmenu = { bg = colors.slate[300], fg = colors.slate[600] },
     PmenuSel = { bg = colors.accent, fg = colors.white },
-    ['@phenax.pmenukind.copilot'] = { fg = colors.red[200] },
     FloatBorder = { fg = colors.accent },
     netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
     WinBar = { bg = colors.bg[100], fg = colors.slate[600] },
