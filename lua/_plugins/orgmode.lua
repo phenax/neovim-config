@@ -1,17 +1,17 @@
 local colors = require '_settings.colors'
 
-local M = {
-  path = vim.fn.expand '~/nixos/extras/notes',
-}
+local M = {}
 
 local plugin = {
   'nvim-orgmode/orgmode',
   event = 'VeryLazy',
   ft = { 'org' },
   config = function()
+    local config = require 'phenax.orgmode.config'
+
     require 'orgmode'.setup {
-      org_agenda_files = vim.fs.joinpath(M.path, '**/*.org'),
-      org_default_notes_file = vim.fs.joinpath(M.path, 'index.org'),
+      org_agenda_files = vim.fs.joinpath(config.path, '**/*.org'),
+      org_default_notes_file = config.notes_entry_file,
       org_todo_keywords = { 'TODO', 'ACTIVE', '|', 'DONE', 'BLOCKED' },
       org_todo_keyword_faces = {
         BLOCKED = ':foreground gray',
@@ -25,7 +25,8 @@ local plugin = {
       win_split_mode = '25split',
       org_deadline_warning_days = 7,
       mappings = M.keybinds(),
-      org_capture_templates = require 'phenax.orgmode.capture-templates'.capture_templates(M.path),
+      org_capture_templates =
+          require 'phenax.orgmode.capture-templates'.capture_templates(config.path),
     }
 
     vim.api.nvim_create_autocmd('FileType', {
