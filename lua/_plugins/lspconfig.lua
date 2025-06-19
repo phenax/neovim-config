@@ -39,6 +39,7 @@ local config = {
     'uiua',
     'unison',
     'vue',
+    'gleam',
   },
 
   alt_formatters = {
@@ -62,6 +63,7 @@ local config = {
       clangd = {},
       unison = { settings = { maxCompletions = 100 } },
       elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
+      gleam = {},
       -- jdtls = {},
       -- zls = {},
       -- ocamlls = {},
@@ -83,7 +85,6 @@ local config = {
       -- },
       -- purescriptls = {},
       -- metals = {}, -- scala
-      -- gleam = {},
       -- crystalline = {},
       -- astro = {},
       -- svelte = {},
