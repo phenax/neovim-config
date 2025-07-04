@@ -117,20 +117,6 @@ local config = {
         completions = {
           completeFunctionCalls = true,
         },
-        init_options = {
-          preferences = {
-            -- Inlay hints
-            interactiveInlayHints = true,
-            importModuleSpecifierPreference = 'non-relative',
-            includeInlayEnumMemberValueHints = true,
-            includeInlayFunctionLikeReturnTypeHints = false,
-            includeInlayFunctionParameterTypeHints = false,
-            includeInlayParameterNameHints = 'all',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayVariableTypeHints = false, -- Disabled because it's noisy
-          },
-        },
         commands = {
           LspRemoveUnused = {
             function()

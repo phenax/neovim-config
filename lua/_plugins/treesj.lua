@@ -3,9 +3,9 @@ local plugin = {
   dependencies = { 'nvim-treesitter/nvim-treesitter' },
 
   keys = {
-    { mode = 'n', '<leader>tt', ':TSJToggle<cr>' },
-    { mode = 'n', '<leader>ts', ':TSJSplit<cr>' },
-    { mode = 'n', '<leader>tj', ':TSJJoin<cr>' },
+    { mode = 'n', '<leader>tt', '<cmd>TSJToggle<cr>' },
+    { mode = 'n', '<leader>ts', '<cmd>TSJSplit<cr>' },
+    { mode = 'n', '<leader>tj', '<cmd>TSJJoin<cr>' },
   },
 }
 function plugin.config()

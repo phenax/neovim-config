@@ -4,8 +4,8 @@ local blink_plugin = {
 }
 
 local plugin = {
-  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
   blink_plugin,
+  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
 }
 
 function blink_plugin.config()
