@@ -24,19 +24,19 @@ function theme.highlight.ui()
     Whitespace = { fg = colors.slate[400] },
     SignColumn = { bg = 'none' },
     LineNr = { bg = 'none', fg = colors.slate[500] },
-    StatusLine = { bg = 'none', fg = colors.accent },
+    StatusLine = { bg = 'none', fg = colors.accent[100] },
     StatusLineNC = { bg = 'none', fg = colors.slate[400] },
     VertSplit = { bg = 'none', fg = colors.slate[400] },
     WinSeparator = { bg = 'none', fg = colors.slate[400] },
     Pmenu = { bg = colors.slate[300], fg = colors.slate[600] },
-    PmenuSel = { bg = colors.accent, fg = colors.white },
-    FloatBorder = { fg = colors.accent },
+    PmenuSel = { bg = colors.accent[100], fg = colors.white },
+    FloatBorder = { fg = colors.accent[100] },
     netrwMarkFile = { bg = colors.slate[500], fg = colors.slate[700] },
     WinBar = { bg = colors.bg[100], fg = colors.slate[600] },
     WinBarNC = { bg = colors.bg[100], fg = colors.slate[400] },
     Folded = { bg = colors.bg[300], fg = colors.slate[600] },
     RulerFileType = { bg = 'none', fg = colors.white, bold = true },
-    RulerFilePath = { bg = colors.accent, fg = colors.white, bold = true },
+    RulerFilePath = { bg = colors.accent[100], fg = colors.white, bold = true },
     RulerFileStatus = { bg = colors.yellow[100], fg = colors.bg[100], bold = true },
   }
 end
@@ -47,38 +47,37 @@ function theme.highlight.code()
     Function = { fg = colors.blue[100] },
     Special = { fg = colors.blue[300] },
     Constant = { link = 'String' },
-    Keyword = { fg = colors.violet[300] },
-    Statement = { fg = colors.violet[500] },
+    Keyword = { fg = colors.teal[600] },
+    Statement = { fg = colors.teal[700] },
     Number = { fg = colors.yellow[100] },
     Type = { fg = colors.slate[700] },
-    Boolean = { fg = colors.yellow[100] },
+    Boolean = { fg = colors.pink[100] },
     Todo = { fg = colors.red[100], bold = true },
     ['@variable'] = { fg = colors.white },
     -- Title = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
-    ['@markup.heading.1.markdown'] = { bg = colors.violet[300], fg = colors.slate[100], bold = true },
-    ['@markup.heading.2.markdown'] = { bg = colors.blue[300], fg = colors.slate[100], bold = true },
+    ['@markup.heading.1.markdown'] = { bg = colors.accent[200], fg = colors.slate[100], bold = true },
+    ['@markup.heading.2.markdown'] = { bg = colors.green[500], fg = colors.slate[100], bold = true },
     ['@markup.strong'] = { fg = colors.green[200], bold = true },
-    ['@markup.link'] = { fg = colors.violet[300] },
+    ['@markup.link'] = { fg = colors.accent[200] },
 
     Tag = { fg = colors.blue[100] },
     ['@tag.builtin'] = { fg = colors.blue[300] },
     ['@tag.attribute'] = { fg = colors.blue[200] },
     ['@variable.member'] = { fg = colors.white },
+  }
+end
 
-    RainbowDelimiter1 = { fg = colors.slate[800] },
-    RainbowDelimiter2 = { fg = colors.violet[200] },
-    RainbowDelimiter3 = { fg = colors.red[500] },
-    RainbowDelimiter4 = { fg = colors.slate[600] },
-    RainbowDelimiter5 = { fg = colors.blue[600] },
-    RainbowDelimiter6 = { fg = colors.green[600] },
+function theme.highlight.oil()
+  theme.update_hl {
+    OilDir = { fg = colors.accent[200] },
   }
 end
 
 function theme.highlight.quickfix()
   theme.update_hl {
     BqfPreviewFloat = { bg = colors.bg[100], fg = colors.slate[400] },
-    BqfPreviewBorder = { bg = colors.bg[100], fg = colors.accent },
-    BqfPreviewTitle = { bg = colors.accent, fg = colors.white },
+    BqfPreviewBorder = { bg = colors.bg[100], fg = colors.accent[100] },
+    BqfPreviewTitle = { bg = colors.accent[100], fg = colors.white },
   }
 end
 
@@ -103,7 +102,7 @@ function theme.highlight.buffer_manager()
   theme.update_hl {
     BufferManagerModified = { fg = colors.yellow[300], bold = true },
     BufferManagerNormal = { bg = bg, fg = colors.slate[600] },
-    BufferManagerBorder = { bg = bg, fg = colors.accent },
+    BufferManagerBorder = { bg = bg, fg = colors.accent[100] },
     BufferManagerBorderTitle = { bg = colors.red[200], fg = colors.slate[500] },
     BufferManagerLineNr = { bg = bg, fg = colors.white },
     BufferManagerVisual = { bg = colors.slate[400], fg = colors.white },
@@ -111,7 +110,7 @@ function theme.highlight.buffer_manager()
     BufferManagerDiffAdd = { fg = colors.green[200], bold = true },
     BufferManagerDiffDelete = { fg = colors.red[200], bold = true },
     BufferManagerCursorLine = { bg = colors.slate[200], fg = colors.white },
-    BufferManagerHighlight = { fg = colors.violet[300], bold = true },
+    BufferManagerHighlight = { fg = colors.accent[200], bold = true },
   }
 end
 
@@ -119,13 +118,13 @@ function theme.highlight.telescope()
   local bg = colors.bg[100]
   theme.update_hl {
     TelescopeNormal = { bg = bg },
-    TelescopeBorder = { bg = bg, fg = colors.accent },
+    TelescopeBorder = { bg = bg, fg = colors.accent[100] },
     TelescopePreviewNormal = { bg = bg },
-    TelescopePreviewTitle = { bg = colors.accent, fg = colors.white },
+    TelescopePreviewTitle = { bg = colors.accent[100], fg = colors.white },
     TelescopeResultsTitle = { bg = bg, fg = bg },
     TelescopeResultsBorder = { bg = bg, fg = bg },
     TelescopePromptNormal = { bg = bg },
-    TelescopePromptTitle = { bg = colors.accent, fg = colors.white },
+    TelescopePromptTitle = { bg = colors.accent[100], fg = colors.white },
     TelescopePromptPrefix = { bg = bg },
   }
 end
@@ -159,10 +158,10 @@ function theme.highlight.mini_files()
   local bg = colors.bg[300]
   theme.update_hl {
     MiniFilesBorder = { bg = bg, fg = bg },
-    MiniFilesBorderModified = { bg = colors.accent, fg = colors.accent },
+    MiniFilesBorderModified = { bg = colors.accent[100], fg = colors.accent[100] },
     MiniFilesNormal = { bg = bg, fg = colors.slate[600] },
     MiniFilesTitle = { bg = bg, fg = colors.white, bold = true },
-    MiniFilesTitleFocused = { bg = colors.accent, fg = colors.white, bold = true },
+    MiniFilesTitleFocused = { bg = colors.accent[100], fg = colors.white, bold = true },
     MiniFilesCursorLine = { bg = colors.slate[200], bold = true },
   }
 end
@@ -192,8 +191,8 @@ function theme.highlight.orgmode()
     ['@org.keyword.done'] = { fg = colors.green[400] },
     ['@org.plan'] = { fg = colors.slate[600] },
     ['@org.properties'] = { fg = colors.red[100] },
-    ['@org.tag'] = { fg = colors.accent },
-    ['@org.timestamp.active'] = { fg = colors.accent },
+    ['@org.tag'] = { fg = colors.accent[100] },
+    ['@org.timestamp.active'] = { fg = colors.accent[100] },
     ['@org.drawer'] = { fg = colors.slate[400] },
     ['@org.agenda.scheduled'] = { fg = colors.green[500] },
     ['@org.agenda.deadline'] = { fg = colors.red[200] },
