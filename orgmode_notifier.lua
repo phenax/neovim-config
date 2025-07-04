@@ -1,7 +1,6 @@
 vim.opt.runtimepath:append(vim.fn.stdpath('data') .. '/lazy/orgmode')
 
 local config = dofile(vim.fn.stdpath('config') .. '/lua/phenax/orgmode/config.lua')
--- local config = dofile('/home/imsohexy/nixos/config/nvim/lua/phenax/orgmode/config.lua')
 local M = {}
 
 function M.init()
@@ -18,7 +17,7 @@ function M.notification_options()
     cron_enabled = true,
     deadline_reminder = true,
     scheduled_reminder = true,
-    reminder_time = { 0, 2, 10, 15 },
+    reminder_time = { 2, 15 },
     cron_notifier = function(tasks)
       for _, task in ipairs(tasks) do
         M.send_org_notification(task)
