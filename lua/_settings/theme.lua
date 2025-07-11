@@ -38,6 +38,7 @@ function theme.highlight.ui()
     RulerFileType = { bg = 'none', fg = colors.white, bold = true },
     RulerFilePath = { bg = colors.accent[100], fg = colors.white, bold = true },
     RulerFileStatus = { bg = colors.yellow[100], fg = colors.bg[100], bold = true },
+    YankHighlight = { bg = colors.slate[600] },
   }
 end
 

@@ -12,6 +12,10 @@ vim.opt.mouse = 'c'
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
+-- Tab
+vim.opt.showtabline = 1
+vim.opt.tabline = ''
+
 vim.opt.number = true
 vim.opt.relativenumber = false
 
@@ -65,3 +69,11 @@ vim.opt.listchars = {
   trail = '.',
   tab = '| ',
 }
+
+-- Highlight copied text
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('phenax/TextYankHl', {}),
+  callback = function()
+    vim.highlight.on_yank { higroup = 'YankHighlight', timeout = 100 }
+  end,
+})
