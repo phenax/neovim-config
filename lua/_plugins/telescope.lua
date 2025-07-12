@@ -17,7 +17,6 @@ local plugin = {
     { mode = 'n', '<localleader>gbb', '<cmd>Telescope git_branches<cr>' },
     { mode = 'n', '<localleader>gbs', '<cmd>Telescope git_stash<cr>' },
     { mode = 'n', 'z=',               '<cmd>Telescope spell_suggest<cr>' },
-    { mode = 'n', '<leader>xx',       '<cmd>Telescope diagnostics<cr>' },
   },
   cmd = { 'Telescope' },
 }

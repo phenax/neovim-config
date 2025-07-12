@@ -5,8 +5,9 @@ vim.cmd [[command! CloseAll :%bd|e#|bd#|'"]]
 vim.keymap.set('x', '<leader>cc', [[:<c-u>s#\%V[_]\+\(.\)#\U\1#g<cr>]])
 vim.keymap.set('x', '<leader>cu', [[:<c-u>s#\%V[A-Z]\+#_\l\0#g<cr>]])
 
--- vim.keymap.set({ 'n', 'v' }, 'gh', '_')
--- vim.keymap.set({ 'n', 'v' }, 'gl', '$')
+-- Alt keys
+vim.keymap.set({ 'n', 'v' }, 'gh', '_')
+vim.keymap.set({ 'n', 'v' }, 'gl', '$')
 
 -- tab close
 vim.keymap.set('n', '<leader>qq', '<cmd>tabclose<cr>')
@@ -54,17 +55,8 @@ vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 vim.keymap.set('n', '<leader>sw', ':mksession! .vim.session<cr>')
 vim.keymap.set('n', '<leader>sl', ':source .vim.session<cr>')
 
--- No highlight
-vim.keymap.set('n', '<c-\\>', ':noh<cr>')
-
--- Replace word
-vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
-
 -- Sort selection
 vim.keymap.set('v', 'gs', ':sort<cr>')
-
--- Search in selection only
-vim.keymap.set('x', 'g/', '<Esc>/\\%V')
 
 -- go to command line window (overrides changelist navigation keybind)
 vim.keymap.set('n', 'g;', ':<c-f>i')

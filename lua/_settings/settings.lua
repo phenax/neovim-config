@@ -17,7 +17,7 @@ vim.opt.showtabline = 1
 vim.opt.tabline = ''
 
 vim.opt.number = true
-vim.opt.relativenumber = false
+vim.opt.relativenumber = true
 
 vim.opt.showmatch = true
 vim.opt.ignorecase = true
@@ -60,6 +60,10 @@ vim.opt.concealcursor = 'c'
 
 -- Short messages
 vim.opt.shortmess:append 'TIc'
+
+-- Path search
+-- vim.opt.path:append '**'
+vim.opt.maxmempattern = 10000
 
 -- Whitespace characters
 vim.opt.list = true
