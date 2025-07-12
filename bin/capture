@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+set -e -o pipefail
+
+ENV_FILE="./env.json"
+
+capture() {
+  local index="$1"
+  local name="$2"
+  local jq_expr="$3"
+  value=$(jq -r --slurp ".[$index]$jq_expr")
+  env_json="$(cat "$ENV_FILE" 2>/dev/null || echo "{}")"
+  set_env "$name" "$value"
+}
+
+tmp=$(mktemp -u /tmp/curltempout-XXXXX)
+trap 'rm -f "$tmp"' EXIT
+
+# Stream out
+cat | tee "$tmp"
+
+case "$1" in
+  -h|--header) capture 0 "$2" "$3" < "$tmp" ;;
+  *) capture 1 "$1" "$2" < "$tmp" ;;
+esac

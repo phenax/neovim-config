@@ -9,11 +9,17 @@ local defaultConfig = {
   vertical = true,
   -- Preprocess input before running
   preprocess = function(input) return input end,
+  -- Restart the job for every send
+  restart_job_on_send = false,
 
   -- Dimensions
   width = function(cols) return cols * 0.4 end,
   height = function(lines) return lines * 0.4 end,
 }
+
+local function command_slashify(input)
+  return input:gsub('\\\n', '\n'):gsub('\n', ' \\\n')
+end
 
 _G.Repl = vim.tbl_extend('force', defaultConfig, {
   -- Repl configurations
@@ -22,18 +28,19 @@ _G.Repl = vim.tbl_extend('force', defaultConfig, {
     shell = {
       config = {
         command = vim.env['SHELL'],
-        preprocess = function(input)
-          return input:gsub('\\\n', '\n'):gsub('\n', '\\\n')
-        end,
+        preprocess = command_slashify,
       },
     },
-    spider_repl = {
-      config = {
-        command = 'nix-shell -p nodejs_23 --run "LD_LIBRARY_PATH="" npx spider-repl -b brave"',
-        vertical = true,
-        width = function(w) return w * 0.3 end,
-      },
+    shell_curl = {
+      config = require 'phenax.curly-repl'.repl_config(),
     },
+    -- spider_repl = {
+    --   config = {
+    --     command = 'nix-shell -p nodejs_23 --run "LD_LIBRARY_PATH="" npx spider-repl -b brave"',
+    --     vertical = true,
+    --     width = function(w) return w * 0.3 end,
+    --   },
+    -- },
   },
 })
 
@@ -76,32 +83,48 @@ function M.initialize()
 end
 
 function M.close_term(close)
-  if M.channel_id then
-    pcall(vim.fn.jobstop, M.channel_id)
-  end
+  M.stop_job()
   M.visible = false
-  M.channel_id = nil
-  if close and M.is_window_valid() then
-    vim.api.nvim_win_close(M.window, true)
+  if close and M.window ~= nil then
+    pcall(vim.api.nvim_win_close, M.window, true)
     M.window = nil
   end
-  if close and M.is_buffer_valid() then
-    vim.api.nvim_buf_delete(M.buffer, { force = true })
+  if close and M.buffer ~= nil then
+    pcall(vim.api.nvim_buf_delete, M.buffer, { force = true })
     M.buffer = nil
   end
+end
+
+function M.restart_job()
+  M.stop_job()
+  M.start_job()
+end
+
+function M.stop_job()
+  if M.channel_id ~= nil then
+    pcall(vim.fn.jobstop, M.channel_id)
+  end
+  M.channel_id = nil
+end
+
+function M.start_job()
+  M.channel_id = vim.api.nvim_buf_call(M.buffer, function()
+    local env = M.config.env
+    if type(env) == "function" then env = env() end
+    return vim.fn.jobstart(M.config.command, {
+      term = true,
+      env = env,
+      -- on_exit = function(_, status) M.close_term(status == 0) end,
+    })
+  end)
 end
 
 function M.start_term(force_open)
   M.toggle_window(force_open)
 
-  if M.channel_id then return end
-
-  M.channel_id = vim.api.nvim_buf_call(M.buffer, function()
-    return vim.fn.jobstart(M.config.command, {
-      term = true,
-      on_exit = function(_, status) M.close_term(status == 0) end,
-    })
-  end)
+  if not M.channel_id then
+    M.start_job()
+  end
 end
 
 function M.toggle_window(force_open)
@@ -159,9 +182,12 @@ function M.send_interrupt()
 end
 
 function M.send(contents, with_return)
+  if M.config.restart_job_on_send then
+    M.close_term(true)
+  end
+
   if M.channel_id == nil or M.channel_id <= 0 then
-    print('Starting term...')
-    M.start_term()
+    M.start_term(M.config.restart_job_on_send)
   end
 
   if M.channel_id == nil or M.channel_id <= 0 then return end

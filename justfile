@@ -2,7 +2,7 @@ set positional-arguments
 
 test *args:
   # Update rtp twice because lazy.nvim overrides rtp
-  nvim --clean -u NONE -c "set rtp^=$PWD" -c "lua dofile('$PWD/init.lua')" -c "set rtp^=$PWD" "$@"
+  nvim --clean -u NONE -c "lua vim.g.__phenax_test = true" -c "set rtp^=$PWD" -c "lua dofile('$PWD/init.lua')" -c "set rtp^=$PWD" "$@"
 
 test-other dir *args:
   #!/usr/bin/env bash

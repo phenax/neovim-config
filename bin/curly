@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+
+set -e -o pipefail
+
+parse_response() {
+  IFS= read -r first_line
+
+  has_headers=0
+  http_status=""
+  if (echo "$first_line" | grep -E "^HTTP.*" >/dev/null 2>&1); then
+    http_status=$(echo "$first_line" | sed 's/[\r ]*$//');
+    has_headers=1
+  fi;
+
+  if [ "$has_headers" = "1" ]; then
+    (jq -n --arg val "$http_status" '{ "__status": $val }'
+    while IFS= read -r line; do
+      [ "$line" = $'\r' ] && break;
+      header_to_json_part "$(echo "$line" | sed 's/\r//g')";
+    done) \
+      | jq --slurp 'add';
+    cat;
+  else
+    echo "{ \"__status\": \"?\" }" | jq;
+    echo "$first_line";
+    cat;
+  fi
+}
+
+header_to_json_part() {
+  local key=$(echo "$1" | cut -d: -f1)
+  local val=$(echo "$1" | cut -d: -f2-)
+  jq -n --arg name "$key" --arg val "$val" '{ $name: ($val | trim) }'
+}
+
+curl --no-progress-meter -i "$@" | parse_response;

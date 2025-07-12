@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -e -o pipefail
+
+tmp=$(mktemp -u /tmp/curltempout-XXXXX)
+trap 'rm -f "$tmp"' EXIT
+
+cat > "$tmp"
+
+show_formatted() {
+  jq "$@" < "$tmp" 2>/dev/null || cat "$tmp"
+}
+
+case "$1" in
+  head) show_formatted --slurp '.[0]' ;;
+  body) show_formatted --slurp '.[0].__status, .[1]' ;;
+  body_only) show_formatted --slurp '.[1]' ;;
+  *) show_formatted ;;
+esac

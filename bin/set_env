@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -e -o pipefail
+
+ENV_FILE="./env.json"
+
+add_env() {
+  jq --arg name "$1" \
+     --arg value "$2" \
+     '. + { $name: $value }'
+}
+
+append_to_env_file() {
+  env_json="$(cat "$ENV_FILE" 2>/dev/null || echo "{}")"
+  echo "$env_json" | add_env "$1" "$2" > "$ENV_FILE"
+}
+
+append_to_env_file "$1" "$2";
+echo "Captured $1: $2" 1>&2;
