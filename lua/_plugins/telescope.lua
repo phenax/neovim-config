@@ -6,18 +6,18 @@ local plugin = {
     'nvim-lua/plenary.nvim',
     'fdschmidt93/telescope-egrepify.nvim',
   },
-  keys = {
+  keys = vim.list_extend(require 'phenax.telescope_buffers'.lazy_keys(), {
     { mode = 'n', '<c-f>',            '<cmd>Telescope egrepify<cr>' },
     { mode = 'n', '<leader>f',        function() M.find_files() end },
     { mode = 'n', '<leader>tr',       '<cmd>Telescope resume<cr>' },
     { mode = 'n', '<leader>tp',       '<cmd>Telescope pickers<cr>' },
     { mode = 'n', '<leader>cf',       '<cmd>Telescope filetypes<cr>' },
-    { mode = 'n', '<leader>bb',       function() M.buffer_picker() end },
+    { mode = 'n', '<leader>bb',       function() M.telescope_buffer_picker() end }, -- TODO: remove if all good
     { mode = 'n', '<C-_>',            '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
     { mode = 'n', '<localleader>gbb', '<cmd>Telescope git_branches<cr>' },
     { mode = 'n', '<localleader>gbs', '<cmd>Telescope git_stash<cr>' },
     { mode = 'n', 'z=',               '<cmd>Telescope spell_suggest<cr>' },
-  },
+  }),
   cmd = { 'Telescope' },
 }
 
@@ -30,6 +30,15 @@ function plugin.config()
     ['<C-o>'] = M.actions.open_and_resume,
     ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
   }
+  local normal_keymaps = {}
+  for i = 1, 10 do
+    local key = i
+    if i == 10 then key = 0 end
+    -- Select item by index alt+num
+    common_keymaps['<M-' .. key .. '>'] = M.actions.select_item_in_picker(i - 1)
+    -- Open item by index
+    normal_keymaps['' .. key] = M.actions.open_item_in_picker(i - 1)
+  end
 
   telescope.setup {
     defaults = {
@@ -43,7 +52,7 @@ function plugin.config()
         width = { padding = 0 },
         height = { 0.7, min = 25 },
         anchor = 'S',
-        anchor_padding = 0,
+        anchor_padding = -1,
         prompt_position = 'top',
         preview_cutoff = 120,
       },
@@ -54,7 +63,7 @@ function plugin.config()
       },
 
       mappings = {
-        n = common_keymaps,
+        n = vim.tbl_extend('force', common_keymaps, normal_keymaps),
         i = common_keymaps,
       },
     },
@@ -76,11 +85,8 @@ function plugin.config()
     },
     extensions = {
       egrepify = {},
-      -- ['ui-select'] = {},
     },
   }
-
-  -- require('telescope').load_extension('ui-select')
 end
 
 function M.is_git()
@@ -95,12 +101,31 @@ function M.find_files()
   end
 end
 
-function M.buffer_picker()
+function M.telescope_buffer_picker()
   require 'telescope.builtin'.buffers({
     select_current = true,
     sort_mru = true,
-    -- sort_buffers = function(bufnr_a, bufnr_b) return bufnr_a < bufnr_b end,
   })
+end
+
+function M.actions.select_item_in_picker(idx)
+  return function(promptbuf)
+    local action_state = require 'telescope.actions.state'
+    local picker = action_state.get_current_picker(promptbuf)
+    picker:set_selection(idx)
+  end
+end
+
+function M.actions.open_item_in_picker(idx)
+  return function(promptbuf)
+    local action_state = require 'telescope.actions.state'
+    local action_set = require 'telescope.actions.set'
+    local picker = action_state.get_current_picker(promptbuf)
+    picker:set_selection(idx)
+    vim.schedule(function()
+      action_set.select(promptbuf, 'default')
+    end)
+  end
 end
 
 function M.actions.git_apply_stash_file(stash_id)

@@ -42,6 +42,8 @@ function theme.highlight.ui()
     RulerFilePath = { bg = colors.accent[100], fg = colors.white, bold = true },
     RulerFileStatus = { bg = colors.yellow[100], fg = colors.bg[100], bold = true },
     YankHighlight = { bg = colors.slate[600] },
+    Search = { bg = colors.slate[600] },
+    CurSearch = { bg = colors.teal[800], fg = colors.slate[300], bold = true },
   }
 end
 
@@ -101,22 +103,31 @@ function theme.highlight.fugitive()
   }
 end
 
-function theme.highlight.buffer_manager()
-  local bg = colors.bg[100]
+function theme.highlight.phenax_buffers()
   theme.update_hl {
-    BufferManagerModified = { fg = colors.yellow[300], bold = true },
-    BufferManagerNormal = { bg = bg, fg = colors.slate[600] },
-    BufferManagerBorder = { bg = bg, fg = colors.accent[100] },
-    BufferManagerBorderTitle = { bg = colors.red[200], fg = colors.slate[500] },
-    BufferManagerLineNr = { bg = bg, fg = colors.white },
-    BufferManagerVisual = { bg = colors.slate[400], fg = colors.white },
-    BufferManagerDiffChange = { fg = colors.yellow[300], bold = true },
-    BufferManagerDiffAdd = { fg = colors.green[200], bold = true },
-    BufferManagerDiffDelete = { fg = colors.red[200], bold = true },
-    BufferManagerCursorLine = { bg = colors.slate[200], fg = colors.white },
-    BufferManagerHighlight = { fg = colors.accent[200], bold = true },
+    PhenaxBufferIndex = { link = 'Number' },
+    PhenaxBufferShortName = { fg = colors.teal[800], bold = true },
+    PhenaxBufferName = { fg = colors.slate[800] },
+    PhenaxBufferNameChanged = { fg = colors.yellow[300], bold = true },
   }
 end
+
+-- function theme.highlight.buffer_manager()
+--   local bg = colors.bg[100]
+--   theme.update_hl {
+--     BufferManagerModified = { fg = colors.yellow[300], bold = true },
+--     BufferManagerNormal = { bg = bg, fg = colors.slate[600] },
+--     BufferManagerBorder = { bg = bg, fg = colors.accent[100] },
+--     BufferManagerBorderTitle = { bg = colors.red[200], fg = colors.slate[500] },
+--     BufferManagerLineNr = { bg = bg, fg = colors.white },
+--     BufferManagerVisual = { bg = colors.slate[400], fg = colors.white },
+--     BufferManagerDiffChange = { fg = colors.yellow[300], bold = true },
+--     BufferManagerDiffAdd = { fg = colors.green[200], bold = true },
+--     BufferManagerDiffDelete = { fg = colors.red[200], bold = true },
+--     BufferManagerCursorLine = { bg = colors.slate[200], fg = colors.white },
+--     BufferManagerHighlight = { fg = colors.accent[200], bold = true },
+--   }
+-- end
 
 function theme.highlight.telescope()
   local bg = colors.bg[100]
