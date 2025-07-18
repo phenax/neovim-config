@@ -9,7 +9,10 @@ function theme.setup(colorscheme)
   vim.g.base16colorspace = 256
   vim.go.termguicolors = true
 
-  vim.api.nvim_create_autocmd('ColorScheme', { callback = theme.highlight_all })
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    group = vim.api.nvim_create_augroup('phenax/theme', { clear = true }),
+    callback = theme.highlight_all,
+  })
   vim.cmd.colorscheme(colorscheme)
 end
 

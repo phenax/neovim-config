@@ -5,7 +5,9 @@ local plugin = {
   },
 }
 
-local function default_capabilities() return vim.lsp.protocol.make_client_capabilities() end
+local function default_capabilities()
+  return vim.lsp.protocol.make_client_capabilities()
+end
 
 local function cap_disable_formatting(cap)
   cap.textDocument.formatting = false

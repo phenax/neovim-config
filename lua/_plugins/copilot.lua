@@ -1,13 +1,12 @@
+vim.g.copilot_enabled = false
+-- vim.g.copilot_no_tab_map = true
+
 local M = {}
 local plugin = {
   'github/copilot.vim',
   keys = {
     { mode = 'n', '<leader>sm', function() M.toggle_copilot() end },
   },
-  config = function()
-    vim.g.copilot_enabled = false
-    -- vim.g.copilot_no_tab_map = true
-  end,
 }
 
 function M.toggle_copilot()

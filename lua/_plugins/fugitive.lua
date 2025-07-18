@@ -42,7 +42,7 @@ local plugin = {
         rev = vim.fn.expand('<cword>')
       end
       print('Opening ' .. (rev or 'last commit') .. '...')
-      M.openFilesInCommit(rev)
+      M.open_files_in_commit(rev)
     end, { force = true, nargs = '*' })
   end,
 }
@@ -64,12 +64,11 @@ local plugin = {
 --
 -- ) and (: goto next item in status
 -- X: reset file
--- a: stage/unstage
 -- dv: diff vert
 -- dq: quit diff
 -- gO: open file vert split
 
-function M.openFilesInCommit(rev)
+function M.open_files_in_commit(rev)
   local git_command = { 'git', '--no-pager', 'show', '--name-only', '--pretty=' }
   if rev and #rev > 0 then table.insert(git_command, rev) end
 

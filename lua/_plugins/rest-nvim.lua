@@ -1,6 +1,7 @@
 local M = {}
 local plugin = {
   'rest-nvim/rest.nvim',
+  enabled = false,
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
   },

@@ -3,7 +3,7 @@ local M = {}
 function M.repl_config()
   local cfg_path = vim.fn.stdpath('config')
   if vim.g.__phenax_test then
-    cfg_path = "/home/imsohexy/nixos/config/nvim"
+    cfg_path = vim.fn.expand '~/nixos/config/nvim'
   end
 
   return {
@@ -24,6 +24,7 @@ function M.curl_command_parser(cmd_str)
   local cmd = {}
 
   for line in cmd_str:gsub('\\\n', '\n'):gmatch("([^\n]*)\n?") do
+    -- TODO: Fix issue with `#` inside strings being stripped
     local trimmed_line = line:gsub('^%s*', ''):gsub('%s*$', ''):gsub('%s*#.*$', '')
     if json_started then
       json_str = json_str .. trimmed_line

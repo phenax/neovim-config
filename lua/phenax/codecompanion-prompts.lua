@@ -37,7 +37,7 @@ Things to keep in mind:
   5. Ensure the code follows the best practises in regards to security
 
 Do not return the corrected code, only the review for it. Your answer should be concise and only provide bullet points.
-#buffer]],
+#{buffer}]],
       opts = { contains_code = true },
     },
   },
