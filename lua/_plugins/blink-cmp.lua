@@ -36,7 +36,16 @@ function blink_plugin.config()
         lsp = { score_offset = 20, fallbacks = {} },
         path = { score_offset = 15 },
         snippets = { score_offset = 10 },
-        buffer = { score_offset = -5 },
+        buffer = {
+          score_offset = -5,
+          opts = {
+            get_bufnrs = function()
+              return vim.tbl_filter(function(bufnr)
+                return vim.bo[bufnr].buftype == ''
+              end, vim.api.nvim_list_bufs())
+            end,
+          },
+        },
         orgmode = {
           name = 'Orgmode',
           module = 'orgmode.org.autocompletion.blink',
