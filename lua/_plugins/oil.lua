@@ -1,7 +1,6 @@
 local M = {}
 local plugin = {
   'stevearc/oil.nvim',
-  dependencies = { { 'echasnovski/mini.icons', opts = {} } },
   lazy = false,
   config = function() M.setup() end,
   keys = {
@@ -66,7 +65,7 @@ M.keys = {
 function M.setup()
   require 'oil'.setup {
     default_file_explorer = true,
-    columns = { 'icon', 'permissions', 'type', 'size' },
+    columns = { 'permissions', 'type', 'size' },
     lsp_file_methods = { enabled = true },
     constrain_cursor = 'name',
     delete_to_trash = false,
