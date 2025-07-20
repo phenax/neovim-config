@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -e -o pipefail
+set -eu -o pipefail
 
 tmp=$(mktemp -u /tmp/curltempout-XXXXX)
 trap 'rm -f "$tmp"' EXIT
@@ -11,9 +11,15 @@ show_formatted() {
   jq "$@" < "$tmp" 2>/dev/null || cat "$tmp"
 }
 
+if [ "$#" = "0" ]; then
+  show_formatted --slurp '.[0].__status, .[1]'
+  exit 0
+fi
+
 case "$1" in
+  status) show_formatted --slurp '.[0].__status' ;;
   head) show_formatted --slurp '.[0]' ;;
-  body) show_formatted --slurp '.[0].__status, .[1]' ;;
-  body_only) show_formatted --slurp '.[1]' ;;
-  *) show_formatted ;;
+  body) show_formatted --slurp '.[1]' ;;
+  full) show_formatted ;;
+  *) echo "status | head | body | full" ;;
 esac

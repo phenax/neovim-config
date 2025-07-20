@@ -9,6 +9,7 @@ local defaultConfig = {
   vertical = true,
   -- Preprocess input before running
   preprocess = function(input) return input end,
+  preprocess_buffer_lines = function(lines) return { table.concat(lines, '\n') } end,
   -- Restart the job for every send
   restart_job_on_send = false,
 
@@ -57,6 +58,7 @@ _G.Repl.apply_repl_mode = function(name) M.apply_repl_mode(name) end
 function M.initialize()
   vim.keymap.set('n', '<c-t><c-t>', function() M.start_term() end)
   vim.keymap.set({ 'v', 'n' }, '<c-t><cr>', function() M.send_selection() end)
+  vim.keymap.set({ 'v', 'n' }, '<c-t>]', function() M.send_buffer() end)
   vim.keymap.set('n', '<c-t>q', function() M.close_term() end)
   vim.keymap.set('n', '<c-t><Tab>', function() M.select_repl_mode() end)
   vim.keymap.set('n', '<c-t>c', function() M.send_interrupt() end)
@@ -154,6 +156,15 @@ function M.toggle_window(force_open)
   end
 end
 
+function M.send_buffer()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local cmds = M.config.preprocess_buffer_lines(lines)
+  if type(cmds) ~= 'table' then cmds = { cmds } end
+  for _, cmd in ipairs(cmds) do
+    M.send(cmd, true)
+  end
+end
+
 function M.send_selection()
   local oldPos = nil
   local isVisualMode = vim.fn.mode():match('[vV]')
@@ -166,7 +177,7 @@ function M.send_selection()
   -- The '< and '> marks only get updated after leaving visual mode
   vim.cmd.normal(vim.api.nvim_replace_termcodes('<esc>', true, false, true))
 
-  local selected_text = M.get_selection_text()
+  local selected_text = M.config.preprocess(M.get_selection_text())
   -- Reset cursor position
   if oldPos then
     vim.api.nvim_win_set_cursor(0, oldPos)
@@ -181,7 +192,9 @@ function M.send_interrupt()
   vim.api.nvim_chan_send(M.channel_id, ctrl_c)
 end
 
-function M.send(contents, with_return)
+function M.send(input, with_return)
+  if not input then return end
+
   if M.config.restart_job_on_send then
     M.close_term(true)
   end
@@ -191,9 +204,6 @@ function M.send(contents, with_return)
   end
 
   if M.channel_id == nil or M.channel_id <= 0 then return end
-
-  local input = M.config.preprocess(contents)
-  if not input then return end
 
   -- Send clear screen sequence
   if M.config.clear_screen then

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+set -e -o pipefail
+
+ENV_FILE="./env.json"
+
+jq -r --arg name "$1" '.[$name]' "$ENV_FILE"
