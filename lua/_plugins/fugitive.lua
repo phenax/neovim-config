@@ -8,6 +8,7 @@ local plugin = {
     { mode = 'n', '<localleader>gca',       '<cmd>Git commit --amend<cr>' },
     { mode = 'n', '<localleader>gpp',       '<cmd>Git push<cr>' },
     { mode = 'n', '<localleader>gpu',       '<cmd>Git pull<cr>' },
+    { mode = 'n', '<leader>grf',            '<cmd>G reset HEAD^1 -- %<cr>' },
 
     { mode = 'n', '<localleader>glm',       '<cmd>Git log --oneline HEAD...origin/master<cr>' },
     { mode = 'n', '<localleader>gl<space>', ':Git log --oneline ' },
