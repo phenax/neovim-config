@@ -37,6 +37,8 @@ local plugin = {
       end
     })
 
+    -- TODO: Add q to close the git log window
+
     vim.api.nvim_create_user_command('GFiles', function(opts)
       local rev = opts.args
       if opts.args == 'w' then

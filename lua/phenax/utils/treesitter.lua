@@ -27,4 +27,17 @@ function M.get_node_at_cursor(winnr)
   return require 'nvim-treesitter.ts_utils'.get_node_at_cursor(winnr)
 end
 
+--- @param bufnr number?: Buffer number (default = 0)
+function M.get_root_node(bufnr)
+  local parser = vim.treesitter.get_parser(bufnr, vim.bo[bufnr].filetype)
+  if not parser then return nil end
+  return parser:parse()[1]:root()
+end
+
+function M.get_node_indentation(node)
+  local end_row, _ = node:start()
+  local line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1]
+  return string.match(line, '^%s*') or ''
+end
+
 return M

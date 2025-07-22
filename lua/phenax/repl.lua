@@ -1,3 +1,5 @@
+local text = require 'phenax.utils.text'
+
 local defaultConfig = {
   -- Send clear seq before sending contents
   clear_screen = true,
@@ -177,7 +179,7 @@ function M.send_selection()
   -- The '< and '> marks only get updated after leaving visual mode
   vim.cmd.normal(vim.api.nvim_replace_termcodes('<esc>', true, false, true))
 
-  local selected_text = M.config.preprocess(M.get_selection_text())
+  local selected_text = M.config.preprocess(text.get_selection_text())
   -- Reset cursor position
   if oldPos then
     vim.api.nvim_win_set_cursor(0, oldPos)
@@ -216,22 +218,6 @@ function M.send(input, with_return)
   -- Add newline to the end
   if with_return then
     vim.api.nvim_chan_send(M.channel_id, '\n')
-  end
-end
-
-function M.get_selection_text()
-  local _, lineStart, colStart = unpack(vim.fn.getpos("'<"))
-  local _, lineEnd, colEnd = unpack(vim.fn.getpos("'>"))
-  local lines = vim.api.nvim_buf_get_lines(0, lineStart - 1, lineEnd, false)
-
-  if #lines == 0 then
-    return ''
-  elseif #lines == 1 then
-    return string.sub(lines[1], colStart, colEnd)
-  else
-    lines[1] = string.sub(lines[1], colStart)
-    lines[#lines] = string.sub(lines[#lines], 1, colEnd)
-    return table.concat(lines, '\n')
   end
 end
 
