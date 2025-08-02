@@ -34,22 +34,6 @@ M.keys = {
   -- Copy path to clipboard
   ['<C-y>'] = { function() M.copyPath({ absolute = true }) end, mode = 'n' },
   ['Y'] = { function() M.copyPath({ absolute = false }) end, mode = 'n' },
-  -- Telescope grep inside dir
-  ['<leader><C-f>'] = function()
-    local path = M.getCurrentDir()
-    require('telescope.builtin').live_grep {
-      search_dirs = { path },
-      prompt_title = 'Grep: ' .. path,
-    }
-  end,
-  -- Telescope find files inside dir
-  ['<leader><leader>f'] = function()
-    local path = M.getCurrentDir()
-    require('telescope.builtin').find_files {
-      search_dirs = { path },
-      prompt_title = 'Find: ' .. path,
-    }
-  end,
 
   -- Toggle listing on oil buffer (behaves weirdly)
   ['<c-l>'] = function() vim.bo.buflisted = not vim.bo.buflisted end,
