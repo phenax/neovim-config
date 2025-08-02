@@ -1,6 +1,6 @@
 local M = {
   max_width = 50,
-  simple_ruler_fts = { 'fugitive', 'buffer_manager', 'TelescopePrompt', 'aerial', 'orgagenda' },
+  simple_ruler_fts = { 'fugitive', 'buffer_manager', 'aerial', 'orgagenda' },
 }
 
 function M.special_buffers()

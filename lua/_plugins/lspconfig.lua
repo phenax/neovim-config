@@ -258,9 +258,7 @@ function config.on_lsp_attached(client, bufnr)
   -- Navigation
   vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 
-  vim.keymap.set('n', 'grr', '<cmd>Telescope lsp_references<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', opts)
-  vim.keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', opts)
+  -- Moved to snacks picker
   -- vim.keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   -- vim.keymap.set('n', '<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   -- vim.keymap.set('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)

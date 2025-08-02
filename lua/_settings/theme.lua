@@ -112,35 +112,14 @@ function theme.highlight.phenax_buffers()
   }
 end
 
--- function theme.highlight.buffer_manager()
---   local bg = colors.bg[100]
---   theme.update_hl {
---     BufferManagerModified = { fg = colors.yellow[300], bold = true },
---     BufferManagerNormal = { bg = bg, fg = colors.slate[600] },
---     BufferManagerBorder = { bg = bg, fg = colors.accent[100] },
---     BufferManagerBorderTitle = { bg = colors.red[200], fg = colors.slate[500] },
---     BufferManagerLineNr = { bg = bg, fg = colors.white },
---     BufferManagerVisual = { bg = colors.slate[400], fg = colors.white },
---     BufferManagerDiffChange = { fg = colors.yellow[300], bold = true },
---     BufferManagerDiffAdd = { fg = colors.green[200], bold = true },
---     BufferManagerDiffDelete = { fg = colors.red[200], bold = true },
---     BufferManagerCursorLine = { bg = colors.slate[200], fg = colors.white },
---     BufferManagerHighlight = { fg = colors.accent[200], bold = true },
---   }
--- end
-
-function theme.highlight.telescope()
+function theme.highlight.snacks_picker()
   local bg = colors.bg[100]
   theme.update_hl {
-    TelescopeNormal = { bg = bg },
-    TelescopeBorder = { bg = bg, fg = colors.accent[100] },
-    TelescopePreviewNormal = { bg = bg },
-    TelescopePreviewTitle = { bg = colors.accent[100], fg = colors.white },
-    TelescopeResultsTitle = { bg = bg, fg = bg },
-    TelescopeResultsBorder = { bg = bg, fg = bg },
-    TelescopePromptNormal = { bg = bg },
-    TelescopePromptTitle = { bg = colors.accent[100], fg = colors.white },
-    TelescopePromptPrefix = { bg = bg },
+    SnacksPicker = { bg = bg },
+    SnacksPickerBoxTitle = { bg = colors.accent[100], fg = colors.white },
+    SnacksPickerPreviewBorder = { bg = 'none', fg = 'none', force = true },
+    SnacksPickerListBorder = { bg = 'none', fg = 'none', force = true },
+    SnacksPickerBorder = { bg = 'none', fg = 'none' },
   }
 end
 
