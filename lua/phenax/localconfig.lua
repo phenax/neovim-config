@@ -12,6 +12,11 @@ function M.initialize()
     M.load_local_config()
   end)
 
+  vim.api.nvim_create_user_command('LocalConfigAllow', function()
+    M.prompt_add_safe(vim.fn.getcwd())
+    M.load_local_config()
+  end, {})
+
   vim.api.nvim_create_autocmd('VimEnter', {
     callback = function()
       vim.defer_fn(function() M.load_local_config() end, 200)
