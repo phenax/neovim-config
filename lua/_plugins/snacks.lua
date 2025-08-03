@@ -26,7 +26,7 @@ local plugin           = {
   keys = list.concat(sortable_buffers.lazy_keys(), picker_history.lazy_keys(), {
     { mode = 'n',          '<c-d>',            function() Snacks.bufdelete() end },
     { mode = 'n',          '<c-f>',            function() Snacks.picker.grep() end },
-    { mode = 'n',          '<leader>f',        function() Snacks.picker.smart() end },
+    { mode = 'n',          '<leader>f',        function() M.find_files() end },
     { mode = 'n',          '<leader>sp',       function() Snacks.picker.pickers() end },
     { mode = 'n',          '<C-_>',            function() Snacks.picker.grep_buffers() end },
     { mode = 'n',          '<localleader>ne',  function() Snacks.picker.explorer() end },
@@ -60,7 +60,7 @@ function M.picker_config()
           backdrop = false,
           row = -1,
           width = 0,
-          height = 0.55,
+          height = 0.65,
           border = 'top',
           title = ' {title} {live} {flags}',
           title_pos = 'center',
@@ -87,6 +87,14 @@ function M.picker_mappings()
   return vim.tbl_extend('force', M.select_index_keys(), {
     ['<c-p>'] = { 'toggle_preview', mode = { 'i', 'n' } },
   })
+end
+
+function M.find_files()
+  if Snacks.git.get_root() then
+    Snacks.picker.git_files()
+  else
+    Snacks.picker.files()
+  end
 end
 
 function M.select_index_keys()

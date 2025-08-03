@@ -117,9 +117,13 @@ function theme.highlight.snacks_picker()
   theme.update_hl {
     SnacksPicker = { bg = bg },
     SnacksPickerBoxTitle = { bg = colors.accent[100], fg = colors.white },
-    SnacksPickerPreviewBorder = { bg = 'none', fg = 'none', force = true },
-    SnacksPickerListBorder = { bg = 'none', fg = 'none', force = true },
     SnacksPickerBorder = { bg = 'none', fg = 'none' },
+    SnacksPickerMatch = { fg = colors.teal[800] },
+    SnacksPickerFile = { fg = colors.white },
+    SnacksPickerDir = { fg = colors.slate[650] },
+    SnacksPickerCursorLine = { bg = colors.slate[500] },
+    SnacksPickerListCursorLine = { bg = colors.slate[500] },
+    SnacksPickerPreviewCursorLine = { bg = colors.slate[500] },
   }
 end
 
