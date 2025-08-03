@@ -33,6 +33,7 @@ local plugin           = {
     { mode = 'n',          '<localleader>uu',  function() Snacks.picker.undo() end },
     { mode = 'n',          'z=',               function() Snacks.picker.spelling() end },
     { mode = 'n',          '<leader>tr',       function() Snacks.picker.resume() end },
+    { mode = 'n',          '<leader>qf',       function() Snacks.picker.qflist() end },
     -- Git
     { mode = { 'n', 'v' }, '<leader>gb',       function() Snacks.gitbrowse() end },
     { mode = 'n',          '<localleader>gbb', function() Snacks.picker.git_branches() end },

@@ -1,5 +1,5 @@
 local M = {
-  window_size = function() return vim.o.lines * 0.3 end
+  window_size = function() return math.max(4, vim.o.lines * 0.3) end
 }
 
 function M.initialize()
@@ -18,9 +18,9 @@ end
 
 function M.quickfix_window_setup()
   vim.keymap.set('n', 'q', '<cmd>cclose<cr>', { nowait = true, buffer = true })
-  vim.keymap.set('n', 'zf', function() Snacks.picker.qflist() end, { buffer = true })
-  vim.keymap.set('n', ']h', '<cmd>cnewer<cr>', { buffer = true })
-  vim.keymap.set('n', '[h', '<cmd>colder<cr>', { buffer = true })
+  vim.keymap.set('n', 'L', '<cmd>cnewer<cr>', { buffer = true })
+  vim.keymap.set('n', 'H', '<cmd>colder<cr>', { buffer = true })
+  vim.keymap.set('n', 'C', '<cmd>cexpr []<cr>', { buffer = true })
 
   -- Resize window
   local win = vim.api.nvim_get_current_win()
