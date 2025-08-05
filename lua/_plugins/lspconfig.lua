@@ -256,7 +256,7 @@ function config.on_lsp_attached(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
   -- Navigation
-  vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<cr>', opts)
 
   -- Moved to snacks picker
   -- vim.keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)

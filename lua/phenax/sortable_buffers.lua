@@ -157,6 +157,7 @@ function sortable_buffers.actions.move_buffer(get_new_index)
 end
 
 function sortable_buffers.actions.delete_buffer()
+  -- TODO: Shouldn't close buffer
   local picker = sortable_buffers.get_current_picker()
   if not picker then return end
 
