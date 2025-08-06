@@ -157,15 +157,14 @@ function sortable_buffers.actions.move_buffer(get_new_index)
 end
 
 function sortable_buffers.actions.delete_buffer()
-  -- TODO: Shouldn't close buffer
   local picker = sortable_buffers.get_current_picker()
   if not picker then return end
 
   local entry = picker.list:current()
   if not entry then return end
-  if entry.buf then Snacks.bufdelete(entry.buf) end
-
   local pos = picker.list.cursor
+  require 'snacks.picker.actions'.bufdelete(picker)
+
   sortable_buffers.populate_buffers()
   sortable_buffers.refresh_picker()
   if pos > picker.list:count() then pos = picker.list:count() end
