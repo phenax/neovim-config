@@ -20,6 +20,21 @@ local plugin           = {
       bigfile = { enabled = true, size = 1 * 1024 * 1024 },
       words = { enabled = true, debounce = 80, modes = { 'n' } },
       picker = M.picker_config(),
+      styles = {
+        phenax_git_diff = {
+          style = 'blame_line',
+          position = 'float',
+          border = 'single',
+        },
+        blame_line = {
+          position = 'bottom',
+          keys = {
+            q = 'close',
+            blame_term_quit = { 'q', function(self) self:close() end, mode = 't' },
+          },
+          on_win = function() vim.cmd.startinsert() end,
+        },
+      },
     }
   end,
 
@@ -38,6 +53,7 @@ local plugin           = {
     { mode = { 'n', 'v' }, '<leader>gb',       function() Snacks.gitbrowse() end },
     { mode = 'n',          '<localleader>gbb', function() Snacks.picker.git_branches() end },
     { mode = 'n',          '<localleader>gbs', function() Snacks.picker.git_stash() end },
+    { mode = 'n',          '<localleader>gm',  function() Snacks.git.blame_line({ count = -1 }) end },
     -- LSP
     { mode = 'n',          'grr',              function() Snacks.picker.lsp_references() end },
     { mode = 'n',          'gd',               function() Snacks.picker.lsp_definitions() end },

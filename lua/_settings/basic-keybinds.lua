@@ -6,8 +6,8 @@ vim.keymap.set('x', '<leader>cc', [[:<c-u>s#\%V[_]\+\(.\)#\U\1#g<cr>]])
 vim.keymap.set('x', '<leader>cu', [[:<c-u>s#\%V[A-Z]\+#_\l\0#g<cr>]])
 
 -- Alt keys
-vim.keymap.set({ 'n', 'v' }, 'gh', '_')
-vim.keymap.set({ 'n', 'v' }, 'gl', '$')
+-- vim.keymap.set({ 'n', 'v' }, 'gh', '_')
+-- vim.keymap.set({ 'n', 'v' }, 'gl', '$')
 
 -- tab close
 vim.keymap.set('n', '<leader>qq', '<cmd>tabclose<cr>')
