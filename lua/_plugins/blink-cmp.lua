@@ -1,14 +1,6 @@
-local blink_plugin = {
-  'saghen/blink.cmp',
-  version = '1.*',
-}
+local plugin = {}
 
-local plugin = {
-  blink_plugin,
-  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
-}
-
-function blink_plugin.config()
+function plugin.config()
   require 'blink.cmp'.setup {
     keymap = {
       preset = 'default',

@@ -7,10 +7,6 @@ local list             = require 'phenax.utils.list'
 Snacks                 = Snacks
 
 local plugin           = {
-  'folke/snacks.nvim',
-  priority = 1000,
-  lazy = false,
-
   config = function()
     require 'snacks'.setup {
       gitbrowse = { enabled = true },

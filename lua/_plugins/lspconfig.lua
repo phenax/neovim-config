@@ -1,9 +1,4 @@
-local plugin = {
-  'neovim/nvim-lspconfig',
-  dependencies = {
-    'saghen/blink.cmp',
-  },
-}
+local plugin = {}
 
 local function default_capabilities()
   return vim.lsp.protocol.make_client_capabilities()
@@ -276,7 +271,7 @@ function config.on_lsp_attached(client, bufnr)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 
   -- Toggle inlay hints
-  if client.supports_method('textDocument/inlayHints') then
+  if client:supports_method('textDocument/inlayHints') then
     local filter = { bufnr = bufnr }
     vim.lsp.inlay_hint.enable(false, filter)
     vim.keymap.set('n', '<C-t>h', function()

@@ -1,14 +1,9 @@
-local plugin = {
-  'nvim-treesitter/nvim-treesitter',
-  build = ':TSUpdate',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-  },
-}
+local plugin = {}
 
 function plugin.config()
   require('nvim-treesitter.configs').setup {
     ensure_installed = 'all',
+    ignore_install = { 'ipkg' }, -- Was breaking during unpacking
 
     highlight = {
       enable = true,

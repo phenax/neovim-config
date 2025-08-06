@@ -1,6 +1,5 @@
 local M = {}
 local plugin = {
-  'tpope/vim-fugitive',
   keys = {
     { mode = 'n', '<localleader>gs',        '<cmd>G<cr>' },
     { mode = 'n', '<localleader>gaf',       '<cmd>G add %<cr>' },
@@ -21,7 +20,7 @@ local plugin = {
     { mode = 'n', '<leader>gl',             '<cmd>diffget //2<cr>' },
     { mode = 'n', '<leader>gr',             '<cmd>diffget //3<cr>' },
   },
-  cmd = { 'Git', 'G', 'GFilesOpen' },
+
   config = function()
     local group = vim.api.nvim_create_augroup('phenax/fugitive', { clear = true })
     vim.api.nvim_create_autocmd('BufReadPost', {

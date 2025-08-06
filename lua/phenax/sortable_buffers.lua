@@ -35,6 +35,7 @@ end
 function sortable_buffers.mappings()
   return {
     ['<c-d>'] = { sortable_buffers.actions.delete_buffer, mode = { 'i', 'n' } },
+    ['dd'] = { sortable_buffers.actions.delete_buffer, mode = 'n' },
     ['<c-j>'] = { sortable_buffers.actions.move_buffer(function(i) return i + 1 end), mode = { 'i', 'n' } },
     ['<c-k>'] = { sortable_buffers.actions.move_buffer(function(i) return i - 1 end), mode = { 'i', 'n' } },
     ['<c-g>g'] = {

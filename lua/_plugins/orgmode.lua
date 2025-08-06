@@ -1,11 +1,7 @@
 local colors = require '_settings.colors'
 
 local M = {}
-
 local plugin = {
-  'nvim-orgmode/orgmode',
-  event = 'VeryLazy',
-  ft = { 'org' },
   config = function()
     local config = require 'phenax.orgmode.config'
 

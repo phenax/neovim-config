@@ -1,8 +1,4 @@
 return {
-  'aaronik/treewalker.nvim',
-  opts = {
-    highlight = true,
-  },
   keys = {
     -- TODO: if arrow key fails, do regular arrow key fallback
     { mode = { 'n', 'v' }, '<Down>',   '<cmd>Treewalker Down<cr>',     noremap = true },
@@ -12,4 +8,9 @@ return {
     { mode = 'n',          '<C-Down>', '<cmd>Treewalker SwapDown<cr>', noremap = true },
     { mode = 'n',          '<C-Up>',   '<cmd>Treewalker SwapUp<cr>',   noremap = true },
   },
+  config = function()
+    require 'treewalker'.setup {
+      highlight = true,
+    }
+  end,
 }

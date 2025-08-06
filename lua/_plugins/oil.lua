@@ -1,14 +1,14 @@
 local M = {}
 local plugin = {
-  'stevearc/oil.nvim',
-  lazy = false,
-  config = function() M.setup() end,
+  config = function()
+    M.setup()
+  end,
   keys = {
     { mode = 'n', '<localleader>nn', '<cmd>Oil<cr>' },
   }
 }
 
-M.keys = {
+M.oil_keys = {
   -- Navigation
   ['H'] = { 'actions.parent', mode = 'n' },
   ['L'] = { 'actions.select', mode = 'n' },
@@ -66,7 +66,7 @@ function M.setup()
       winbar = '%!v:lua._OilWinbarSegment()',
     },
     use_default_keymaps = false,
-    keymaps = M.keys,
+    keymaps = M.oil_keys,
   }
 end
 

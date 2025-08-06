@@ -16,6 +16,8 @@ function M.initialize()
 
       vim.keymap.set('v', '<leader>rll', M.add_log_for_selected_text, { buffer = true })
       vim.keymap.set('v', '<leader>rev', M.extract_selected_text_as_value, { buffer = true })
+
+      -- TODO: Keybind to toggle `it`/`it.only` in the current block
     end,
   })
 end
