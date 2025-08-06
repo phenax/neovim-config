@@ -33,11 +33,20 @@ function blink_plugin.config()
         org = { 'orgmode', 'path', 'snippets', 'buffer' },
       },
       providers = {
-        lsp = { score_offset = 20, fallbacks = {} },
-        path = { score_offset = 15 },
-        snippets = { score_offset = 10 },
+        lsp = {
+          score_offset = 20,
+          fallbacks = {},
+        },
+        path = {
+          score_offset = 15,
+        },
+        snippets = {
+          score_offset = 10,
+          max_items = 5,
+        },
         buffer = {
           score_offset = -5,
+          max_items = 5,
           opts = {
             get_bufnrs = function()
               return vim.tbl_filter(function(bufnr)
