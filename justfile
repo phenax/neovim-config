@@ -1,14 +1,11 @@
 set positional-arguments
 
-test *args:
-  # Update rtp twice because lazy.nvim overrides rtp
-  nvim --clean -u NONE -c "lua vim.g.__phenax_test = true" -c "set rtp^=$PWD" -c "lua dofile('$PWD/init.lua')" -c "set rtp^=$PWD" "$@"
+test_path:="nvim-test-config"
 
-test-other dir *args:
-  #!/usr/bin/env bash
-  vim_dir="$PWD"
-  cd "{{dir}}"
-  nvim --clean -u NONE -c "set rtp^=$vim_dir" -c "lua dofile('$vim_dir/init.lua')" -c "set rtp^=$vim_dir" "$@"
+test *args:
+  #!/usr/bin/env sh
+  [ -L "$HOME/.config/{{test_path}}" ] || ln -sf "$PWD" "$HOME/.config/{{test_path}}";
+  NVIM_APPNAME="{{test_path}}" nvim -c "lua vim.g.__phenax_test = true" "$@"
 
 format:
   stylua init.lua lua/**/*.lua
