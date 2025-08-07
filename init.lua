@@ -21,8 +21,8 @@ vim.pack.add {
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects' },
   { src = 'https://github.com/Wansmer/treesj' },
   { src = 'https://github.com/aaronik/treewalker.nvim' },
-  { src = 'https://github.com/sheerun/vim-polyglot' },
   { src = 'https://github.com/saghen/blink.cmp', version = version('1.*') },
+  -- { src = 'https://github.com/sheerun/vim-polyglot' },
 }
 
 require 'phenax'

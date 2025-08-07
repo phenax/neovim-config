@@ -7,6 +7,7 @@ local list             = require 'phenax.utils.list'
 Snacks                 = Snacks
 
 local plugin           = {
+  priority = 100,
   config = function()
     require 'snacks'.setup {
       gitbrowse = { enabled = true },
@@ -19,11 +20,10 @@ local plugin           = {
       styles = {
         phenax_git_diff = {
           style = 'blame_line',
-          position = 'float',
           border = 'single',
         },
         blame_line = {
-          position = 'bottom',
+          position = 'float',
           keys = {
             q = 'close',
             blame_term_quit = { 'q', function(self) self:close() end, mode = 't' },
@@ -103,7 +103,7 @@ end
 
 function M.find_files()
   if Snacks.git.get_root() then
-    Snacks.picker.git_files()
+    Snacks.picker.git_files({ untracked = true })
   else
     Snacks.picker.files()
   end

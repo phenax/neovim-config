@@ -89,7 +89,7 @@ end
 
 function _G._OilWinbarSegment()
   local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-  local dir = require('oil').get_current_dir(bufnr)
+  local dir = require 'oil'.get_current_dir(bufnr)
   if dir then
     local short_path = vim.fn.fnamemodify(dir, ':~:.')
     if #short_path == 0 then return vim.fn.fnamemodify(dir, ':~') end

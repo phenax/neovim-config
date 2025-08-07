@@ -5,7 +5,7 @@ return {
     { mode = 'n', '<leader>tj', '<cmd>TSJJoin<cr>' },
   },
   config = function()
-    require('treesj').setup {
+    require 'treesj'.setup {
       use_default_keymaps = false,
       max_join_length = 200,
     }

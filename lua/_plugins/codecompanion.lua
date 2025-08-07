@@ -9,7 +9,10 @@ return {
   config = function()
     require 'codecompanion'.setup {
       strategies = {
-        chat = { adapter = 'copilot' },
+        chat = {
+          adapter = 'copilot',
+          opts = { completion_provider = 'blink' },
+        },
         inline = { adapter = 'copilot' },
         agent = { adapter = 'copilot' },
       },

@@ -203,7 +203,7 @@ function _SetupLspServer(name, opts, autoformat_ft)
   local options = opts or {}
   local nvim_lsp = require 'lspconfig'
   local cap = options.capabilities or default_capabilities()
-  cap = require('blink.cmp').get_lsp_capabilities(cap)
+  cap = require 'blink.cmp'.get_lsp_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', {
     on_attach = config.on_lsp_attached,
     capabilities = cap,

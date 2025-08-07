@@ -1,7 +1,7 @@
 local plugin = {}
 
 function plugin.config()
-  require('nvim-treesitter.configs').setup {
+  require 'nvim-treesitter.configs'.setup {
     ensure_installed = 'all',
     ignore_install = { 'ipkg' }, -- Was breaking during unpacking
 

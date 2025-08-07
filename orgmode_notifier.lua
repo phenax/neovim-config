@@ -4,7 +4,7 @@ local config = dofile(vim.fn.stdpath('config') .. '/lua/phenax/orgmode/config.lu
 local M = {}
 
 function M.init()
-  require('orgmode').cron({
+  require 'orgmode'.cron({
     org_agenda_files = vim.fs.joinpath(config.path, '**/*.org'),
     org_default_notes_file = config.notes_entry_file,
     notifications = M.notification_options(),

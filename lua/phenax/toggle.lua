@@ -1,0 +1,1 @@
+-- TODO: toggle/increment/decrement common value types (like https://github.com/nat-418/boole.nvim)

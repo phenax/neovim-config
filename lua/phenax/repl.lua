@@ -47,6 +47,36 @@ _G.Repl = vim.tbl_extend('force', defaultConfig, {
   },
 })
 
+-- TODO: Pre-configure test-runners repl modes
+-- jest = {
+--   config = {
+--     command = vim.env['SHELL'],
+--     vertical = true,
+--     clear_screen = true,
+--     preprocess = function(_)
+--       local currentFilePath = vim.fn.fnamemodify(vim.fn.expand('%'), ':p')
+--       local jestRoot = vim.fs.root(currentFilePath, 'jest.config.js')
+--       if not jestRoot then return end
+--       return 'sh -c "cd ' ..
+--           jestRoot ..
+--           ' && pnpm dlx jest --runTestsByPath ' ..
+--           currentFilePath ..
+--           '"'
+--     end,
+--   }
+-- },
+-- cypress = {
+--   config = {
+--     command = vim.env['SHELL'],
+--     vertical = true,
+--     clear_screen = false,
+--     preprocess = function(_)
+--       local currentFilePath = vim.fn.fnamemodify(vim.fn.expand('%'), ':p')
+--       return 'pnpm dlx cypress run --headless --e2e --spec "' .. currentFilePath .. '"'
+--     end,
+--   }
+-- }
+
 local M = {
   channel_id = nil,
   window = nil,
