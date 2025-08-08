@@ -1,12 +1,22 @@
 local plugin = {}
 
-local function default_capabilities()
-  return vim.lsp.protocol.make_client_capabilities()
-end
-
 local function cap_disable_formatting(cap)
   cap.textDocument.formatting = false
   return cap
+end
+
+local function get_fennel_ls_config()
+  local config = require 'nfnl.config'
+  local def    = config.default { ['root-dir'] = '.', ['rtp-patterns'] = { '.' } }
+  return {
+    ['fennel-ls'] = {
+      libraries = { nvim = true },
+      ['lua-version'] = 'lua5.1',
+      ['fennel-path'] = def['fennel-path'],
+      ['macro-path'] = def['fennel-macro-path'],
+      ['extra-globals'] = 'vim Snacks',
+    },
+  }
 end
 
 local config = {
@@ -41,6 +51,10 @@ local config = {
 
   alt_formatters = {
     eslint = function() vim.cmd 'EslintFixAll' end,
+    ['fennel_ls'] = function()
+      print(123)
+      vim.cmd [[!fnlfmt --fix %]]
+    end,
     -- biome = function()
     --   local bufnr = vim.api.nvim_get_current_buf()
     --   local clients = vim.lsp.get_clients({ bufnr = bufnr, name = 'biome' })
@@ -110,7 +124,7 @@ local config = {
 
       -- denols = {},
       ts_ls = {
-        capabilities = cap_disable_formatting(default_capabilities()),
+        capabilities = cap_disable_formatting(vim.lsp.protocol.make_client_capabilities()),
         completions = {
           completeFunctionCalls = true,
         },
@@ -172,16 +186,18 @@ local config = {
         },
       },
 
+      fennel_ls = {
+        settings = get_fennel_ls_config(),
+      },
       lua_ls = {
         settings = {
           Lua = {
             diagnostics = {
               globals = { 'vim', 'web' },
             },
-            hint = {
-              enable = true,
-            },
+            hint = { enable = true },
             workspace = {
+              -- library = vim.api.nvim_list_runtime_paths(),
               library = {
                 [vim.fn.expand('$VIMRUNTIME/lua')] = true,
                 [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
@@ -202,7 +218,7 @@ local config = {
 function _SetupLspServer(name, opts, autoformat_ft)
   local options = opts or {}
   local nvim_lsp = require 'lspconfig'
-  local cap = options.capabilities or default_capabilities()
+  local cap = options.capabilities or vim.lsp.protocol.make_client_capabilities()
   cap = require 'blink.cmp'.get_lsp_capabilities(cap)
   nvim_lsp[name].setup(vim.tbl_extend('force', {
     on_attach = config.on_lsp_attached,

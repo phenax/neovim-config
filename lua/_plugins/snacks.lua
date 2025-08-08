@@ -1,10 +1,7 @@
 local M                = { actions = {} }
 local picker_history   = require 'phenax.snacks_picker_history'
 local sortable_buffers = require 'phenax.sortable_buffers'
-local list             = require 'phenax.utils.list'
-
---- @type table
-Snacks                 = Snacks
+local core             = require 'nfnl.core'
 
 local plugin           = {
   priority = 100,
@@ -34,7 +31,7 @@ local plugin           = {
     }
   end,
 
-  keys = list.concat(sortable_buffers.lazy_keys(), picker_history.lazy_keys(), {
+  keys = core.concat(sortable_buffers.lazy_keys(), {
     { mode = 'n',          '<c-d>',            function() Snacks.bufdelete() end },
     { mode = 'n',          '<c-f>',            function() Snacks.picker.grep() end },
     { mode = 'n',          '<leader>f',        function() M.find_files() end },

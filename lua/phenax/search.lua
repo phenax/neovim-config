@@ -1,33 +1,22 @@
+-- [nfnl] fnl/phenax/search.fnl
 local M = {}
-
-function M.initialize()
-  vim.opt.grepprg = 'rg --vimgrep --hidden '
-
-  -- Disable search highlighting
-  vim.keymap.set('n', '<c-\\>', ':noh<cr>')
-  -- Replace word
-  vim.keymap.set('n', '<localleader>rw', '*:%s//<c-r><c-w>')
-  -- Search in visual selection
-  vim.keymap.set('x', 'g/', '<Esc>/\\%V')
-  -- Search in visible lines
-  vim.keymap.set('n', 'z/', M.search_in_visible_lines, { noremap = true })
-  -- Grep + quickfix list
-  vim.keymap.set('n', '<c-c>f', '<cmd>copen<cr>:sil grep ')
+M.initialize = function()
+  vim.opt.grepprg = "rg --vimgrep --hidden "
+  vim.keymap.set("n", "<c-\\>", ":noh<cr>")
+  vim.keymap.set("n", "<localleader>rw", "*:%s//<c-r><c-w>")
+  vim.keymap.set("x", "g/", "<Esc>/\\%V")
+  vim.keymap.set("n", "z/", M.search_in_visible_lines, {noremap = true})
+  return vim.keymap.set("n", "<c-c>f", "<cmd>copen<cr>:sil grep ")
 end
-
-function M.search_in_visible_lines()
+M.search_in_visible_lines = function()
   local scrolloff = vim.o.scrolloff
   vim.o.scrolloff = 0
-  M.norm "VHoL<Esc>"
+  M.norm("VHoL<Esc>")
   vim.o.scrolloff = scrolloff
-
-  M.norm '``' -- Reset cursor
-  vim.fn.feedkeys [[/\%V]]
+  M.norm("``")
+  return vim.fn.feedkeys("/\\%V")
 end
-
-function M.norm(input)
-  vim.cmd.norm(
-    vim.api.nvim_replace_termcodes(input, true, true, true))
+M.norm = function(input)
+  return vim.cmd.norm(vim.api.nvim_replace_termcodes(input, true, true, true))
 end
-
 return M

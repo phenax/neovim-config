@@ -8,5 +8,9 @@ test *args:
   NVIM_APPNAME="{{test_path}}" nvim -c "lua vim.g.__phenax_test = true" "$@"
 
 format:
-  stylua init.lua lua/**/*.lua
+  #!/usr/bin/env sh
+  fnlfmt --fix `find . -iname *.fnl`
 
+fennel_ls_setup:
+  mkdir -p $HOME/.local/share/fennel-ls/docsets/
+  curl -o $HOME/.local/share/fennel-ls/docsets/nvim.lua 'https://git.sr.ht/~micampe/fennel-ls-nvim-docs/blob/main/nvim.lua'

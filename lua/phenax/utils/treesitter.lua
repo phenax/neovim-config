@@ -1,43 +1,39 @@
+-- [nfnl] fnl/phenax/utils/treesitter.fnl
+local core = require("nfnl.core")
+local ts_utils = require("nvim-treesitter.ts_utils")
 local M = {}
-
---- @param node TSNode
---- @param pred fun(n: TSNode):boolean
---- @return TSNode?
-function M.find_closest_parent(node, pred)
-  if pred(node) then return node end
-
-  local parent = node:parent()
-  if parent == nil then return nil end
-
-  return M.find_closest_parent(parent, pred)
+M.find_closest_parent = function(node, pred)
+  if pred(node) then
+    return node
+  else
+    local parent = node:parent()
+    if parent then
+      return M.find_closest_parent(parent, pred)
+    else
+      return nil
+    end
+  end
 end
-
---- @param node TSNode
---- @param types table
---- @return TSNode?
-function M.find_closest_parent_of_type(node, types)
-  return M.find_closest_parent(node, function(n)
+M.find_closest_parent_of_type = function(node, types)
+  local function _3_(n)
     return vim.tbl_contains(types, n:type())
-  end)
+  end
+  return M.find_closest_parent(node, _3_)
 end
-
---- @param winnr number?: Window number (default = 0)
---- @return TSNode?
-function M.get_node_at_cursor(winnr)
-  return require 'nvim-treesitter.ts_utils'.get_node_at_cursor(winnr)
+M.get_node_at_cursor = ts_utils.get_node_at_cursor
+M.get_root_node = function(bufnr)
+  local ft = vim.bo[bufnr].filetype
+  local parser = vim.treesitter.get_parser(bufnr, ft)
+  if parser then
+    return core.first(parser:parse()):root()
+  else
+    return nil
+  end
 end
-
---- @param bufnr number?: Buffer number (default = 0)
-function M.get_root_node(bufnr)
-  local parser = vim.treesitter.get_parser(bufnr, vim.bo[bufnr].filetype)
-  if not parser then return nil end
-  return parser:parse()[1]:root()
-end
-
-function M.get_node_indentation(node)
+M.get_node_indentation = function(node)
   local end_row, _ = node:start()
-  local line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1]
-  return string.match(line, '^%s*') or ''
+  local _let_5_ = vim.api.nvim_buf_get_lines(0, end_row, (end_row + 1), false)
+  local line = _let_5_[1]
+  return core.str(string.match(line, "^%s*"))
 end
-
 return M
