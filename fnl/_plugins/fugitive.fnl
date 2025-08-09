@@ -28,6 +28,7 @@
   (key! :n :<localleader>gpu "<cmd>G pull<cr>")
   (key! :n :<leader>grf "<cmd>G reset HEAD^1 -- %<cr>")
   (key! :n :<localleader>glm "<cmd>G log --oneline HEAD...origin/master<cr>")
+  (key! :n :<localleader>gll "<cmd>G log --oneline<cr>")
   (key! :n :<localleader>gl<space> ":G log --oneline HEAD...HEAD~")
   (key! :n :<localleader>goe :<cmd>GFilesOpen<cr>)
   (key! :n :<localleader>gow "<cmd>GFilesOpen w<cr>")

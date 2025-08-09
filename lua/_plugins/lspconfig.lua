@@ -12,7 +12,7 @@ local function _1_()
   return vim.cmd("EslintFixAll")
 end
 local function _2_()
-  return vim.cmd("!fnlfmt --fix %")
+  return vim.cmd("sil !fnlfmt --fix %")
 end
 config.alt_formatters = {eslint = _1_, fennel_ls = _2_}
 config.format_on_save_ft = {"astro", "c", "cpp", "crystal", "elm", "go", "h", "haskell", "java", "javascript", "javascriptreact", "lua", "nix", "purescript", "racket", "ruby", "rust", "scala", "svelte", "typescript", "typescriptreact", "uiua", "unison", "vue", "gleam"}

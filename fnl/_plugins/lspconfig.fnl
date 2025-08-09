@@ -11,7 +11,7 @@
 
 (set config.alt_formatters
      {:eslint (fn [] (vim.cmd :EslintFixAll))
-      :fennel_ls (fn [] (vim.cmd "!fnlfmt --fix %"))})
+      :fennel_ls (fn [] (vim.cmd "sil !fnlfmt --fix %"))})
 
 (set config.format_on_save_ft [:astro
                                :c
@@ -132,7 +132,7 @@
                     :workspace {:library {(vim.fn.expand :$VIMRUNTIME/lua) true
                                           (vim.fn.expand :$VIMRUNTIME/lua/vim/lsp) true
                                           (.. (vim.fn.stdpath :data)
-                                               :/lazy/lazy.nvim/lua/lazy) true}
+                                              :/lazy/lazy.nvim/lua/lazy) true}
                                 :maxPreload 100000
                                 :preloadFileSize 10000}}}})
 

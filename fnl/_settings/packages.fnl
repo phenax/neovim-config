@@ -3,7 +3,6 @@
 
 (vim.pack.add [{:src (gh :nvim-lua/plenary.nvim)}
                {:src (gh :nvim-treesitter/nvim-treesitter)}
-               {:src (gh :windwp/nvim-ts-autotag)}
                {:src (gh :github/copilot.vim)}
                {:src (gh :olimorris/codecompanion.nvim)}
                {:src (gh :folke/snacks.nvim)}
@@ -18,4 +17,7 @@
                {:src (gh :Wansmer/treesj)}
                {:src (gh :aaronik/treewalker.nvim)}
                {:src (gh :Olical/nfnl)}
-               {:src (gh :saghen/blink.cmp) :version (version :1.*)}])
+               {:src (gh :saghen/blink.cmp) :version (version :1.*)}
+               {:src (gh :windwp/nvim-ts-autotag)}
+               {:src (gh :windwp/nvim-autopairs)}])
+               
