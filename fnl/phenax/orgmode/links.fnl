@@ -32,7 +32,6 @@
 (fn orglinks.run_command_link [link]
   (local cmd (link.url.url:sub 2))
   (print (.. "Running: " cmd))
-  (values (vim.cmd cmd))
   (vim.cmd cmd))
 
 (fn orglinks.open_at_cursor []
