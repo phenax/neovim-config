@@ -1,349 +1,163 @@
+-- [nfnl] fnl/_plugins/lspconfig.fnl
+local lspconfig = require("lspconfig")
+local blink = require("blink.cmp")
+local nfnl_config = require("nfnl.config")
 local plugin = {}
-
 local function cap_disable_formatting(cap)
   cap.textDocument.formatting = false
   return cap
 end
-
-local function get_fennel_ls_config()
-  local config = require 'nfnl.config'
-  local def    = config.default { ['root-dir'] = '.', ['rtp-patterns'] = { '.' } }
-  return {
-    ['fennel-ls'] = {
-      libraries = { nvim = true },
-      ['lua-version'] = 'lua5.1',
-      ['fennel-path'] = def['fennel-path'],
-      ['macro-path'] = def['fennel-macro-path'],
-      ['extra-globals'] = 'vim Snacks',
-    },
-  }
+local config = {is_autoformat_enabled = true}
+local function _1_()
+  return vim.cmd("EslintFixAll")
 end
-
-local config = {
-  is_autoformat_enabled = true,
-  format_on_save_ft = {
-    'astro',
-    'c',
-    'cpp',
-    'crystal',
-    'elm',
-    'go',
-    'h',
-    'haskell',
-    'java',
-    'javascript',
-    'javascriptreact',
-    'lua',
-    'nix',
-    'purescript',
-    'racket',
-    'ruby',
-    'rust',
-    'scala',
-    'svelte',
-    'typescript',
-    'typescriptreact',
-    'uiua',
-    'unison',
-    'vue',
-    'gleam',
-  },
-
-  alt_formatters = {
-    eslint = function() vim.cmd 'EslintFixAll' end,
-    ['fennel_ls'] = function()
-      print(123)
-      vim.cmd [[!fnlfmt --fix %]]
-    end,
-    -- biome = function()
-    --   local bufnr = vim.api.nvim_get_current_buf()
-    --   local clients = vim.lsp.get_clients({ bufnr = bufnr, name = 'biome' })
-    --   if #clients == 0 then return end
-    --   local params = vim.lsp.util.make_formatting_params()
-    --   local response = clients[1]:request_sync('textDocument/formatting', params, bufnr)
-    --   if not response or not response.result then return end
-    --   vim.lsp.util.apply_text_edits(response.result, bufnr, clients[1].offset_encoding)
-    -- end,
-  },
-
-  lsp_servers = function()
-    local nvim_lsp = require 'lspconfig'
-    return {
-      racket_langserver = {},
-      uiua = {},
-      clangd = {},
-      unison = { settings = { maxCompletions = 100 } },
-      elmls = { init_options = { elmReviewDiagnostics = 'warning' } },
-      gleam = {},
-      -- jdtls = {},
-      -- zls = {},
-      -- ocamlls = {},
-      -- asm_lsp = {},
-      -- vuels = {
-      --   settings = {
-      --     vetur = {
-      --       format = { enable = false },
-      --       validation = {
-      --         style = true,
-      --         script = true,
-      --         interpolation = true,
-      --         template = true,
-      --         templateProps = false,
-      --       },
-      --       completion = { autoImport = true, tagCasing = "kebab" },
-      --     },
-      --   },
-      -- },
-      -- purescriptls = {},
-      -- metals = {}, -- scala
-      -- crystalline = {},
-      -- astro = {},
-      -- svelte = {},
-
-      rubocop = {},
-      solargraph = {
-        init_options = {
-          formatting = false,
-        },
-      },
-      yamlls = {},
-      gopls = {},
-
-      biome = {},
-      eslint = {},
-
-      tailwindcss = {
-        root_dir = nvim_lsp.util.root_pattern(
-          'tailwind.config.js',
-          'tailwind.config.cjs',
-          'tailwind.config.mjs',
-          'tailwind.config.ts'
-        ),
-        single_file_support = false,
-      },
-
-      -- denols = {},
-      ts_ls = {
-        capabilities = cap_disable_formatting(vim.lsp.protocol.make_client_capabilities()),
-        completions = {
-          completeFunctionCalls = true,
-        },
-        commands = {
-          LspRemoveUnused = {
-            function()
-              vim.lsp.buf.code_action({
-                apply = true,
-                context = { only = { 'source.removeUnused.ts' }, diagnostics = {} },
-              })
-            end,
-          },
-          LspAddMissingImports = {
-            function()
-              vim.lsp.buf.code_action({
-                apply = true,
-                context = { only = { 'source.addMissingImports.ts' }, diagnostics = {} },
-              })
-            end,
-          },
-        },
-      },
-
-      rust_analyzer = {
-        settings = {
-          ['rust-analyzer'] = {
-            cargo = { autoreload = true },
-            procMacro = { enable = true },
-            checkOnSave = true,
-            diagnostics = {
-              enable = true,
-              disabled = { 'unresolved-proc-macro' },
-            },
-          },
-        },
-      },
-
-      jsonls = {
-        init_options = { provideFormatter = true },
-      },
-
-      nixd = {},
-
-      hls = {
-        -- filetypes = { 'haskell', 'lhaskell', 'liquid' },
-        settings = {
-          languageServerHaskell = { hlintOn = true, completionSnippetsOn = true },
-        },
-        commands = {
-          LspRemoveUnused = {
-            function()
-              vim.lsp.buf.code_action({
-                apply = true,
-                context = { only = { 'quickfix' }, diagnostics = {} },
-                filter = function(cmd) return cmd.title == 'Remove all redundant imports' end,
-              })
-            end,
-          },
-        },
-      },
-
-      fennel_ls = {
-        settings = get_fennel_ls_config(),
-      },
-      lua_ls = {
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { 'vim', 'web' },
-            },
-            hint = { enable = true },
-            workspace = {
-              -- library = vim.api.nvim_list_runtime_paths(),
-              library = {
-                [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-                [vim.fn.stdpath('data') .. '/lazy/lazy.nvim/lua/lazy'] = true,
-              },
-              maxPreload = 100000,
-              preloadFileSize = 10000,
-            },
-          },
-        },
-      },
-    }
-  end,
-}
-
--- Can be run to setup a language server dynamically
--- _SetupLspServer('name')
-function _SetupLspServer(name, opts, autoformat_ft)
-  local options = opts or {}
-  local nvim_lsp = require 'lspconfig'
-  local cap = options.capabilities or vim.lsp.protocol.make_client_capabilities()
-  cap = require 'blink.cmp'.get_lsp_capabilities(cap)
-  nvim_lsp[name].setup(vim.tbl_extend('force', {
-    on_attach = config.on_lsp_attached,
-    capabilities = cap,
-  }, options))
-
-  if autoformat_ft then config.setup_file_autoformat(autoformat_ft) end
+local function _2_()
+  return vim.cmd("!fnlfmt --fix %")
 end
-
-function plugin.config()
-  vim.g.markdown_fenced_languages = { 'ts=typescript', 'js=javascript' }
-
-  -- Lsp
+config.alt_formatters = {eslint = _1_, fennel_ls = _2_}
+config.format_on_save_ft = {"astro", "c", "cpp", "crystal", "elm", "go", "h", "haskell", "java", "javascript", "javascriptreact", "lua", "nix", "purescript", "racket", "ruby", "rust", "scala", "svelte", "typescript", "typescriptreact", "uiua", "unison", "vue", "gleam"}
+local function _3_()
+  return {biome = {}, clangd = {}, eslint = {}, fennel_ls = config["get-fennel-ls-config"](), gopls = {}, hls = config["get-hls-config"](), jsonls = {init_options = {provideFormatter = true}}, lua_ls = config["get-lua-ls-config"](), nixd = {}, racket_langserver = {}, rubocop = {}, rust_analyzer = {settings = {["rust-analyzer"] = {cargo = {autoreload = true}, checkOnSave = true, diagnostics = {disabled = {"unresolved-proc-macro"}, enable = true}, procMacro = {enable = true}}}}, solargraph = {init_options = {formatting = false}}, tailwindcss = {root_dir = lspconfig.util.root_pattern("tailwind.config.js", "tailwind.config.cjs", "tailwind.config.mjs", "tailwind.config.ts"), single_file_support = false}, ts_ls = config["get-ts-ls-config"](), yamlls = {}}
+end
+config.lsp_servers = _3_
+plugin.config = function()
+  vim.keymap.set("n", "<leader>df", config.toggle_autoformat)
+  vim.api.nvim_create_user_command("LspInfoV", "vert botright checkhealth vim.lsp", {})
   for name, options in pairs(config.lsp_servers()) do
-    _SetupLspServer(name, options)
+    _G._SetupLspServer(name, options)
   end
-
-  -- Autoformatting
-  vim.keymap.set('n', '<leader>df', config.toggle_autoformat)
   config.setup_file_autoformat(config.format_on_save_ft)
-
-  vim.api.nvim_create_user_command('LspInfoV', 'vert botright checkhealth vim.lsp', {});
-
-  -- diagnostics config
-  vim.diagnostic.config {
-    signs = true,
-    underline = true,
-    severity_sort = true,
-    virtual_text = {
-      prefix = function(diag)
-        if diag.severity == vim.diagnostic.severity.ERROR then
-          return ' '
-        elseif diag.severity == vim.diagnostic.severity.WARN then
-          return ' '
-        end
-        return '■ '
-      end,
-    },
-    float = {
-      source = true,
-    },
-  }
+  local function virtual_text_prefix(diag)
+    if (diag.severity == vim.diagnostic.severity.ERROR) then
+      return " "
+    elseif (diag.severity == vim.diagnostic.severity.WARN) then
+      return " "
+    else
+    end
+    return "\226\150\160 "
+  end
+  return vim.diagnostic.config({float = {source = true}, severity_sort = true, signs = true, underline = true, virtual_text = {prefix = virtual_text_prefix}})
 end
-
-function config.on_lsp_attached(client, bufnr)
-  local opts = { noremap = true, silent = true, buffer = bufnr }
-
-  -- Navigation
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<cr>', opts)
-
-  -- Moved to snacks picker
-  -- vim.keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  -- vim.keymap.set('n', '<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  -- vim.keymap.set('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-
-  -- Refactor actions
-  vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-  vim.keymap.set('n', '<localleader>f', config.format_buffer, { silent = true, noremap = true })
-  vim.keymap.set('n', '<leader>tu', '<cmd>LspRemoveUnused<cr>', opts)      -- Remove unused imports
-  vim.keymap.set('n', '<leader>ta', '<cmd>LspAddMissingImports<cr>', opts) -- Add missing imports
-
-  -- Diagnostics
-  vim.keymap.set('n', '<localleader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-
-  -- Toggle inlay hints
-  if client:supports_method('textDocument/inlayHints') then
-    local filter = { bufnr = bufnr }
+config.on_lsp_attached = function(client, bufnr)
+  local opts = {buffer = bufnr, noremap = true, silent = true}
+  local function _5_()
+    return vim.lsp.buf.hover({border = "single"})
+  end
+  vim.keymap.set("n", "K", _5_, opts)
+  local function _6_()
+    return vim.lsp.buf.rename()
+  end
+  vim.keymap.set("n", "grn", _6_, opts)
+  vim.keymap.set("n", "<localleader>f", config.format_buffer, {noremap = true, silent = true})
+  local function _7_()
+    return vim.diagnostic.open_float()
+  end
+  vim.keymap.set("n", "<localleader>e", _7_, opts)
+  local function _8_()
+    return vim.diagnostic.goto_prev()
+  end
+  vim.keymap.set("n", "[d", _8_, opts)
+  local function _9_()
+    return vim.diagnostic.goto_next()
+  end
+  vim.keymap.set("n", "]d", _9_, opts)
+  local function _10_()
+    return vim.lsp.buf.code_action()
+  end
+  vim.keymap.set("n", "gra", _10_, opts)
+  vim.keymap.set("n", "<leader>tu", "<cmd>LspRemoveUnused<cr>", opts)
+  vim.keymap.set("n", "<leader>ta", "<cmd>LspAddMissingImports<cr>", opts)
+  if client:supports_method("textDocument/inlayHints") then
+    local filter = {bufnr = bufnr}
     vim.lsp.inlay_hint.enable(false, filter)
-    vim.keymap.set('n', '<C-t>h', function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), {})
-    end, opts)
+    local function toggle_inlay_hint()
+      return vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), {})
+    end
+    return vim.keymap.set("n", "<C-t>h", toggle_inlay_hint, opts)
+  else
+    return nil
   end
 end
-
-function config.setup_file_autoformat(fts)
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = fts,
-    callback = function(ev)
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        buffer = ev.buf,
-        callback = config.run_auto_formatter,
-      })
-    end,
-  })
+config["get-fennel-ls-config"] = function()
+  local def = nfnl_config.default({["root-dir"] = ".", ["rtp-patterns"] = {"."}})
+  return {settings = {["fennel-ls"] = {["extra-globals"] = "vim Snacks", ["fennel-path"] = def["fennel-path"], libraries = {nvim = true}, ["lua-version"] = "lua5.1", ["macro-path"] = def["fennel-macro-path"]}}}
 end
-
--- Autoformatting hooks
-function config.toggle_autoformat()
+config["get-lua-ls-config"] = function()
+  return {settings = {Lua = {diagnostics = {globals = {"vim", "web"}}, hint = {enable = true}, workspace = {library = {[vim.fn.expand("$VIMRUNTIME/lua")] = true, [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true, [(vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy")] = true}, maxPreload = 100000, preloadFileSize = 10000}}}}
+end
+config["get-hls-config"] = function()
+  local function remove_unused_imports()
+    local function _12_(cmd)
+      return (cmd.title == "Remove all redundant imports")
+    end
+    return vim.lsp.buf.code_action({apply = true, context = {diagnostics = {}, only = {"quickfix"}}, filter = _12_})
+  end
+  return {commands = {LspRemoveUnused = {remove_unused_imports}}, settings = {languageServerHaskell = {completionSnippetsOn = true, hlintOn = true}}}
+end
+config["get-ts-ls-config"] = function()
+  local function add_missing_import()
+    return vim.lsp.buf.code_action({apply = true, context = {diagnostics = {}, only = {"source.addMissingImports.ts"}}})
+  end
+  local function remove_unused_imports()
+    return vim.lsp.buf.code_action({apply = true, context = {diagnostics = {}, only = {"source.removeUnused.ts"}}})
+  end
+  return {capabilities = cap_disable_formatting(vim.lsp.protocol.make_client_capabilities()), commands = {LspAddMissingImports = {add_missing_import}, LspRemoveUnused = {remove_unused_imports}}, completions = {completeFunctionCalls = true}}
+end
+_G._SetupLspServer = function(name, opts, autoformat_ft)
+  local options = (opts or {})
+  local nvim_lsp = require("lspconfig")
+  local cap = (options.capabilities or vim.lsp.protocol.make_client_capabilities())
+  cap = blink.get_lsp_capabilities(cap)
+  nvim_lsp[name].setup(vim.tbl_extend("force", {capabilities = cap, on_attach = config.on_lsp_attached}, options))
+  if autoformat_ft then
+    return config.setup_file_autoformat(autoformat_ft)
+  else
+    return nil
+  end
+end
+config.setup_file_autoformat = function(fts)
+  local function _14_(ev)
+    return vim.api.nvim_create_autocmd("BufWritePre", {buffer = ev.buf, callback = config.run_auto_formatter})
+  end
+  return vim.api.nvim_create_autocmd("FileType", {callback = _14_, pattern = fts})
+end
+config.toggle_autoformat = function()
   config.is_autoformat_enabled = not config.is_autoformat_enabled
   if config.is_autoformat_enabled then
-    vim.notify '[Autoformat enabled]'
+    return vim.notify("[Autoformat enabled]")
   else
-    vim.notify '[Autoformat disabled]'
+    return vim.notify("[Autoformat disabled]")
   end
 end
-
-function config.run_auto_formatter()
-  if not config.is_autoformat_enabled then return end
-
-  config.format_buffer()
+config.run_auto_formatter = function()
+  if not config.is_autoformat_enabled then
+    return 
+  else
+  end
+  return config.format_buffer()
 end
-
-function config.has_alt_formatter(client)
+config.has_alt_formatter = function(client)
   return config.alt_formatters[client.name]
 end
-
-function config.format_buffer()
+config.format_buffer = function()
   local buf = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_clients({ bufnr = buf })
-  if #clients == 0 then return end
-
+  local clients = vim.lsp.get_clients({bufnr = buf})
+  if (#clients == 0) then
+    return 
+  else
+  end
   local is_formatted = false
   for _, client in ipairs(clients) do
     if config.has_alt_formatter(client) then
       config.alt_formatters[client.name]()
       is_formatted = true
+    else
     end
   end
-
   if not is_formatted then
-    vim.lsp.buf.format({ async = false })
+    return vim.lsp.buf.format({async = false})
+  else
+    return nil
   end
 end
-
 return plugin

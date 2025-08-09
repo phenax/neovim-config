@@ -72,6 +72,8 @@
 ;set ; (vim.opt.listchars  "lead:.,trail:.,tab:| ")
 (set vim.opt.listchars {:lead "." :trail "." :tab "| "})
 
+(set vim.g.markdown_fenced_languages [:ts=typescript :js=javascript])
+
 ;; Highlight copied text
 (fn highlight_yanked_text []
   (vim.highlight.on_yank {:higroup :YankHighlight :timeout 100}))

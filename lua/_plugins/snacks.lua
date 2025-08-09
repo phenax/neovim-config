@@ -1,141 +1,135 @@
-local M                = { actions = {} }
-local picker_history   = require 'phenax.snacks_picker_history'
-local sortable_buffers = require 'phenax.sortable_buffers'
-local core             = require 'nfnl.core'
-
-local plugin           = {
-  priority = 100,
-  config = function()
-    require 'snacks'.setup {
-      gitbrowse = { enabled = true },
-      bufdelete = { enabled = true },
-      quickfile = { enabled = true },
-      rename = { enabled = true },
-      bigfile = { enabled = true, size = 1 * 1024 * 1024 },
-      words = { enabled = true, debounce = 80, modes = { 'n' } },
-      picker = M.picker_config(),
-      styles = {
-        phenax_git_diff = {
-          style = 'blame_line',
-          border = 'single',
-        },
-        blame_line = {
-          position = 'float',
-          keys = {
-            q = 'close',
-            blame_term_quit = { 'q', function(self) self:close() end, mode = 't' },
-          },
-          on_win = function() vim.cmd.startinsert() end,
-        },
-      },
-    }
-  end,
-
-  keys = core.concat(sortable_buffers.lazy_keys(), {
-    { mode = 'n',          '<c-d>',            function() Snacks.bufdelete() end },
-    { mode = 'n',          '<c-f>',            function() Snacks.picker.grep() end },
-    { mode = 'n',          '<leader>f',        function() M.find_files() end },
-    { mode = 'n',          '<leader>sp',       function() Snacks.picker.pickers() end },
-    { mode = 'n',          '<C-_>',            function() Snacks.picker.grep_buffers() end },
-    { mode = 'n',          '<localleader>ne',  function() Snacks.picker.explorer() end },
-    { mode = 'n',          '<localleader>uu',  function() Snacks.picker.undo() end },
-    { mode = 'n',          'z=',               function() Snacks.picker.spelling() end },
-    { mode = 'n',          '<leader>tr',       function() Snacks.picker.resume() end },
-    { mode = 'n',          '<leader>qf',       function() Snacks.picker.qflist() end },
-    -- Git
-    { mode = { 'n', 'v' }, '<leader>gb',       function() Snacks.gitbrowse() end },
-    { mode = 'n',          '<localleader>gbb', function() Snacks.picker.git_branches() end },
-    { mode = 'n',          '<localleader>gbs', function() Snacks.picker.git_stash() end },
-    { mode = 'n',          '<localleader>gm',  function() Snacks.git.blame_line({ count = -1 }) end },
-    -- LSP
-    { mode = 'n',          'grr',              function() Snacks.picker.lsp_references() end },
-    { mode = 'n',          'gd',               function() Snacks.picker.lsp_definitions() end },
-    { mode = 'n',          'gt',               function() Snacks.picker.lsp_type_definitions() end },
-    { mode = 'n',          '<localleader>ns',  function() Snacks.picker.lsp_symbols() end },
-  }),
-}
-
-function M.picker_config()
-  return {
-    enabled = true,
-    ui_select = true,
-    prompt = ' λ ',
-    icons = { files = { enabled = false } },
-    layout = function()
-      local show_preview = vim.o.columns >= 120
-      return {
-        layout = {
-          box = 'vertical',
-          backdrop = false,
-          row = -1,
-          width = 0,
-          height = 0.65,
-          border = 'top',
-          title = ' {title} {live} {flags}',
-          title_pos = 'center',
-          { win = 'input', height = 1, border = 'bottom' },
-          {
-            box = 'horizontal',
-            { win = 'list', border = 'none' },
-            (show_preview and { win = 'preview', title = '', width = 0.4, border = 'none' } or nil),
-          },
-        }
-      }
-    end,
-    win = {
-      input = { keys = M.picker_mappings() },
-      list = { keys = M.picker_mappings() },
-    },
-    on_close = function(picker)
-      picker_history.save_picker(picker)
-    end,
-  }
+-- [nfnl] fnl/_plugins/snacks.fnl
+local picker_history = require("phenax.snacks_picker_history")
+local sortable_buffers = require("phenax.sortable_buffers")
+local core = require("nfnl.core")
+local snacks = require("snacks")
+local m = {actions = {}}
+local plugin
+local function _1_()
+  return m.config()
 end
-
-function M.picker_mappings()
-  return vim.tbl_extend('force', M.select_index_keys(), {
-    ['<c-p>'] = { 'toggle_preview', mode = { 'i', 'n' } },
-  })
+plugin = {config = _1_, priority = 100, keys = {}}
+plugin.config = function()
+  local function _2_(self)
+    return self:close()
+  end
+  local function _3_()
+    return vim.cmd.startinsert()
+  end
+  return snacks.setup({bigfile = {enabled = true, size = (1 * 1024 * 1024)}, bufdelete = {enabled = true}, gitbrowse = {enabled = true}, picker = m.picker_config(), quickfile = {enabled = true}, rename = {enabled = true}, styles = {blame_line = {keys = {blame_term_quit = {"q", _2_, mode = "t"}, q = "close"}, on_win = _3_, position = "float"}, phenax_git_diff = {border = "single", style = "blame_line"}}, words = {debounce = 80, enabled = true, modes = {"n"}}})
 end
-
-function M.find_files()
+local function _4_()
+  return Snacks.bufdelete()
+end
+local function _5_()
+  return Snacks.picker.grep()
+end
+local function _6_()
+  return m.find_files()
+end
+local function _7_()
+  return Snacks.picker.pickers()
+end
+local function _8_()
+  return Snacks.picker.grep_buffers()
+end
+local function _9_()
+  return Snacks.picker.explorer()
+end
+local function _10_()
+  return Snacks.picker.undo()
+end
+local function _11_()
+  return Snacks.picker.spelling()
+end
+local function _12_()
+  return Snacks.picker.resume()
+end
+local function _13_()
+  return Snacks.picker.qflist()
+end
+local function _14_()
+  return Snacks.gitbrowse()
+end
+local function _15_()
+  return Snacks.picker.git_branches()
+end
+local function _16_()
+  return Snacks.picker.git_stash()
+end
+local function _17_()
+  return Snacks.git.blame_line({count = ( - 1)})
+end
+local function _18_()
+  return Snacks.picker.lsp_references()
+end
+local function _19_()
+  return Snacks.picker.lsp_definitions()
+end
+local function _20_()
+  return Snacks.picker.lsp_type_definitions()
+end
+local function _21_()
+  return Snacks.picker.lsp_symbols()
+end
+plugin.keys = core.concat(sortable_buffers.lazy_keys(), {{"<c-d>", _4_, mode = "n"}, {"<c-f>", _5_, mode = "n"}, {"<leader>f", _6_, mode = "n"}, {"<leader>sp", _7_, mode = "n"}, {"<C-_>", _8_, mode = "n"}, {"<localleader>ne", _9_, mode = "n"}, {"<localleader>uu", _10_, mode = "n"}, {"z=", _11_, mode = "n"}, {"<leader>tr", _12_, mode = "n"}, {"<leader>qf", _13_, mode = "n"}, {"<leader>gb", _14_, mode = {"n", "v"}}, {"<localleader>gbb", _15_, mode = "n"}, {"<localleader>gbs", _16_, mode = "n"}, {"<localleader>gm", _17_, mode = "n"}, {"grr", _18_, mode = "n"}, {"gd", _19_, mode = "n"}, {"gt", _20_, mode = "n"}, {"<localleader>ns", _21_, mode = "n"}})
+m.picker_config = function()
+  local function _22_()
+    local show_preview = (vim.o.columns >= 120)
+    return {layout = {{border = "bottom", height = 1, win = "input"}, {{border = "none", win = "list"}, ((show_preview and {border = "none", title = "", width = 0.4, win = "preview"}) or nil), box = "horizontal"}, border = "top", box = "vertical", height = 0.65, row = ( - 1), title = " {title} {live} {flags}", title_pos = "center", width = 0, backdrop = false}}
+  end
+  local function _23_(picker)
+    return picker_history.save_picker(picker)
+  end
+  return {enabled = true, icons = {files = {enabled = false}}, layout = _22_, on_close = _23_, prompt = " \206\187 ", ui_select = true, win = {input = {keys = m.picker_mappings()}, list = {keys = m.picker_mappings()}}}
+end
+m.picker_mappings = function()
+  return vim.tbl_extend("force", m.select_index_keys(), {["<c-p>"] = {"toggle_preview", mode = {"i", "n"}}})
+end
+m.find_files = function()
   if Snacks.git.get_root() then
-    Snacks.picker.git_files({ untracked = true })
+    return Snacks.picker.git_files({untracked = true})
   else
-    Snacks.picker.files()
+    return Snacks.picker.files()
   end
 end
-
-function M.select_index_keys()
+m.select_index_keys = function()
   local keymaps = {}
   for i = 1, 10 do
     local key = i
-    if i == 10 then key = 0 end
-    keymaps['<M-' .. key .. '>'] = { M.actions.highlight_index(i - 1), mode = { 'i', 'n' } }
-    keymaps[tostring(key)] = { M.actions.open_index(i - 1), mode = { 'n' } }
+    if (i == 10) then
+      key = 0
+    else
+    end
+    keymaps[("<M-" .. key .. ">")] = {m.actions.highlight_index((i - 1)), mode = {"i", "n"}}
+    keymaps[tostring(key)] = {m.actions.open_index((i - 1)), mode = {"n"}}
   end
   return keymaps
 end
-
-function M.actions.highlight_index(index)
-  return function()
-    local picker = M.current_picker()
-    if not picker then return end
-    picker.list:_move(index - picker.list.cursor + 1)
+m.actions.highlight_index = function(index)
+  local function _26_()
+    local picker = m.current_picker()
+    if not picker then
+      return 
+    else
+    end
+    return picker.list:_move(((index - picker.list.cursor) + 1))
   end
+  return _26_
 end
-
-function M.actions.open_index(index)
-  return function()
-    local picker = M.current_picker()
-    if not picker then return end
-    picker.list:_move(index - picker.list.cursor + 1)
-    picker:action('confirm')
+m.actions.open_index = function(index)
+  local function _28_()
+    local picker = m.current_picker()
+    if not picker then
+      return 
+    else
+    end
+    picker.list:_move(((index - picker.list.cursor) + 1))
+    return picker:action("confirm")
   end
+  return _28_
 end
-
-function M.current_picker()
+m.current_picker = function()
   return Snacks.picker.get()[1]
 end
-
 return plugin

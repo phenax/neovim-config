@@ -50,3 +50,7 @@
 
 ;; Toggle spell check
 (vim.keymap.set :n :<leader>== ":setlocal spell! spelllang=en_us<CR>")
+
+;; Set ft
+(vim.keymap.set :n :<leader>cf ":set filetype=")
+

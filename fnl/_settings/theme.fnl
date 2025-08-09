@@ -70,7 +70,9 @@
                     :Statement {:fg (. colors.teal 700)}
                     :Tag {:fg (. colors.blue 100)}
                     :Todo {:bold true :fg (. colors.red 100)}
-                    :Type {:fg (. colors.slate 700)}}))
+                    :Type {:fg (. colors.slate 700)}
+                    "@punctuation.bracket.fennel" {:fg (. colors.slate 550)}
+                    "@string.documentation.fennel" {:fg (. colors.slate 650)}}))
 
 (fn theme.highlight.oil []
   (theme.update_hl {:OilDir {:fg (. colors.accent 200)}}))

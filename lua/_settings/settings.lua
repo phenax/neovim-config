@@ -47,6 +47,7 @@ vim.opt.shortmess:append("TIc")
 vim.opt.maxmempattern = 10000
 vim.opt.list = true
 vim.opt.listchars = {lead = ".", trail = ".", tab = "| "}
+vim.g.markdown_fenced_languages = {"ts=typescript", "js=javascript"}
 local function highlight_yanked_text()
   return vim.highlight.on_yank({higroup = "YankHighlight", timeout = 100})
 end
