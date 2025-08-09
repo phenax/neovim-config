@@ -4,7 +4,6 @@
 ; @class Spec
 ; @field name string?
 ; @field enabled boolean?
-; @field keys table? TODO: remove this
 ; @field config function?
 ; @field priority number?
 
@@ -17,10 +16,6 @@
   (when (or (not spec) (= spec.enabled false)) (lua "return "))
 
   (fn _configure []
-    (each [_ value (ipairs (or spec.keys {}))]
-      (local [key action] value)
-      (vim.keymap.set (or value.mode :n) key action
-                      {:remap value.remap :silent value.silent}))
     (when (core.function? spec.config) (spec.config)))
 
   (local (ok error) (pcall _configure))

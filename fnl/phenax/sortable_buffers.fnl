@@ -1,5 +1,5 @@
 (import-macros {: key! : cmd! : aucmd! : augroup!} :phenax.macros)
-(local {: present? : not_nil? : clamp} (require :phenax.utils.utils))
+(local {: present? : not_nil? : clamp : ++} (require :phenax.utils.utils))
 (local core (require :nfnl.core))
 (local snacks_picker_actions (require :snacks.picker.actions))
 
@@ -21,17 +21,17 @@
           {:callback (fn [] (sortable-buffers.populate_buffers)) : group}))
 
 (fn sortable-buffers.mappings []
-  (lambda key [act opts] (core.merge {1 act} opts))
   (lambda last-index [] (length sortable-buffers.sorted_buffers))
   (lambda first-index [] 1)
-  {:<c-d> (key sortable-buffers.actions.delete_buffer {:mode [:i :n]})
-   :<c-g>g (key (sortable-buffers.actions.move_buffer first-index)
-                {:mode [:i :n] :nowait true})
-   :<c-g>G (key (sortable-buffers.actions.move_buffer last-index)
-                {:mode [:i :n] :nowait true})
-   :<c-j> (key (sortable-buffers.actions.move_buffer core.inc) {:mode [:i :n]})
-   :<c-k> (key (sortable-buffers.actions.move_buffer core.dec) {:mode [:i :n]})
-   :dd (key sortable-buffers.actions.delete_buffer {:mode :n})})
+  {:<c-d> (++ [sortable-buffers.actions.delete_buffer] {:mode [:i :n]})
+   :dd (++ [sortable-buffers.actions.delete_buffer] {:mode :n})
+   :<c-g>g (++ [(sortable-buffers.actions.move_buffer first-index)]
+               {:mode [:i :n] :nowait true})
+   :<c-g>G (++ [(sortable-buffers.actions.move_buffer last-index)]
+               {:mode [:i :n] :nowait true})
+   :<c-j> (++ [(sortable-buffers.actions.move_buffer core.inc)] {:mode [:i :n]})
+   :<c-k> (++ [(sortable-buffers.actions.move_buffer core.dec)] {:mode [:i :n]})
+   :dd (++ [sortable-buffers.actions.delete_buffer] {:mode :n})})
 
 (fn sortable-buffers.buffer_picker []
   (sortable-buffers.populate_buffers)

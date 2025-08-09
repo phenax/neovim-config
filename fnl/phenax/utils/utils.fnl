@@ -1,6 +1,6 @@
-(local {: empty? : nil?} (require :nfnl.core))
+(local {: empty? : nil? : merge} (require :nfnl.core))
 
-(local utils {})
+(local utils { :++ merge })
 
 (fn utils.present? [val]
   "Is the given value present / not empty?"

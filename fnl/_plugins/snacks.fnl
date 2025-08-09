@@ -1,105 +1,90 @@
+(import-macros {: key!} :phenax.macros)
 (local picker-history (require :phenax.snacks_picker_history))
+(local core (require :nfnl.core))
+(local {: ++} (require :phenax.utils.utils))
 (local snacks (require :snacks))
 
 (local m {:actions {}})
-(local plugin {:config (fn [] (m.config)) :priority 100 :keys []})
+(local plugin {:config (fn [] (m.config)) :priority 100})
 
 (fn plugin.config []
+  (key! :n :<c-d> (fn [] (Snacks.bufdelete)))
+  (key! :n :<c-f> (fn [] (Snacks.picker.grep)))
+  (key! :n :<leader>f (fn [] (m.find_files)))
+  (key! :n :<leader>sp (fn [] (Snacks.picker.pickers)))
+  (key! :n :<C-_> (fn [] (Snacks.picker.grep_buffers)))
+  (key! :n :<localleader>ne (fn [] (Snacks.picker.explorer)))
+  (key! :n :<localleader>uu (fn [] (Snacks.picker.undo)))
+  (key! :n :z= (fn [] (Snacks.picker.spelling)))
+  (key! :n :<leader>tr (fn [] (Snacks.picker.resume)))
+  (key! :n :<leader>qf (fn [] (Snacks.picker.qflist)))
+  (key! [:n :v] :<leader>gb (fn [] (Snacks.gitbrowse)))
+  (key! :n :<localleader>gbb (fn [] (Snacks.picker.git_branches)))
+  (key! :n :<localleader>gbs (fn [] (Snacks.picker.git_stash)))
+  (key! :n :<localleader>gm
+        (fn []
+          (Snacks.git.blame_line {:count (- 1)})))
+  (key! :n :grr (fn [] (Snacks.picker.lsp_references)))
+  (key! :n :gd (fn [] (Snacks.picker.lsp_definitions)))
+  (key! :n :gt (fn [] (Snacks.picker.lsp_type_definitions)))
+  (key! :n :<localleader>ns (fn [] (Snacks.picker.lsp_symbols)))
+  ;; Setup
+  (lambda quit [self] (self:close))
+  (local blame_line_keys {:q quit :blame_term_quit (++ [:q quit] {:mode :t})})
   (snacks.setup {:bigfile {:enabled true :size (* 1 1024 1024)}
                  :bufdelete {:enabled true}
                  :gitbrowse {:enabled true}
                  :picker (m.picker_config)
                  :quickfile {:enabled true}
                  :rename {:enabled true}
-                 :styles {:blame_line {:keys {:blame_term_quit {1 :q
-                                                                2 (fn [self]
-                                                                    (self:close))
-                                                                :mode :t}
-                                              :q :close}
+                 :styles {:phenax_git_diff {:border :single :style :blame_line}
+                          :blame_line {:keys blame_line_keys
                                        :on_win (fn [] (vim.cmd.startinsert))
-                                       :position :float}
-                          :phenax_git_diff {:border :single :style :blame_line}}
+                                       :position :float}}
                  :words {:debounce 80 :enabled true :modes [:n]}}))
-
-;; TODO: Refactor these
-(set plugin.keys [{1 :<c-d> 2 (fn [] (Snacks.bufdelete)) :mode :n}
-                  {1 :<c-f> 2 (fn [] (Snacks.picker.grep)) :mode :n}
-                  {1 :<leader>f 2 (fn [] (m.find_files)) :mode :n}
-                  {1 :<leader>sp 2 (fn [] (Snacks.picker.pickers)) :mode :n}
-                  {1 :<C-_> 2 (fn [] (Snacks.picker.grep_buffers)) :mode :n}
-                  {1 :<localleader>ne
-                   2 (fn [] (Snacks.picker.explorer))
-                   :mode :n}
-                  {1 :<localleader>uu 2 (fn [] (Snacks.picker.undo)) :mode :n}
-                  {1 :z= 2 (fn [] (Snacks.picker.spelling)) :mode :n}
-                  {1 :<leader>tr 2 (fn [] (Snacks.picker.resume)) :mode :n}
-                  {1 :<leader>qf 2 (fn [] (Snacks.picker.qflist)) :mode :n}
-                  {1 :<leader>gb 2 (fn [] (Snacks.gitbrowse)) :mode [:n :v]}
-                  {1 :<localleader>gbb
-                   2 (fn [] (Snacks.picker.git_branches))
-                   :mode :n}
-                  {1 :<localleader>gbs
-                   2 (fn [] (Snacks.picker.git_stash))
-                   :mode :n}
-                  {1 :<localleader>gm
-                   2 (fn []
-                       (Snacks.git.blame_line {:count (- 1)}))
-                   :mode :n}
-                  {1 :grr 2 (fn [] (Snacks.picker.lsp_references)) :mode :n}
-                  {1 :gd 2 (fn [] (Snacks.picker.lsp_definitions)) :mode :n}
-                  {1 :gt
-                   2 (fn []
-                       (Snacks.picker.lsp_type_definitions))
-                   :mode :n}
-                  {1 :<localleader>ns
-                   2 (fn [] (Snacks.picker.lsp_symbols))
-                   :mode :n}])
 
 (fn m.picker_config []
   {:enabled true
    :icons {:files {:enabled false}}
    :layout (fn []
              (local show-preview (>= vim.o.columns 120))
-             {:layout {1 {:border :bottom :height 1 :win :input}
-                       2 {1 {:border :none :win :list}
-                          2 (or (and show-preview
-                                     {:border :none
-                                      :title ""
-                                      :width 0.4
-                                      :win :preview})
-                                nil)
-                          :box :horizontal}
-                       :backdrop false
-                       :border :top
-                       :box :vertical
-                       :height 0.65
-                       :row (- 1)
-                       :title " {title} {live} {flags}"
-                       :title_pos :center
-                       :width 0}})
+             (local preview-box {:border :none
+                                 :title ""
+                                 :width 0.4
+                                 :win :preview})
+             {:layout (++ [{:border :bottom :height 1 :win :input}
+                           (++ [{:border :none :win :list}
+                                (if show-preview preview-box nil)]
+                               {:box :horizontal})]
+                          {:backdrop false
+                           :border :top
+                           :box :vertical
+                           :height 0.65
+                           :row (- 1)
+                           :title " {title} {live} {flags}"
+                           :title_pos :center
+                           :width 0})})
    :on_close (fn [picker] (picker-history.save_picker picker))
    :prompt " λ "
    :ui_select true
    :win {:input {:keys (m.picker_mappings)} :list {:keys (m.picker_mappings)}}})
 
 (fn m.picker_mappings []
-  (vim.tbl_extend :force (m.select_index_keys)
-                  {:<c-p> {1 :toggle_preview :mode [:i :n]}}))
+  (fn keys-for-index [index]
+    (local key (if (= index 10) 0 index))
+    (lambda alt [k] (.. :<M- k ">"))
+    {(alt key) (++ [(m.actions.highlight_index (- index 1))] {:mode [:i :n]})
+     (tostring key) (++ [(m.actions.open_index (- index 1))] {:mode [:n]})})
+
+  (fn select-index-keys []
+    (local keymaps (fcollect [i 1 10] (keys-for-index i)))
+    (core.reduce core.merge {} keymaps))
+
+  (++ (select-index-keys) {:<c-p> (++ [:toggle_preview] {:mode [:i :n]})}))
 
 (fn m.find_files []
   (if (Snacks.git.get_root) (Snacks.picker.git_files {:untracked true})
       (Snacks.picker.files)))
-
-(fn m.select_index_keys []
-  (let [keymaps {}]
-    (for [i 1 10]
-      (var key i)
-      (when (= i 10) (set key 0))
-      (tset keymaps (.. :<M- key ">")
-            {1 (m.actions.highlight_index (- i 1)) :mode [:i :n]})
-      (tset keymaps (tostring key)
-            {1 (m.actions.open_index (- i 1)) :mode [:n]}))
-    keymaps))
 
 (fn m.actions.highlight_index [index]
   (fn []
