@@ -1,207 +1,213 @@
-local sortable_buffers = {
-  actions = {},
-  sorted_buffers = {},
-  config = {
-    short_name_columns = 45,
-  }
-}
-
-local clamp = function(n, min, max)
-  return math.min(math.max(n, min), max or math.huge)
-end
-
-function sortable_buffers.lazy_keys()
-  local keys = {
-    { mode = 'n', '<localleader>b', function() sortable_buffers.buffer_picker() end },
-    { mode = 'n', ']b',             function() sortable_buffers.select_buffer(function(i) return i + 1 end) end },
-    { mode = 'n', '[b',             function() sortable_buffers.select_buffer(function(i) return i - 1 end) end },
-  }
-  for i = 1, 10 do
-    local key = i
-    if i == 10 then key = 0 end
-    table.insert(keys, { mode = 'n', '<localleader>' .. key, function() sortable_buffers.select_buffer(i) end })
+-- [nfnl] fnl/phenax/sortable_buffers.fnl
+local _local_1_ = require("phenax.utils.utils")
+local present_3f = _local_1_["present?"]
+local not_nil_3f = _local_1_["not_nil?"]
+local clamp = _local_1_["clamp"]
+local core = require("nfnl.core")
+local snacks_picker_actions = require("snacks.picker.actions")
+local sortable_buffers = {actions = {}, config = {short_name_columns = 45}, sorted_buffers = {}}
+sortable_buffers.initialize = function()
+  local function _2_()
+    return sortable_buffers.buffer_picker()
   end
-  return keys
+  vim.keymap.set("n", "<localleader>b", _2_)
+  local function _3_()
+    return sortable_buffers.select_buffer(core.inc)
+  end
+  vim.keymap.set("n", "]b", _3_)
+  local function _4_()
+    return sortable_buffers.select_buffer(core.dec)
+  end
+  vim.keymap.set("n", "[b", _4_)
+  for i = 1, 10 do
+    local key
+    if (i == 10) then
+      key = 0
+    else
+      key = i
+    end
+    local function _6_()
+      return sortable_buffers.select_buffer(i)
+    end
+    vim.keymap.set("n", ("<localleader>" .. key), _6_)
+  end
+  local group = vim.api.nvim_create_augroup("phenax/sortable_buffers", {clear = true})
+  local function _7_()
+    return sortable_buffers.populate_buffers()
+  end
+  return vim.api.nvim_create_autocmd({"BufAdd", "BufDelete", "BufHidden", "BufUnload"}, {callback = _7_, group = group})
 end
-
-function sortable_buffers.initialize()
-  local group = vim.api.nvim_create_augroup('phenax/sortable_buffers', { clear = true })
-  vim.api.nvim_create_autocmd({ 'BufAdd', 'BufDelete', 'BufHidden', 'BufUnload' }, {
-    group = group,
-    callback = function() sortable_buffers.populate_buffers() end,
-  })
+sortable_buffers.mappings = function()
+  local function key(act, opts)
+    _G.assert((nil ~= opts), "Missing argument opts on /home/imsohexy/nixos/config/nvim/fnl/phenax/sortable_buffers.fnl:24")
+    _G.assert((nil ~= act), "Missing argument act on /home/imsohexy/nixos/config/nvim/fnl/phenax/sortable_buffers.fnl:24")
+    return core.merge({act}, opts)
+  end
+  local function last_index()
+    return #sortable_buffers.sorted_buffers
+  end
+  local function first_index()
+    return 1
+  end
+  return {["<c-d>"] = key(sortable_buffers.actions.delete_buffer, {mode = {"i", "n"}}), ["<c-g>g"] = key(sortable_buffers.actions.move_buffer(first_index), {mode = {"i", "n"}, nowait = true}), ["<c-g>G"] = key(sortable_buffers.actions.move_buffer(last_index), {mode = {"i", "n"}, nowait = true}), ["<c-j>"] = key(sortable_buffers.actions.move_buffer(core.inc), {mode = {"i", "n"}}), ["<c-k>"] = key(sortable_buffers.actions.move_buffer(core.dec), {mode = {"i", "n"}}), dd = key(sortable_buffers.actions.delete_buffer, {mode = "n"})}
 end
-
-function sortable_buffers.mappings()
-  return {
-    ['<c-d>'] = { sortable_buffers.actions.delete_buffer, mode = { 'i', 'n' } },
-    ['dd'] = { sortable_buffers.actions.delete_buffer, mode = 'n' },
-    ['<c-j>'] = { sortable_buffers.actions.move_buffer(function(i) return i + 1 end), mode = { 'i', 'n' } },
-    ['<c-k>'] = { sortable_buffers.actions.move_buffer(function(i) return i - 1 end), mode = { 'i', 'n' } },
-    ['<c-g>g'] = {
-      sortable_buffers.actions.move_buffer(function(_) return 1 end),
-      mode = { 'i', 'n' },
-      nowait = true,
-    },
-    ['<c-g>G'] = {
-      sortable_buffers.actions.move_buffer(function(_) return #sortable_buffers.sorted_buffers end),
-      mode = { 'i', 'n' },
-      nowait = true,
-    },
-  }
-end
-
-function sortable_buffers.buffer_picker()
+sortable_buffers.buffer_picker = function()
   sortable_buffers.populate_buffers()
   local current_buffer = vim.api.nvim_get_current_buf()
-
-  Snacks.picker.pick({
-    source = 'sortable_buffers',
-    finder = sortable_buffers.finder,
-    format = sortable_buffers.formatter,
-    title = 'Buffers',
-    focus = 'list',
-    preview = require 'snacks.picker'.preview.file,
-    on_show = function(picker)
-      local cur = sortable_buffers.buffer_to_sort_position(current_buffer)
-      sortable_buffers.set_selection(picker, cur)
-    end,
-    win = {
-      input = { keys = sortable_buffers.mappings() },
-      list = { keys = sortable_buffers.mappings() },
-    }
-  })
-end
-
-function sortable_buffers.finder()
-  local results = {}
-  for index, buf in ipairs(sortable_buffers.sorted_buffers) do
-    local info = vim.fn.getbufinfo(buf)[1];
-    local file = info.name ~= '' and info.name or nil
-    local bufname = file and vim.fn.fnamemodify(file, ':~:.') or '[No Name]'
-    table.insert(results, {
-      text = bufname,
-      buf = buf,
-      index = index,
-      changed = info.changed == 1,
-      file = bufname,
-    })
+  local function _8_(picker)
+    local cur = sortable_buffers.buffer_to_sort_position(current_buffer)
+    return sortable_buffers.set_selection(picker, cur)
   end
-  return results
+  return Snacks.picker.pick({finder = sortable_buffers.finder, focus = "list", format = sortable_buffers.formatter, on_show = _8_, preview = require("snacks.picker").preview.file, source = "sortable_buffers", title = "Buffers", win = {input = {keys = sortable_buffers.mappings()}, list = {keys = sortable_buffers.mappings()}}})
 end
-
-function sortable_buffers.formatter(entry)
-  local segments = vim.split(entry.file, '/')
+sortable_buffers.finder = function()
+  local function to_finder_result(_9_)
+    local index = _9_[1]
+    local buf = _9_[2]
+    local info = vim.fn.getbufinfo(buf)[1]
+    local file
+    if present_3f(info.name) then
+      file = info.name
+    else
+      file = nil
+    end
+    local bufname = ((file and vim.fn.fnamemodify(file, ":~:.")) or "[No Name]")
+    return {buf = buf, changed = (info.changed == 1), file = bufname, index = index, text = bufname}
+  end
+  return core["map-indexed"](to_finder_result, sortable_buffers.sorted_buffers)
+end
+sortable_buffers.formatter = function(entry)
+  local segments = vim.split(entry.file, "/")
   local file_short = segments[#segments]
-  if #segments > 1 then
-    file_short = segments[#segments - 1] .. '/' .. segments[#segments]
+  if (#segments > 1) then
+    file_short = (segments[(#segments - 1)] .. "/" .. segments[#segments])
+  else
   end
-  if string.len(file_short) > sortable_buffers.config.short_name_columns then
-    file_short = '…' .. string.sub(file_short, -sortable_buffers.config.short_name_columns + 2, -1)
+  if (string.len(file_short) > sortable_buffers.config.short_name_columns) then
+    file_short = ("\226\128\166" .. string.sub(file_short, (( - sortable_buffers.config.short_name_columns) + 2), ( - 1)))
+  else
   end
-  return {
-    { Snacks.picker.util.align(tostring(entry.index), 4),                               'PhenaxBufferIndex' },
-    { Snacks.picker.util.align(file_short, sortable_buffers.config.short_name_columns), 'PhenaxBufferShortName' },
-    { entry.text,                                                                       entry.changed and 'PhenaxBufferNameChanged' or 'PhenaxBufferName' },
-  }
+  local align = Snacks.picker.util.align
+  local function _13_()
+    if entry.changed then
+      return "PhenaxBufferNameChanged"
+    else
+      return "PhenaxBufferName"
+    end
+  end
+  return {{align(tostring(entry.index), 4), "PhenaxBufferIndex"}, {align(file_short, sortable_buffers.config.short_name_columns), "PhenaxBufferShortName"}, {entry.text, _13_()}}
 end
-
-function sortable_buffers.select_buffer(pos)
+sortable_buffers.select_buffer = function(pos)
   sortable_buffers.populate_buffers()
-  if type(pos) == 'function' then
+  if core["function?"](pos) then
     local cur = sortable_buffers.buffer_to_sort_position(vim.api.nvim_get_current_buf())
     pos = pos(cur)
-    if pos > #sortable_buffers.sorted_buffers then pos = 1 end
-    if pos < 1 then pos = #sortable_buffers.sorted_buffers end
+    if (pos > #sortable_buffers.sorted_buffers) then
+      pos = 1
+    else
+    end
+    if (pos < 1) then
+      pos = #sortable_buffers.sorted_buffers
+    else
+    end
+  else
   end
   local buf = sortable_buffers.sorted_buffers[pos]
-  if buf == nil then return end
-  vim.api.nvim_set_current_buf(buf)
+  if (buf == nil) then
+    return 
+  else
+  end
+  return vim.api.nvim_set_current_buf(buf)
 end
-
-function sortable_buffers.buffer_to_sort_position(buf)
+sortable_buffers.buffer_to_sort_position = function(buf)
   for index, value in ipairs(sortable_buffers.sorted_buffers) do
-    if buf == value then
+    if (buf == value) then
       return index
+    else
     end
   end
   return #sortable_buffers.sorted_buffers
 end
-
---- @param get_new_index fun(i: number): number
-function sortable_buffers.actions.move_buffer(get_new_index)
-  local move_buf = function(cur_index, next_index)
-    if cur_index < 1 or cur_index > #sortable_buffers.sorted_buffers then return end
-    if next_index < 1 or next_index > #sortable_buffers.sorted_buffers then return end
+sortable_buffers.actions.move_buffer = function(get_new_index)
+  local function move_buf(cur_index, next_index)
+    if ((cur_index < 1) or (cur_index > #sortable_buffers.sorted_buffers)) then
+      return 
+    else
+    end
+    if ((next_index < 1) or (next_index > #sortable_buffers.sorted_buffers)) then
+      return 
+    else
+    end
     local buf = sortable_buffers.sorted_buffers[cur_index]
     table.remove(sortable_buffers.sorted_buffers, cur_index)
-    table.insert(sortable_buffers.sorted_buffers, next_index, buf)
+    return table.insert(sortable_buffers.sorted_buffers, next_index, buf)
   end
-
-  return function()
+  local function _21_()
     local picker = sortable_buffers.get_current_picker()
     local pos = picker.list.cursor
     local entry = picker.list:current()
-    if not entry then return end
-
+    if not entry then
+      return 
+    else
+    end
     local cur_index = sortable_buffers.buffer_to_sort_position(entry.buf)
-    local is_filtered = pos ~= cur_index
-    local next_index = get_new_index(cur_index);
+    local is_filtered = (pos ~= cur_index)
+    local next_index = get_new_index(cur_index)
     move_buf(cur_index, clamp(next_index, 1, #sortable_buffers.sorted_buffers))
     sortable_buffers.refresh_picker()
     if not is_filtered then
-      sortable_buffers.set_selection(picker, next_index)
+      return sortable_buffers.set_selection(picker, next_index)
     else
-      sortable_buffers.set_selection(picker, pos)
+      return sortable_buffers.set_selection(picker, pos)
     end
   end
+  return _21_
 end
-
-function sortable_buffers.actions.delete_buffer()
+sortable_buffers.actions.delete_buffer = function()
   local picker = sortable_buffers.get_current_picker()
-  if not picker then return end
-
+  if not picker then
+    return 
+  else
+  end
   local entry = picker.list:current()
-  if not entry then return end
+  if not entry then
+    return 
+  else
+  end
   local pos = picker.list.cursor
-  require 'snacks.picker.actions'.bufdelete(picker)
-
+  snacks_picker_actions.bufdelete(picker)
   sortable_buffers.populate_buffers()
   sortable_buffers.refresh_picker()
-  if pos > picker.list:count() then pos = picker.list:count() end
-  sortable_buffers.set_selection(picker, pos)
+  pos = math.min(pos, picker.list:count())
+  return sortable_buffers.set_selection(picker, pos)
 end
-
-function sortable_buffers.set_selection(picker, pos)
-  picker.list:view(pos)
+sortable_buffers.set_selection = function(picker, pos)
+  return picker.list:view(pos)
 end
-
-function sortable_buffers.get_current_picker()
+sortable_buffers.get_current_picker = function()
   return Snacks.picker.get()[1]
 end
-
-function sortable_buffers.refresh_picker()
+sortable_buffers.refresh_picker = function()
   local picker = sortable_buffers.get_current_picker()
-  if not picker then return end
-  picker:find({ refresh = true })
-end
-
-function sortable_buffers.populate_buffers()
-  -- Remove unloaded buffers
-  sortable_buffers.sorted_buffers = vim.tbl_filter(sortable_buffers.is_buf_valid,
-    sortable_buffers.sorted_buffers)
-
-  -- Add new buffers
-  local bufnrs = vim.api.nvim_list_bufs()
-  for _, buf in ipairs(bufnrs) do
-    if sortable_buffers.is_buf_valid(buf) and not vim.tbl_contains(sortable_buffers.sorted_buffers, buf) then
-      table.insert(sortable_buffers.sorted_buffers, buf)
-    end
+  if not_nil_3f(picker) then
+    return picker:find({refresh = true})
+  else
+    return nil
   end
 end
-
-function sortable_buffers.is_buf_valid(buf)
-  return vim.api.nvim_buf_is_valid(buf) and vim.fn.buflisted(buf) == 1
+sortable_buffers.populate_buffers = function()
+  sortable_buffers.sorted_buffers = vim.tbl_filter(sortable_buffers.is_buf_valid, sortable_buffers.sorted_buffers)
+  local bufnrs = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(bufnrs) do
+    local new_valid_buf_3f = (sortable_buffers.is_buf_valid(buf) and not vim.tbl_contains(sortable_buffers.sorted_buffers, buf))
+    if new_valid_buf_3f then
+      table.insert(sortable_buffers.sorted_buffers, buf)
+    else
+    end
+  end
+  return nil
 end
-
+sortable_buffers.is_buf_valid = function(buf)
+  return (vim.api.nvim_buf_is_valid(buf) and (vim.fn.buflisted(buf) == 1))
+end
 return sortable_buffers

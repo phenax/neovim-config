@@ -14,3 +14,13 @@ format:
 fennel_ls_setup:
   mkdir -p $HOME/.local/share/fennel-ls/docsets/
   curl -o $HOME/.local/share/fennel-ls/docsets/nvim.lua 'https://git.sr.ht/~micampe/fennel-ls-nvim-docs/blob/main/nvim.lua'
+
+lua2fnl path:
+  #!/usr/bin/env sh
+  cd dummy/antifennel
+  lua_path="../../{{path}}"
+  [ -f "$lua_path" ] || exit 1;
+  fnl_path="$(echo "$lua_path" | sed 's/lua/fnl/g')"
+  luajit ./antifennel.lua "$lua_path" > "$fnl_path"
+  rm "$lua_path"
+

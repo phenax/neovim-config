@@ -1,8 +1,7 @@
-local M = {}
-
-function M.initialize()
-  require 'phenax.refactorings.ruby'.initialize()
-  require 'phenax.refactorings.js'.initialize()
+-- [nfnl] fnl/phenax/refactorings/init.fnl
+local refactorings = {}
+refactorings.initialize = function()
+  require("phenax.refactorings.ruby").initialize()
+  return require("phenax.refactorings.js").initialize()
 end
-
-return M
+return refactorings

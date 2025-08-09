@@ -1,100 +1,133 @@
-local M = {
-  max_width = 50,
-  simple_ruler_fts = { 'fugitive', 'buffer_manager', 'aerial', 'orgagenda' },
-}
-
-function M.special_buffers()
-  if vim.bo.buftype == 'terminal' then return ' <term> ' end
-  if vim.bo.filetype == 'fugitive' then return ' <git> ' end
-  if vim.tbl_contains(M.simple_ruler_fts, vim.bo.filetype) then return '' end
-  return nil
-end
-
-_G._RulerFilePath = function()
-  local special_name = M.special_buffers()
-  if special_name ~= nil then return special_name end
-
-  local buf_path = vim.api.nvim_buf_get_name(0)
-  if buf_path == '' then return '' end
-  return ' ' .. M.get_short_path(buf_path, vim.o.columns) .. ' '
-end
-
-_G._RulerDiagnostic = function()
-  if M.is_simple_ruler() then return '' end
-  local diag = M.diagnostics()
-  if diag == '' then return '' end
-  return diag
-end
-
-_G._RulerFileStatus = function()
-  if M.is_simple_ruler() then return '' end
-  return '%m%r'
-end
-
-function M.path_segment()
-  return '%#RulerFilePath#%{v:lua._RulerFilePath()}%#Normal#'
-end
-
-function M.status_segment()
-  return '%#RulerFileStatus#%{%v:lua._RulerFileStatus()%}%#Normal#'
-end
-
-function M.diagnostics_segment()
-  return '%{%v:lua._RulerDiagnostic()%}%#Normal#'
-end
-
-function M.is_simple_ruler()
-  local current_ft = vim.bo.filetype
-  for _, ft in ipairs(M.simple_ruler_fts) do
-    if current_ft == ft then return true end
-  end
-  return false
-end
-
-function M.set_ruler_format()
-  local format = '%=' .. M.status_segment()
-      -- .. ' ' .. M.diagnostics_segment()
-      .. ' %<%l/%L, %v'
-      .. ' ' .. M.path_segment()
-  vim.opt.rulerformat = '%' .. M.max_width .. '(' .. format .. '%)'
-  vim.opt.statusline = '%<' .. [[%{repeat('─', winwidth(0))}]] .. '%= ' .. format
-end
-
-function M.initialize()
+-- [nfnl] fnl/phenax/rulerline.fnl
+local _local_1_ = require("phenax.utils.utils")
+local not_nil_3f = _local_1_["not_nil?"]
+local core = require("nfnl.core")
+local str = require("nfnl.string")
+local nil_3f = core["nil?"]
+local contains_3f = core["contains?"]
+local rulerline = {max_width = 50, simple_ruler_fts = {"fugitive", "orgagenda"}, ["show_diagnostics?"] = true, ["show_filestatus?"] = true, ["show_filename?"] = true, ["show_linenum?"] = true}
+rulerline.initialize = function()
   vim.opt.ruler = true
   vim.opt.laststatus = 1
-  M.set_ruler_format()
+  return rulerline.set_ruler_format()
 end
-
-function M.diagnostics()
-  local icons = { Error = '', Warn = '', Info = '', Hint = '' }
-  local diagnostics = ''
-  for severity, icon in pairs(icons) do
-    local count = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity[string.upper(severity)] })
-    if count > 0 then
-      diagnostics = diagnostics .. ' %#DiagnosticSign' .. severity .. '#' .. icon .. ' ' .. count
+rulerline.special_buffers = function()
+  if (vim.bo.buftype == "terminal") then
+    return " <term> "
+  elseif (vim.bo.filetype == "fugitive") then
+    return " <git> "
+  elseif vim.tbl_contains(rulerline.simple_ruler_fts, vim.bo.filetype) then
+    return ""
+  else
+    return nil
+  end
+end
+rulerline.path_segment = function()
+  return "%#RulerFilePath#%{v:lua._RulerFilePath()}%#Normal#"
+end
+rulerline.status_segment = function()
+  return "%#RulerFileStatus#%{%v:lua._RulerFileStatus()%}%#Normal#"
+end
+rulerline.diagnostics_segment = function()
+  return "%{%v:lua._RulerDiagnostic()%}%#Normal#"
+end
+rulerline.is_simple_ruler = function()
+  return contains_3f(rulerline.simple_ruler_fts, vim.bo.filetype)
+end
+rulerline.set_ruler_format = function()
+  local diag
+  if rulerline["show_diagnostics?"] then
+    diag = (" " .. rulerline.diagnostics_segment())
+  else
+    diag = ""
+  end
+  local status
+  if rulerline["show_filestatus?"] then
+    status = (" " .. rulerline.status_segment())
+  else
+    status = ""
+  end
+  local filepath
+  if rulerline["show_filename?"] then
+    filepath = (" " .. rulerline.path_segment())
+  else
+    filepath = ""
+  end
+  local linenum
+  if rulerline["show_linenum?"] then
+    linenum = (" " .. "%<%l/%L, %v")
+  else
+    linenum = ""
+  end
+  local format = ("%=" .. diag .. status .. linenum .. filepath)
+  vim.opt.rulerformat = ("%" .. rulerline.max_width .. "(" .. format .. "%)")
+  vim.opt.statusline = ("%<" .. "%{repeat('\226\148\128', winwidth(0))}" .. "%= " .. format)
+  return nil
+end
+rulerline.diagnostics = function()
+  local icons = {Error = "\239\128\141", Hint = "\239\160\180", Info = "\239\129\154", Warn = "\239\129\177"}
+  local function to_diagnostic_text(_7_)
+    local severity = _7_[1]
+    local icon = _7_[2]
+    _G.assert((nil ~= icon), "Missing argument icon on /home/imsohexy/nixos/config/nvim/fnl/phenax/rulerline.fnl:55")
+    _G.assert((nil ~= severity), "Missing argument severity on /home/imsohexy/nixos/config/nvim/fnl/phenax/rulerline.fnl:55")
+    local severity_value = vim.diagnostic.severity[string.upper(severity)]
+    local count = #vim.diagnostic.get(0, {severity = severity_value})
+    if (count > 0) then
+      return ("%#DiagnosticSign" .. severity .. "#" .. icon .. " " .. count)
+    else
+      return nil
     end
   end
-  return diagnostics
+  return str.join(" ", core.remove(nil_3f, core["map-indexed"](to_diagnostic_text, icons)))
 end
-
-function M.get_short_path(path, win_width)
-  local segments = vim.split(path, '/')
-  if #segments == 0 then
+rulerline.get_short_path = function(path, win_width)
+  local segments = vim.split(path, "/")
+  local _9_ = #segments
+  if (_9_ == 0) then
     return path
-  elseif #segments == 1 then
+  elseif (_9_ == 1) then
     return segments[1]
   else
-    local dir = segments[#segments - 1]
+    local _ = _9_
+    local dir = segments[(#segments - 1)]
     local fname = segments[#segments]
-    if string.len(dir) > 25 or string.len(dir .. fname) > 50 then
-      dir = string.sub(dir, 1, 5) .. '…'
-    elseif string.len(dir) > 5 and win_width < 85 then
-      dir = string.sub(dir, 1, 5) .. '…'
+    if ((string.len(dir) > 25) or (string.len((dir .. fname)) > 50)) then
+      dir = (string.sub(dir, 1, 5) .. "\226\128\166")
+    elseif ((string.len(dir) > 5) and (win_width < 85)) then
+      dir = (string.sub(dir, 1, 5) .. "\226\128\166")
+    else
     end
-    if string.len(fname) > 40 then fname = string.sub(fname, 1, 10) .. '…' .. string.sub(fname, -10, -1) end
-    return dir .. '/' .. fname
+    if (string.len(fname) > 40) then
+      fname = (string.sub(fname, 1, 10) .. "\226\128\166" .. string.sub(fname, ( - 10), ( - 1)))
+    else
+    end
+    return (dir .. "/" .. fname)
   end
 end
-
-return M
+_G._RulerFilePath = function()
+  local buf_path = vim.api.nvim_buf_get_name(0)
+  local special_name = rulerline.special_buffers()
+  if not_nil_3f(special_name) then
+    return special_name
+  elseif (buf_path == "") then
+    return ""
+  else
+    return (" " .. rulerline.get_short_path(buf_path, vim.o.columns) .. " ")
+  end
+end
+_G._RulerDiagnostic = function()
+  if rulerline.is_simple_ruler() then
+    return ""
+  else
+    return (rulerline.diagnostics() or "")
+  end
+end
+_G._RulerFileStatus = function()
+  if rulerline.is_simple_ruler() then
+    return ""
+  else
+    return "%m%r"
+  end
+end
+return rulerline

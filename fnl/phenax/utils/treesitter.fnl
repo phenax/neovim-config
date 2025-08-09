@@ -4,15 +4,16 @@
 (local M {})
 
 (fn M.find_closest_parent [node pred]
-  (if (pred node) node
-      (do
-        (local parent (node:parent))
-        (when parent (M.find_closest_parent parent pred)))))
+  (if (core.nil? node) nil
+      (if (pred node) node
+          (do
+            (local parent (node:parent))
+            (when parent (M.find_closest_parent parent pred))))))
 
 (fn M.find_closest_parent_of_type [node types]
   (M.find_closest_parent node (fn [n] (vim.tbl_contains types (n:type)))))
 
-(set M.get_node_at_cursor ts_utils.get_node_at_cursor)
+(fn M.get_node_at_cursor [win] (ts_utils.get_node_at_cursor win))
 
 (fn M.get_root_node [bufnr]
   (local ft (. vim.bo bufnr :filetype))

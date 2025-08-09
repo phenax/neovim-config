@@ -28,8 +28,7 @@
                                 :pattern [:org :orgagenda]})
   ;; Personal plugins
   ((. (require :phenax.orgmode.links) :initialize))
-  ((. (require :phenax.orgmode.present) :initialize))
-  ((. (require :phenax.orgmode.rpg) :initialize)))
+  ((. (require :phenax.orgmode.present) :initialize)))
 
 (fn m.configure_org_ft []
   (set vim.opt_local.conceallevel 2))

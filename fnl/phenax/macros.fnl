@@ -8,10 +8,17 @@
 (fn aucmd! [ev opts]
   `(vim.api.nvim_create_autocmd ,ev ,opts))
 
+(fn augroup! [name opts]
+  `(vim.api.nvim_create_augroup ,name ,opts))
+
 (fn key! [mode key action opts]
   `(vim.keymap.set ,mode ,key ,action ,opts))
 
 (fn => [...]
   `(fn [val#] (-> val# ,...)))
 
-{: cmd! : aucmd! : key! : =>}
+(fn ?call [obj method ...]
+  `(let [_val_# ,obj]
+     (and _val_# (: _val_# ,method ,...))))
+
+{: cmd! : aucmd! : key! : => : augroup! : ?call}

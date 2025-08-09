@@ -16,8 +16,7 @@ m.config = function()
   end
   vim.api.nvim_create_autocmd("FileType", {callback = _2_, pattern = {"org", "orgagenda"}})
   require("phenax.orgmode.links").initialize()
-  require("phenax.orgmode.present").initialize()
-  return require("phenax.orgmode.rpg").initialize()
+  return require("phenax.orgmode.present").initialize()
 end
 m.configure_org_ft = function()
   vim.opt_local.conceallevel = 2

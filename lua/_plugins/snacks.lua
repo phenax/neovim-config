@@ -1,7 +1,5 @@
 -- [nfnl] fnl/_plugins/snacks.fnl
 local picker_history = require("phenax.snacks_picker_history")
-local sortable_buffers = require("phenax.sortable_buffers")
-local core = require("nfnl.core")
 local snacks = require("snacks")
 local m = {actions = {}}
 local plugin
@@ -72,7 +70,7 @@ end
 local function _21_()
   return Snacks.picker.lsp_symbols()
 end
-plugin.keys = core.concat(sortable_buffers.lazy_keys(), {{"<c-d>", _4_, mode = "n"}, {"<c-f>", _5_, mode = "n"}, {"<leader>f", _6_, mode = "n"}, {"<leader>sp", _7_, mode = "n"}, {"<C-_>", _8_, mode = "n"}, {"<localleader>ne", _9_, mode = "n"}, {"<localleader>uu", _10_, mode = "n"}, {"z=", _11_, mode = "n"}, {"<leader>tr", _12_, mode = "n"}, {"<leader>qf", _13_, mode = "n"}, {"<leader>gb", _14_, mode = {"n", "v"}}, {"<localleader>gbb", _15_, mode = "n"}, {"<localleader>gbs", _16_, mode = "n"}, {"<localleader>gm", _17_, mode = "n"}, {"grr", _18_, mode = "n"}, {"gd", _19_, mode = "n"}, {"gt", _20_, mode = "n"}, {"<localleader>ns", _21_, mode = "n"}})
+plugin.keys = {{"<c-d>", _4_, mode = "n"}, {"<c-f>", _5_, mode = "n"}, {"<leader>f", _6_, mode = "n"}, {"<leader>sp", _7_, mode = "n"}, {"<C-_>", _8_, mode = "n"}, {"<localleader>ne", _9_, mode = "n"}, {"<localleader>uu", _10_, mode = "n"}, {"z=", _11_, mode = "n"}, {"<leader>tr", _12_, mode = "n"}, {"<leader>qf", _13_, mode = "n"}, {"<leader>gb", _14_, mode = {"n", "v"}}, {"<localleader>gbb", _15_, mode = "n"}, {"<localleader>gbs", _16_, mode = "n"}, {"<localleader>gm", _17_, mode = "n"}, {"grr", _18_, mode = "n"}, {"gd", _19_, mode = "n"}, {"gt", _20_, mode = "n"}, {"<localleader>ns", _21_, mode = "n"}}
 m.picker_config = function()
   local function _22_()
     local show_preview = (vim.o.columns >= 120)
