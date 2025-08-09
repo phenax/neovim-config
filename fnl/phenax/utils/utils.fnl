@@ -12,4 +12,10 @@
 
 (fn utils.clamp [n min max] (math.min (math.max n min) (or max math.huge)))
 
+(fn utils.index-of [item ls]
+  (each [_index x (ipairs ls)]
+    (when (= item x)
+      (lua "return _index")))
+  nil)
+
 utils

@@ -71,6 +71,7 @@
                     :Tag {:fg (. colors.blue 100)}
                     :Todo {:bold true :fg (. colors.red 100)}
                     :Type {:fg (. colors.slate 700)}
+                    "Delimiter" {:fg (. colors.slate 600)}
                     "@punctuation.bracket.fennel" {:fg (. colors.slate 550)}
                     "@string.documentation.fennel" {:fg (. colors.slate 650)}}))
 
