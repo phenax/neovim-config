@@ -1,3 +1,4 @@
+(import-macros {: cmd!} :phenax.macros)
 (fn gh [p] (.. "https://github.com/" p))
 (local version vim.version.range)
 
@@ -20,4 +21,5 @@
                {:src (gh :saghen/blink.cmp) :version (version :1.*)}
                {:src (gh :windwp/nvim-ts-autotag)}
                {:src (gh :windwp/nvim-autopairs)}])
-               
+
+(cmd! :PackUpdate (fn [] (vim.pack.update)) {})
