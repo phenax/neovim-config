@@ -2,7 +2,7 @@
 (local colors (require :_settings.colors))
 (local theme {:colors (require :_settings.colors) :highlight {}})
 
-(fn theme.setup [colorscheme]
+(fn theme.initialize [colorscheme]
   (set vim.o.background :dark)
   (set vim.g.base16colorspace 256)
   (set vim.go.termguicolors true)
