@@ -46,7 +46,7 @@
                            ; denols = {},
                            ; :elmls {:init_options {:elmReviewDiagnostics :warning}}
                            :eslint {}
-                           :fennel_ls (config.get-fennel-ls-config)
+                           :fennel_ls {}
                            ; :gleam {}
                            :gopls {}
                            :hls (config.get-hls-config)
@@ -118,13 +118,13 @@
 
     (key! :n :<C-t>h toggle-inlay-hint opts)))
 
-(fn config.get-fennel-ls-config []
-  (local def (nfnl-config.default {:root-dir "." :rtp-patterns ["."]}))
-  {:settings {:fennel-ls {:extra-globals "vim Snacks"
-                          :fennel-path def.fennel-path
-                          :libraries {:nvim true}
-                          :lua-version :lua5.1
-                          :macro-path def.fennel-macro-path}}})
+; (fn config.get-fennel-ls-config []
+;   (local def (nfnl-config.default {:root-dir "." :rtp-patterns ["."]}))
+;   {:settings {:fennel-ls {:extra-globals "vim Snacks"
+;                           :fennel-path def.fennel-path
+;                           :libraries {:nvim true}
+;                           :lua-version :lua5.1
+;                           :macro-path def.fennel-macro-path}}})
 
 (fn config.get-lua-ls-config []
   {:settings {:Lua {:diagnostics {:globals [:vim :web]}

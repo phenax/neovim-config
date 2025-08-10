@@ -1,2 +1,3 @@
 dummy/
+tmp/
 lua/**/*.lua
