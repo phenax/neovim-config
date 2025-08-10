@@ -1,4 +1,4 @@
-(import-macros {: key! : aucmd! : ?call} :phenax.macros)
+(import-macros {: ?call} :phenax.macros)
 (local tsutils (require :phenax.utils.treesitter))
 (local text (require :phenax.utils.text))
 (local {: not_nil?} (require :phenax.utils.utils))
