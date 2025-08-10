@@ -64,6 +64,7 @@
                            :title " {title} {live} {flags}"
                            :title_pos :center
                            :width 0})})
+   :formatters {:file {:filename_first true :truncate math.huge}}
    :on_close (fn [picker] (picker-history.save_picker picker))
    :prompt " λ "
    :ui_select true
