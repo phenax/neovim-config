@@ -11,3 +11,4 @@
 (init! :phenax.refactorings.init)
 (init! :phenax.typescript)
 (init! :phenax.snacks_picker_history)
+(init! :phenax.color_tools)
