@@ -1,7 +1,6 @@
 (import-macros {: key! : cmd!} :phenax.macros)
 (local lspconfig (require :lspconfig))
 (local blink (require :blink.cmp))
-(local nfnl-config (require :nfnl.config))
 
 (local plugin {})
 
@@ -18,6 +17,7 @@
                                :cpp
                                :crystal
                                :elm
+                               :gleam
                                :go
                                :h
                                :haskell
@@ -36,8 +36,7 @@
                                :typescriptreact
                                :uiua
                                :unison
-                               :vue
-                               :gleam])
+                               :vue])
 
 (set config.lsp_servers (fn []
                           {:biome {}
@@ -66,11 +65,7 @@
                                                                       :procMacro {:enable true}}}}
                            :solargraph {:init_options {:formatting false}}
                            ; svelte = {},
-                           :tailwindcss {:root_dir (lspconfig.util.root_pattern :tailwind.config.js
-                                                                                :tailwind.config.cjs
-                                                                                :tailwind.config.mjs
-                                                                                :tailwind.config.ts)
-                                         :single_file_support false}
+                           :tailwindcss {}
                            :ts_ls (config.get-ts-ls-config)
                            ; :uiua {}
                            ; :unison {:settings {:maxCompletions 100}}
@@ -84,9 +79,9 @@
   (config.setup_file_autoformat config.format_on_save_ft)
 
   (fn virtual_text_prefix [diag]
-    (if (= diag.severity vim.diagnostic.severity.ERROR) (lua "return \" \"")
-        (= diag.severity vim.diagnostic.severity.WARN) (lua "return \" \""))
-    "■ ")
+    (if (= diag.severity vim.diagnostic.severity.ERROR) " "
+        (= diag.severity vim.diagnostic.severity.WARN) " "
+        "■ "))
 
   (vim.diagnostic.config {:float {:source true}
                           :severity_sort true
@@ -132,7 +127,7 @@
                     :workspace {:library {(vim.fn.expand :$VIMRUNTIME/lua) true
                                           (vim.fn.expand :$VIMRUNTIME/lua/vim/lsp) true
                                           (.. (vim.fn.stdpath :data)
-                                              :/lazy/lazy.nvim/lua/lazy) true}
+                                               :/lazy/lazy.nvim/lua/lazy) true}
                                 :maxPreload 100000
                                 :preloadFileSize 10000}}}})
 
@@ -167,11 +162,10 @@
 ;; _SetupLspServer('name')
 (fn _G._SetupLspServer [name opts autoformat-ft]
   (local options (or opts {}))
-  (local nvim_lsp (require :lspconfig))
   (var cap
        (or options.capabilities (vim.lsp.protocol.make_client_capabilities)))
   (set cap (blink.get_lsp_capabilities cap))
-  ((. nvim_lsp name :setup) (vim.tbl_extend :force
+  ((. lspconfig name :setup) (vim.tbl_extend :force
                                             {:capabilities cap
                                              :on_attach config.on_lsp_attached}
                                             options))
