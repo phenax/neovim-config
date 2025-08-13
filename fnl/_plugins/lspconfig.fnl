@@ -1,5 +1,7 @@
-(import-macros {: key! : cmd!} :phenax.macros)
+(import-macros {: key! : cmd! : aucmd!} :phenax.macros)
 (local lspconfig (require :lspconfig))
+(local core (require :nfnl.core))
+(local {: not_nil?} (require :phenax.utils.utils))
 (local blink (require :blink.cmp))
 
 (local plugin {})
@@ -160,45 +162,43 @@
 
 ;; Can be run to setup a language server dynamically
 ;; _SetupLspServer('name')
-(fn _G._SetupLspServer [name opts autoformat-ft]
+(fn _G._SetupLspServer [name opts]
   (local options (or opts {}))
   (var cap
        (or options.capabilities (vim.lsp.protocol.make_client_capabilities)))
   (set cap (blink.get_lsp_capabilities cap))
-  ((. lspconfig name :setup) (vim.tbl_extend :force
-                                            {:capabilities cap
-                                             :on_attach config.on_lsp_attached}
-                                            options))
-  (when autoformat-ft (config.setup_file_autoformat autoformat-ft)))
+  (local lspclient (. lspconfig name))
+  (lspclient:setup (vim.tbl_extend :force
+                                   {:capabilities cap
+                                    :on_attach config.on_lsp_attached}
+                                   options)))
 
 (fn config.setup_file_autoformat [fts]
-  (vim.api.nvim_create_autocmd :FileType
-                               {:callback (fn [ev]
-                                            (vim.api.nvim_create_autocmd :BufWritePre
-                                                                         {:buffer ev.buf
-                                                                          :callback config.run_auto_formatter}))
-                                :pattern fts}))
+  (lambda config.run_auto_formatter []
+    (when config.is_autoformat_enabled
+      (config.format_buffer)))
+  (lambda setup_autoformat_for_ft [ev]
+    (aucmd! :BufWritePre {:buffer ev.buf :callback config.run_auto_formatter}))
+  (aucmd! :FileType {:callback setup_autoformat_for_ft :pattern fts}))
 
 (fn config.toggle_autoformat []
   (set config.is_autoformat_enabled (not config.is_autoformat_enabled))
-  (if config.is_autoformat_enabled (vim.notify "[Autoformat enabled]")
+  (if config.is_autoformat_enabled
+      (vim.notify "[Autoformat enabled]")
       (vim.notify "[Autoformat disabled]")))
 
-(fn config.run_auto_formatter []
-  (when (not config.is_autoformat_enabled) (lua "return "))
-  (config.format_buffer))
+(fn config.has_alt_formatter [client]
+  (not_nil? (. config.alt_formatters client.name)))
 
-(fn config.has_alt_formatter [client] (. config.alt_formatters client.name))
+(fn config.run_alt_formatter [client]
+  (let [fmt (. config.alt_formatters client.name)] (fmt)))
 
 (fn config.format_buffer []
-  (let [buf (vim.api.nvim_get_current_buf)
-        clients (vim.lsp.get_clients {:bufnr buf})]
-    (when (= (length clients) 0) (lua "return "))
-    (var is-formatted false)
-    (each [_ client (ipairs clients)]
-      (when (config.has_alt_formatter client)
-        ((. config.alt_formatters client.name))
-        (set is-formatted true)))
-    (when (not is-formatted) (vim.lsp.buf.format {:async false}))))
+  (local buf (vim.api.nvim_get_current_buf))
+  (local clients (vim.lsp.get_clients {:bufnr buf}))
+  (local clients_with_alt_fmt (core.filter config.has_alt_formatter clients))
+  (if (core.empty? clients_with_alt_fmt)
+      (vim.lsp.buf.format {:async false})
+      (core.run! config.run_alt_formatter clients_with_alt_fmt)))
 
 plugin
