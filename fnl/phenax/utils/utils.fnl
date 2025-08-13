@@ -2,8 +2,12 @@
 
 (local utils { :++ merge })
 
+(fn utils.not_empty? [val]
+  "Is the given value not empty?"
+  (not (empty? val)))
+
 (fn utils.present? [val]
-  "Is the given value present / not empty?"
+  "Is the given value present?"
   ;; TODO: Make this work for values of any type
   (not (empty? val)))
 
