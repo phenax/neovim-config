@@ -73,6 +73,7 @@
                     :Type {:fg (. colors.slate 700)}
                     "Delimiter" {:fg (. colors.slate 600)}
                     "@punctuation.bracket.fennel" {:fg (. colors.slate 550)}
+                    "@phenax.hl.jsx_class" {:fg (. colors.slate 600)}
                     "@string.documentation.fennel" {:fg (. colors.slate 650)}}))
 
 (fn theme.highlight.oil []

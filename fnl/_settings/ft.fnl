@@ -2,7 +2,7 @@
 (vim.cmd "autocmd BufRead,BufEnter *.curl set ft=sh")
 (vim.cmd "autocmd BufRead,BufEnter *.bqn set filetype=bqn")
 (vim.cmd "autocmd BufRead,BufEnter *.ua set filetype=uiua")
-(vim.cmd "autocmd BufRead,BufEnter *.ts,*.tsx setlocal conceallevel=2")
+(vim.cmd "autocmd BufRead,BufEnter *.ts,*.tsx,*.js,*.jsx setlocal conceallevel=2")
 (vim.cmd "autocmd BufRead,BufEnter *.json.jbuilder set filetype=ruby")
 (vim.cmd "autocmd BufRead,BufEnter *.slim set filetype=slim")
 (vim.cmd "autocmd BufRead,BufEnter *.kbd set filetype=scheme")
