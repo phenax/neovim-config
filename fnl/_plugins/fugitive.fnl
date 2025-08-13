@@ -52,32 +52,33 @@
 (fn m.setup_git_buffer [buf]
   (local opts {:buffer buf :nowait true :remap true})
   (vim.keymap.set :n :q :gq opts)
-  (vim.keymap.set :n :gd m.diffview_for_commit_or_file_under_cursor opts)
+  (vim.keymap.set :n :dc m.diffview_for_commit_under_cursor opts)
+  (vim.keymap.set :n :df m.diffview_for_file_under_cursor opts)
   (vim.keymap.set :n :fl m.files_for_commit_under_cursor opts)
   (vim.api.nvim_set_option_value :bufhidden :delete {: buf})
   (vim.api.nvim_set_option_value :buflisted false {: buf}))
 
 (fn m.files_for_commit_under_cursor []
-  "Show a split window with files changed in the commit id under cursor"
-  (let [rev (vim.fn.expand :<cword>)]
+  "Show a split with files changed in the commit id under cursor"
+  (local rev (vim.fn.expand :<cword>))
+  (when (present? rev)
     (vim.cmd.Git (.. "show --name-only " rev))))
 
-(fn m.diffview_for_commit_or_file_under_cursor []
-  "Show a diff window for the commit or file under cursor.
-  If the current buffer starts with `commit <rev>`, it will show a diff for the file path under cursor on that commit.
-  Otherwise, word under cursor is used as revision"
+(fn m.diffview_for_file_under_cursor []
+  "Show a diff window for the file path under cursor.
+  Only works for buffers starting with `commit <rev>`"
   (local buf (vim.api.nvim_get_current_buf))
   (local first-line (. (vim.api.nvim_buf_get_lines buf 0 1 false) 1))
-  (local (rev file) (if (string.match first-line "^commit%s+")
-                        (do
-                          (local rev
-                                 (first-line.gsub first-line "^commit%s+" ""))
-                          (local file (vim.fn.expand :<cfile>))
-                          (values rev file))
-                        (do
-                          (local rev (vim.fn.expand :<cword>))
-                          (values rev nil))))
-  (m.show_diff_in_term rev file))
+  (when (string.match first-line "^commit%s+")
+    (local rev (first-line.gsub first-line "^commit%s+" ""))
+    (local file (vim.fn.expand :<cfile>))
+    (m.show_diff_in_term rev file)))
+
+(fn m.diffview_for_commit_under_cursor []
+  "Show a diff window for the commit under cursor"
+  (local rev (vim.fn.expand :<cword>))
+  (when (present? rev)
+    (m.show_diff_in_term rev nil)))
 
 (var current-term nil)
 

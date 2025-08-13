@@ -1,4 +1,4 @@
-(import-macros {: key! : =>} :phenax.macros)
+(import-macros {: key!} :phenax.macros)
 (local core (require :nfnl.core))
 (local {: present?} (require :phenax.utils.utils))
 

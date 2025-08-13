@@ -1,5 +1,6 @@
 (import-macros {: key! : aucmd! : cmd!} :phenax.macros)
 (local {: nil?} (require :nfnl.core))
+(local {: not_nil?} (require :phenax.utils.utils))
 
 (local localconf
        {:local_config_file :.local.lua
@@ -47,6 +48,6 @@
   (file:close))
 
 (fn localconf.file_exists [filepath]
-  (not= (vim.uv.fs_stat filepath) nil))
+  (not_nil? (vim.uv.fs_stat filepath)))
 
 localconf
