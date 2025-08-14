@@ -71,7 +71,7 @@
                     :Tag {:fg (. colors.blue 100)}
                     :Todo {:bold true :fg (. colors.red 100)}
                     :Type {:fg (. colors.slate 700)}
-                    "Delimiter" {:fg (. colors.slate 600)}
+                    :Delimiter {:fg (. colors.slate 600)}
                     "@punctuation.bracket.fennel" {:fg (. colors.slate 550)}
                     "@phenax.hl.jsx_class" {:fg (. colors.slate 600)}
                     "@string.documentation.fennel" {:fg (. colors.slate 650)}}))
@@ -107,9 +107,9 @@
   (let [bg (. colors.bg 100)]
     (theme.update_hl {:SnacksPicker {: bg}
                       :SnacksPickerBorder {:bg :none :fg :none}
-                      :SnacksPickerBoxTitle {:bg (. colors.accent 100)
-                                             :fg colors.white}
+                      :SnacksPickerBoxTitle {:fg (. colors.accent 100)}
                       :SnacksPickerCursorLine {:bg (. colors.slate 500)}
+                      :SnacksPickerPrompt {:fg (. colors.accent 100)}
                       :SnacksPickerDir {:fg (. colors.slate 650)}
                       :SnacksPickerFile {:fg colors.white}
                       :SnacksPickerListCursorLine {:bg (. colors.slate 500)}

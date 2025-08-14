@@ -5,7 +5,7 @@
 (local snacks (require :snacks))
 
 (local m {:actions {}})
-(local plugin {:config (fn [] (m.config)) :priority 100})
+(local plugin {:priority 100 :config (fn [] (m.config))})
 
 (fn plugin.config []
   (key! :n :<c-d> (fn [] (Snacks.bufdelete)))
@@ -47,34 +47,34 @@
                  :words {:debounce 80 :enabled true :modes [:n]}}))
 
 (fn m.picker_config []
+  (local layout-input {:border :bottom :height 1 :win :input})
+  (local layout-list {:border :none :win :list})
+  (local layout-preview {:border :none :width 0.4 :win :preview})
   {:enabled true
    :icons {:files {:enabled false}}
+   :prompt " λ "
    :layout (fn []
              (local show-preview (>= vim.o.columns 120))
-             (local preview-box {:border :none
-                                 :title ""
-                                 :width 0.4
-                                 :win :preview})
-             {:layout (++ [{:border :bottom :height 1 :win :input}
-                           (++ [{:border :none :win :list}
-                                (if show-preview preview-box nil)]
+             {:layout (++ [layout-input
+                           (++ [layout-list
+                                (if show-preview layout-preview nil)]
                                {:box :horizontal})]
                           {:backdrop false
                            :border :top
                            :box :vertical
-                           :height 0.65
-                           :row (- 1)
-                           :title " {title} {live} {flags}"
-                           :title_pos :center
+                           :height 0.5
+                           :row -1
+                           :title "{title}"
+                           :title_pos :left
                            :width 0})})
    :formatters {:file {:filename_first true :truncate math.huge}}
    :on_close (fn [picker] (picker-history.save_picker picker))
-   :prompt " λ "
    :ui_select true
    :win {:input {:keys (m.picker_mappings)} :list {:keys (m.picker_mappings)}}})
 
 (fn m.picker_mappings []
   (fn keys-for-index [index]
+    "Generate <digit> keys for selecting item by index and <alt-digit> keys for highlighting item"
     (local key (if (= index 10) 0 index))
     (lambda alt [k] (.. :<M- k ">"))
     {(alt key) (++ [(m.actions.highlight_index (- index 1))] {:mode [:i :n]})
