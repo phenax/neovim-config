@@ -3,7 +3,6 @@
 (set vim.g.mapleader "\\")
 (set vim.g.maplocalleader " ")
 
-(set vim.opt.compatible false)
 (set vim.opt.encoding :UTF-8)
 
 (set vim.opt.hidden true)
@@ -70,9 +69,11 @@
 ;; Whitespace characters
 (set vim.opt.list true)
 ;set ; (vim.opt.listchars  "lead:.,trail:.,tab:| ")
-(set vim.opt.listchars {:lead "." :trail "." :tab "| "})
+(set vim.opt.listchars {:leadmultispace "|·" :multispace "·" :trail "·" :tab "→ "})
 
 (set vim.g.markdown_fenced_languages [:ts=typescript :js=javascript])
+
+(set vim.cmd.filetype "plugin indent on")
 
 ;; Highlight copied text
 (fn highlight_yanked_text []

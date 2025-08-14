@@ -87,7 +87,8 @@
   (++ (select-index-keys) {:<c-p> (++ [:toggle_preview] {:mode [:i :n]})}))
 
 (fn m.find_files []
-  (if (Snacks.git.get_root) (Snacks.picker.git_files {:untracked true})
+  (if (= (Snacks.git.get_root) (vim.fn.getcwd))
+      (Snacks.picker.git_files {:untracked true})
       (Snacks.picker.files)))
 
 (fn m.actions.highlight_index [index]

@@ -3,6 +3,10 @@
 (vim.keymap.set :n :<localleader><tab> ":b#<CR>")
 (vim.cmd "command! CloseAll :%bd|e#|bd#|'\"")
 
+; Scroll
+(vim.keymap.set :n :<c-j> :<c-d>zz)
+(vim.keymap.set :n :<c-k> :<c-u>zz)
+
 ;; Window navigation
 (vim.keymap.set :n :<M-h> :<C-w>h)
 (vim.keymap.set :n :<M-l> :<C-w>l)

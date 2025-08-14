@@ -39,7 +39,7 @@
                     :StatusLine {:bg :none :fg (. colors.accent 100)}
                     :StatusLineNC {:bg :none :fg (. colors.slate 400)}
                     :VertSplit {:bg :none :fg (. colors.slate 400)}
-                    :Whitespace {:fg (. colors.slate 400)}
+                    :Whitespace {:fg (. colors.slate 350)}
                     :WinBar {:bg (. colors.bg 100) :fg (. colors.slate 600)}
                     :WinBarNC {:bg (. colors.bg 100) :fg (. colors.slate 400)}
                     :WinSeparator {:bg :none :fg (. colors.slate 400)}

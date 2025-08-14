@@ -32,6 +32,7 @@
   (key! :n :<localleader>gl<space> ":G log --oneline HEAD...HEAD~")
   (key! :n :<localleader>goe :<cmd>GFilesOpen<cr>)
   (key! :n :<localleader>gow "<cmd>GFilesOpen w<cr>")
+  ;; Not fugitive specific but who cares
   (key! :n :<leader>gl "<cmd>diffget //2<cr>")
   (key! :n :<leader>gr "<cmd>diffget //3<cr>"))
 
