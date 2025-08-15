@@ -1,14 +1,15 @@
-vim.opt.runtimepath:append(vim.fn.stdpath('data') .. '/lazy/orgmode')
-
-local config = dofile(vim.fn.stdpath('config') .. '/lua/phenax/orgmode/config.lua')
+vim.pack.add {
+  { src = 'https://github.com/nvim-orgmode/orgmode' }
+}
 local M = {}
 
 function M.init()
-  require 'orgmode'.cron({
+  local config = dofile(vim.fn.stdpath('config') .. '/lua/phenax/orgmode/config.lua')
+  require 'orgmode'.cron {
     org_agenda_files = vim.fs.joinpath(config.path, '**/*.org'),
     org_default_notes_file = config.notes_entry_file,
     notifications = M.notification_options(),
-  })
+  }
 end
 
 function M.notification_options()
@@ -30,10 +31,10 @@ function M.send_org_notification(task)
   local title = task.category .. ' (' .. task.humanized_duration .. ')'
   local subtitle = task.todo .. ' ' .. task.title
   local date = task.type .. ': ' .. task.time:to_string()
-  vim.system({
+  vim.system {
     'notify-send', '--app-name=orgmode',
     title, string.format('%s\n%s', subtitle, date)
-  })
+  }
 end
 
 M.init()
