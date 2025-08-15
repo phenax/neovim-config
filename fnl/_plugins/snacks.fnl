@@ -1,4 +1,4 @@
-(import-macros {: key!} :phenax.macros)
+(import-macros {: key! : cmd!} :phenax.macros)
 (local picker-history (require :phenax.snacks_picker_history))
 (local core (require :nfnl.core))
 (local {: ++} (require :phenax.utils.utils))
@@ -21,13 +21,17 @@
   (key! [:n :v] :<leader>gb (fn [] (Snacks.gitbrowse)))
   (key! :n :<localleader>gbb (fn [] (Snacks.picker.git_branches)))
   (key! :n :<localleader>gbs (fn [] (Snacks.picker.git_stash)))
-  (key! :n :<localleader>gm
-        (fn []
-          (Snacks.git.blame_line {:count (- 1)})))
+  (key! :n :<localleader>gm (fn [] (Snacks.git.blame_line {:count -1})))
   (key! :n :grr (fn [] (Snacks.picker.lsp_references)))
   (key! :n :gd (fn [] (Snacks.picker.lsp_definitions)))
   (key! :n :gt (fn [] (Snacks.picker.lsp_type_definitions)))
   (key! :n :<localleader>ns (fn [] (Snacks.picker.lsp_symbols)))
+  (cmd! :X
+        (fn [opts]
+          "Run args inside a terminal"
+          (local win-opts {:style :split :wo {:winbar (.. "[run] " opts.args)}})
+          (Snacks.terminal.open opts.fargs {:interactive false :win win-opts}))
+        {:nargs "*"})
   ;; Setup
   (lambda quit [self] (self:close))
   (local blame_line_keys {:q quit :blame_term_quit (++ [:q quit] {:mode :t})})
@@ -73,17 +77,15 @@
    :win {:input {:keys (m.picker_mappings)} :list {:keys (m.picker_mappings)}}})
 
 (fn m.picker_mappings []
-  (fn keys-for-index [index]
+  (lambda keys-for-index [index]
     "Generate <digit> keys for selecting item by index and <alt-digit> keys for highlighting item"
     (local key (if (= index 10) 0 index))
     (lambda alt [k] (.. :<M- k ">"))
     {(alt key) (++ [(m.actions.highlight_index (- index 1))] {:mode [:i :n]})
      (tostring key) (++ [(m.actions.open_index (- index 1))] {:mode [:n]})})
-
-  (fn select-index-keys []
+  (lambda select-index-keys []
     (local keymaps (fcollect [i 1 10] (keys-for-index i)))
     (core.reduce core.merge {} keymaps))
-
   (++ (select-index-keys) {:<c-p> (++ [:toggle_preview] {:mode [:i :n]})}))
 
 (fn m.find_files []
