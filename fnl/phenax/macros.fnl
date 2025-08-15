@@ -8,6 +8,9 @@
 (fn aucmd! [ev opts]
   `(vim.api.nvim_create_autocmd ,ev ,opts))
 
+(fn bufcmd! [buf cmd func opts]
+  `(vim.api.nvim_buf_create_user_command ,buf ,cmd ,func ,opts))
+
 (fn augroup! [name opts]
   `(vim.api.nvim_create_augroup ,name ,opts))
 
@@ -21,4 +24,4 @@
   `(let [_val_# ,obj]
      (and _val_# (: _val_# ,method ,...))))
 
-{: cmd! : aucmd! : key! : => : augroup! : ?call}
+{: cmd! : aucmd! : key! : => : augroup! : ?call : bufcmd!}

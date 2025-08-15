@@ -1,12 +1,8 @@
-(import-macros {: key! : cmd! : aucmd!} :phenax.macros)
-(local lspconfig (require :lspconfig))
+(import-macros {: key! : cmd! : aucmd! : augroup! : bufcmd!} :phenax.macros)
 (local core (require :nfnl.core))
-(local {: not_nil?} (require :phenax.utils.utils))
-(local blink (require :blink.cmp))
+(local {: not_nil? : not_empty?} (require :phenax.utils.utils))
 
 (local plugin {})
-
-(fn cap-disable-formatting [cap] (set cap.textDocument.formatting false) cap)
 
 (local config {:is_autoformat_enabled true})
 
@@ -50,7 +46,8 @@
                            :fennel_ls {}
                            ; :gleam {}
                            :gopls {}
-                           :hls (config.get-hls-config)
+                           :hls {:settings {:languageServerHaskell {:completionSnippetsOn true
+                                                                    :hlintOn true}}}
                            ; jdtls = {},
                            :jsonls {:init_options {:provideFormatter true}}
                            :lua_ls (config.get-lua-ls-config)
@@ -76,22 +73,34 @@
 (fn plugin.config []
   (key! :n :<leader>df config.toggle_autoformat)
   (cmd! :LspInfoV "vert botright checkhealth vim.lsp" {})
-  (each [name options (pairs (config.lsp_servers))]
-    (_G._SetupLspServer name options))
-  (config.setup_file_autoformat config.format_on_save_ft)
+  (aucmd! :LspAttach
+          {:group (augroup! :phenax/lspattach {:clear true})
+           :callback (fn [opts]
+                       (config.on-lsp-attached opts.data.client_id opts.buf))})
+  (plugin.configure-lsp-servers (config.lsp_servers))
+  (config.setup-file-autoformat config.format_on_save_ft)
+  (plugin.configure-diagnostics))
 
-  (fn virtual_text_prefix [diag]
+(fn plugin.configure-lsp-servers [lsp_servers]
+  "Setup the given lsp server configurations"
+  (each [name options (pairs lsp_servers)]
+    (when (not_empty? options)
+      (vim.lsp.config name options)))
+  (vim.lsp.enable (vim.tbl_keys lsp_servers)))
+
+(fn plugin.configure-diagnostics []
+  "Configure vim.diagnostic"
+  (lambda virtual-text-prefix [diag]
     (if (= diag.severity vim.diagnostic.severity.ERROR) " "
         (= diag.severity vim.diagnostic.severity.WARN) " "
         "■ "))
-
   (vim.diagnostic.config {:float {:source true}
                           :severity_sort true
                           :signs true
                           :underline true
-                          :virtual_text {:prefix virtual_text_prefix}}))
+                          :virtual_text {:prefix virtual-text-prefix}}))
 
-(fn config.on_lsp_attached [client bufnr]
+(fn config.on-lsp-attached [_client_id bufnr] ; (local client (assert (vim.lsp.get_client_by_id client_id)))
   (local opts {:buffer bufnr :noremap true :silent true})
   (key! :n :K (fn [] (vim.lsp.buf.hover {:border :single})) opts)
   (key! :n :grn (fn [] (vim.lsp.buf.rename)) opts)
@@ -103,77 +112,38 @@
   ;; Code action keys
   (key! :n :gra (fn [] (vim.lsp.buf.code_action)) opts)
   (key! :n :<leader>tu :<cmd>LspRemoveUnused<cr> opts)
-  (key! :n :<leader>ta :<cmd>LspAddMissingImports<cr> opts)
-  ;; Inlay hints
-  (when (client:supports_method :textDocument/inlayHints)
-    (local filter {: bufnr})
-    (vim.lsp.inlay_hint.enable false filter)
-
-    (fn toggle-inlay-hint []
-      (vim.lsp.inlay_hint.enable (not (vim.lsp.inlay_hint.is_enabled filter))
-                                 {}))
-
-    (key! :n :<C-t>h toggle-inlay-hint opts)))
-
-; (fn config.get-fennel-ls-config []
-;   (local def (nfnl-config.default {:root-dir "." :rtp-patterns ["."]}))
-;   {:settings {:fennel-ls {:extra-globals "vim Snacks"
-;                           :fennel-path def.fennel-path
-;                           :libraries {:nvim true}
-;                           :lua-version :lua5.1
-;                           :macro-path def.fennel-macro-path}}})
+  (key! :n :<leader>ta :<cmd>LspAddMissingImports<cr> opts))
 
 (fn config.get-lua-ls-config []
+  (local libraries
+         {(vim.fn.expand :$VIMRUNTIME/lua) true
+          (vim.fn.expand :$VIMRUNTIME/lua/vim/lsp) true})
   {:settings {:Lua {:diagnostics {:globals [:vim :web]}
                     :hint {:enable true}
-                    :workspace {:library {(vim.fn.expand :$VIMRUNTIME/lua) true
-                                          (vim.fn.expand :$VIMRUNTIME/lua/vim/lsp) true
-                                          (.. (vim.fn.stdpath :data)
-                                               :/lazy/lazy.nvim/lua/lazy) true}
+                    :workspace {:library libraries
                                 :maxPreload 100000
                                 :preloadFileSize 10000}}}})
 
-(fn config.get-hls-config []
-  (fn remove-unused-imports []
-    (vim.lsp.buf.code_action {:apply true
-                              :context {:diagnostics {} :only [:quickfix]}
-                              :filter (fn [cmd]
-                                        (= cmd.title
-                                           "Remove all redundant imports"))}))
-
-  {:commands {:LspRemoveUnused [remove-unused-imports]}
-   :settings {:languageServerHaskell {:completionSnippetsOn true :hlintOn true}}})
-
 (fn config.get-ts-ls-config []
-  (fn add-missing-import []
+  (lambda add-missing-import []
     (vim.lsp.buf.code_action {:apply true
                               :context {:diagnostics {}
                                         :only [:source.addMissingImports.ts]}}))
-
-  (fn remove-unused-imports []
+  (lambda remove-unused-imports []
     (vim.lsp.buf.code_action {:apply true
                               :context {:diagnostics {}
                                         :only [:source.removeUnused.ts]}}))
-
-  {:capabilities (cap-disable-formatting (vim.lsp.protocol.make_client_capabilities))
-   :commands {:LspAddMissingImports [add-missing-import]
-              :LspRemoveUnused [remove-unused-imports]}
+  (local current_cfg vim.lsp.config.ts_ls)
+  {:capabilities {:textDocument {:formatting false}}
+   :on_attach (fn [client buf]
+                (pcall current_cfg.on_attach client buf) ; Call lspconfigs on_attach
+                (bufcmd! buf :LspAddMissingImports add-missing-import {})
+                (bufcmd! buf :LspRemoveUnused remove-unused-imports {})
+                (key! :n :<leader>ti :<cmd>LspTypescriptSourceAction<cr>
+                      {:buffer buf}))
    :completions {:completeFunctionCalls true}})
 
-;; Can be run to setup a language server dynamically
-;; _SetupLspServer('name')
-(fn _G._SetupLspServer [name opts]
-  (local options (or opts {}))
-  (var cap
-       (or options.capabilities (vim.lsp.protocol.make_client_capabilities)))
-  (set cap (blink.get_lsp_capabilities cap))
-  (local lspclient (. lspconfig name))
-  (lspclient:setup (vim.tbl_extend :force
-                                   {:capabilities cap
-                                    :on_attach config.on_lsp_attached}
-                                   options)))
-
-(fn config.setup_file_autoformat [fts]
+(fn config.setup-file-autoformat [fts]
   (lambda config.run_auto_formatter []
     (when config.is_autoformat_enabled
       (config.format_buffer)))
