@@ -13,3 +13,4 @@
 (init! :phenax.snacks_picker_history)
 (init! :phenax.colorizer)
 (init! :phenax.formatter)
+(init! :phenax.github)

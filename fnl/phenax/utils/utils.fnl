@@ -1,6 +1,7 @@
 (local {: empty? : nil? : merge} (require :nfnl.core))
+(local str (require :nfnl.string))
 
-(local utils { :++ merge })
+(local utils {:++ merge})
 
 (fn utils.not_empty? [val]
   "Is the given value not empty?"
@@ -21,5 +22,15 @@
     (when (= item x)
       (lua "return _index")))
   nil)
+
+(fn utils.split_lines [input] (str.split input "\n"))
+
+(fn utils.join_lines [input] (table.concat input "\n"))
+
+(fn utils.slice_list [ls min ?max]
+  "vim.list_slice but support negative values for min"
+  (if (and (nil? ?max) (< min 0))
+      (vim.list_slice ls (+ min (length ls)))
+      (vim.list_slice ls min ?max)))
 
 utils
