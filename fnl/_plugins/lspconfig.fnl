@@ -62,7 +62,10 @@
                                                                       :diagnostics {:disabled [:unresolved-proc-macro]
                                                                                     :enable true}
                                                                       :procMacro {:enable true}}}}
-                           :solargraph {:init_options {:formatting false}}
+                           ; :solargraph {:init_options {:formatting false}}
+                           :ruby_lsp {:init_options {:formatter :auto
+                                                     :initializationOptions {:enabledFeatures {:formatting false}}
+                                                     :addonSettings {"Ruby LSP Rails" {:enablePendingMigrationsPrompt true}}}}
                            ; svelte = {},
                            :tailwindcss {}
                            :ts_ls (config.get-ts-ls-config)
