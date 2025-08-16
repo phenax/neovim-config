@@ -95,9 +95,9 @@
   (when (not repl.channel_id) (repl.start_job)))
 
 (fn repl.toggle_window [force-open]
-  (when (and (and force-open repl.visible) (repl.is_window_valid))
+  (when (and force-open repl.visible (repl.is_window_valid))
     (lua "return "))
-  (if (and (and repl.channel_id repl.visible) (repl.is_window_valid))
+  (if (and repl.channel_id repl.visible (repl.is_window_valid))
       (do
         (vim.api.nvim_win_close repl.window true)
         (set repl.window nil)
