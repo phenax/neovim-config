@@ -8,7 +8,7 @@
   (cmd! :Tsc (=> (. :fargs) core.first ts.typecheck) {:nargs "*"}))
 
 (fn ts.typecheck [path]
-  (vim.fn.setqflist {} :r)
+  (vim.fn.setqflist {})
   (vim.cmd.copen)
   (ts.run_tsc_async path))
 
@@ -56,6 +56,6 @@
 (fn ts.get_tsc []
   (if (vim.uv.fs_stat :./node_modules/.bin/tsc)
       [:./node_modules/.bin/tsc]
-      [:tsc]))
+      [:npx :tsc]))
 
 ts

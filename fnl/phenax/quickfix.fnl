@@ -1,5 +1,6 @@
 (import-macros {: key! : aucmd!} :phenax.macros)
 (local {: not_nil?} (require :phenax.utils.utils))
+(local text (require :phenax.utils.text))
 (local core (require :nfnl.core))
 
 (local qf {:window_size (fn [] (math.max 4 (* vim.o.lines 0.3)))
@@ -8,16 +9,21 @@
 (fn qf.initialize []
   (key! :n :<c-c>o :<cmd>copen<cr>)
   (key! :n :<leader>xx (fn [] (vim.diagnostic.setqflist) (vim.cmd.copen)))
-  (aucmd! :FileType {:callback (fn [] (qf.quickfix_window_setup))
-                     :pattern [:qf]}))
+  (aucmd! :FileType
+          {:pattern [:qf]
+           :callback (fn [opts] (qf.quickfix-buf-setup opts.buf))}))
 
-(fn qf.quickfix_window_setup []
-  (key! :n :q :<cmd>cclose<cr> {:buffer true :nowait true})
-  (key! :n :L :<cmd>cnewer<cr> {:buffer true})
-  (key! :n :H :<cmd>colder<cr> {:buffer true})
-  (key! :n :C "<cmd>cexpr []<cr>" {:buffer true})
-  (key! :n :p (fn [] (qf.preview)) {:buffer true})
+(fn qf.quickfix-buf-setup [buf]
+  (key! :n :q :<cmd>cclose<cr> {:buffer buf :nowait true})
+  (key! :n :<c-r> :<cmd>cnewer<cr> {:buffer buf})
+  (key! :n :u :<cmd>colder<cr> {:buffer buf})
+  (key! [:n :x] :dd qf.delete-items {:buffer buf})
+  (key! :n :C "<cmd>cexpr []<cr>" {:buffer buf})
+  (key! :n :p qf.preview {:buffer buf})
   (qf.set_qf_win_height))
+
+(fn qf.add-item-previewer [preview_type preview]
+  (tset qf.item-previewers preview_type preview))
 
 (fn qf.set_qf_win_height []
   "Sets qf window height"
@@ -35,10 +41,11 @@
                :on_win (fn [win]
                          (vim.api.nvim_win_set_cursor win.win
                                                       [(or item.lnum 0)
-                                                       (or item.col 0)]))
+                                                       (- (or item.col 0) 1)]))
                :keys {:q :close}}))
 
 (fn qf.preview []
+  "Preview (p key) action to trigger custom preview for text"
   (local index (vim.fn.line "."))
   (local qfitem (. (vim.fn.getqflist) index))
   (local preview-type (?. qfitem :user_data :preview_type))
@@ -48,7 +55,17 @@
     (when (core.function? p) (set previewer p)))
   (previewer qfitem index))
 
-(fn qf.add-item-previewer [preview_type preview]
-  (tset qf.item-previewers preview_type preview))
+(fn qf.delete-items []
+  "Delete item under cursor or visual selected lines from quickfix list
+  Note: Selects current line if not in visual mode so affects gv"
+  (local visual-mode? (: (vim.fn.mode) :match "[vV]"))
+  (when (not visual-mode?) (vim.cmd.normal :V))
+  (local (line-start col-start line-end _) (text.get_selection_range))
+  (local qflist (vim.fn.getqflist))
+  (for [index line-end line-start -1]
+    (table.remove qflist index))
+  (vim.fn.setqflist qflist)
+  (pcall vim.api.nvim_win_set_cursor 0
+         [(math.min line-start (length qflist)) col-start]))
 
 qf

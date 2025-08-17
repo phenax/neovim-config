@@ -5,13 +5,13 @@
 (local {: slice_list : split_lines : join_lines : ++}
        (require :phenax.utils.utils))
 
-(local github {})
+(local github {:preview-type :gh-review-comments})
 
 (fn github.initialize []
   (cmd! :GhPRCreate (fn [opts] (github.create-pr opts.fargs)) {:nargs "*"})
   (cmd! :GhPRComments github.show-gh-reviews {})
   (cmd! :GhPRList github.pick-prs {})
-  (qf.add-item-previewer :gh-review-comments github.preview-qf-review-item))
+  (qf.add-item-previewer github.preview-type github.preview-qf-review-item))
 
 (fn github.pick-prs []
   (lambda confirm [picker item]
@@ -86,7 +86,7 @@
   (str.join "\n\n" sections))
 
 (fn github.review->review-userdata [review]
-  {:preview_type :gh-review-comments
+  {:preview_type github.preview-type
    :id review.id
    :in_reply_to_id review.in_reply_to_id
    :url review.html_url
@@ -129,9 +129,7 @@
 
 (fn github.populate-qflist [review-comments]
   (lambda update-qflist []
-    (-> review-comments
-        github.reviews->qf-list-items
-        (vim.fn.setqflist :r)))
+    (-> review-comments github.reviews->qf-list-items vim.fn.setqflist))
   (vim.schedule (fn [] (update-qflist) (vim.cmd.copen))))
 
 (fn github.review->qf-item [review]

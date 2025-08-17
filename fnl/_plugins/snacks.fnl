@@ -35,9 +35,6 @@
   ;; Setup
   (lambda quit [self] (self:close))
   (local blame_line_keys {:q quit :blame_term_quit (++ [:q quit] {:mode :t})})
-  (lambda on_blame_line_win [win]
-    (set (. vim.bo win.scratch_buf :filetype) :git)
-    (vim.cmd.startinsert))
   (snacks.setup {:bigfile {:enabled true :size (* 1 1024 1024)}
                  :bufdelete {:enabled true}
                  :gitbrowse {:enabled true}
@@ -46,7 +43,8 @@
                  :rename {:enabled true}
                  :styles {:phenax_git_diff {:border :single :style :blame_line}
                           :blame_line {:keys blame_line_keys
-                                       :on_win on_blame_line_win
+                                       :on_win (fn [] (vim.cmd.startinsert))
+                                       :bo {:filetype :git}
                                        :position :float}}
                  :words {:debounce 80 :enabled true :modes [:n]}}))
 
