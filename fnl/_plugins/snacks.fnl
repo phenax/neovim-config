@@ -18,7 +18,7 @@
   (key! :n :z= (fn [] (Snacks.picker.spelling)))
   (key! :n :<leader>tr (fn [] (Snacks.picker.resume)))
   (key! :n :<leader>qf (fn [] (Snacks.picker.qflist)))
-  (key! [:n :v] :<leader>gb (fn [] (Snacks.gitbrowse)))
+  (key! [:n :x] :<leader>gb (fn [] (Snacks.gitbrowse)))
   (key! :n :<localleader>gbb (fn [] (Snacks.picker.git_branches)))
   (key! :n :<localleader>gbs (fn [] (Snacks.picker.git_stash)))
   (key! :n :<localleader>gm (fn [] (Snacks.git.blame_line {:count -1})))

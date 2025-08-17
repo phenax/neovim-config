@@ -1,7 +1,8 @@
 (import-macros {: key! : cmd! : aucmd! : augroup!} :phenax.macros)
 (local {: present? : not_nil? : clamp : ++} (require :phenax.utils.utils))
 (local core (require :nfnl.core))
-(local snacks_picker_actions (require :snacks.picker.actions))
+(local snacks-picker-actions (require :snacks.picker.actions))
+(local snacks-picker (require :snacks.picker))
 
 (local sortable-buffers {:actions {}
                          :config {:short_name_columns 45}
@@ -21,17 +22,16 @@
           {:callback (fn [] (sortable-buffers.populate_buffers)) : group}))
 
 (fn sortable-buffers.mappings []
-  (lambda last-index [] (length sortable-buffers.sorted_buffers))
-  (lambda first-index [] 1)
+  (lambda last-buf [] (length sortable-buffers.sorted_buffers))
+  (lambda first-buf [] 1)
   {:<c-d> (++ [sortable-buffers.actions.delete_buffer] {:mode [:i :n]})
    :dd (++ [sortable-buffers.actions.delete_buffer] {:mode :n})
-   :<c-g>g (++ [(sortable-buffers.actions.move_buffer first-index)]
+   :<c-g>g (++ [(sortable-buffers.actions.move_buffer first-buf)]
                {:mode [:i :n] :nowait true})
-   :<c-g>G (++ [(sortable-buffers.actions.move_buffer last-index)]
+   :<c-g>G (++ [(sortable-buffers.actions.move_buffer last-buf)]
                {:mode [:i :n] :nowait true})
    :<c-j> (++ [(sortable-buffers.actions.move_buffer core.inc)] {:mode [:i :n]})
-   :<c-k> (++ [(sortable-buffers.actions.move_buffer core.dec)] {:mode [:i :n]})
-   :dd (++ [sortable-buffers.actions.delete_buffer] {:mode :n})})
+   :<c-k> (++ [(sortable-buffers.actions.move_buffer core.dec)] {:mode [:i :n]})})
 
 (fn sortable-buffers.buffer_picker []
   (sortable-buffers.populate_buffers)
@@ -43,7 +43,7 @@
                                   (local cur
                                          (sortable-buffers.buffer_to_sort_position current-buffer))
                                   (sortable-buffers.set_selection picker cur))
-                       :preview (. (require :snacks.picker) :preview :file)
+                       :preview snacks-picker.preview.file
                        :source :sortable_buffers
                        :title :Buffers
                        :win {:input {:keys (sortable-buffers.mappings)}
@@ -129,7 +129,7 @@
   (local entry (picker.list:current))
   (when (not entry) (lua "return "))
   (var pos picker.list.cursor) ; Store position before deleting
-  (snacks_picker_actions.bufdelete picker)
+  (snacks-picker-actions.bufdelete picker)
   (sortable-buffers.populate_buffers)
   (sortable-buffers.refresh_picker)
   (set pos (math.min pos (picker.list:count)))
@@ -156,6 +156,7 @@
                 (not (vim.tbl_contains sortable-buffers.sorted_buffers buf))))
     (when new_valid_buf? (table.insert sortable-buffers.sorted_buffers buf))))
 
+;; TODO: There might be an issue here. Random [No name] buffers show up
 (fn sortable-buffers.is_buf_valid [buf]
   (and (vim.api.nvim_buf_is_valid buf) (= (vim.fn.buflisted buf) 1)))
 

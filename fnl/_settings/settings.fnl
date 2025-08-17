@@ -22,6 +22,7 @@
 
 (set vim.opt.showmatch true)
 (set vim.opt.ignorecase true)
+(set vim.opt.jumpoptions :stack)
 
 (set vim.opt.smartcase true)
 (set vim.opt.hlsearch true)
@@ -69,7 +70,10 @@
 ;; Whitespace characters
 (set vim.opt.list true)
 ;set ; (vim.opt.listchars  "lead:.,trail:.,tab:| ")
-(set vim.opt.listchars {:leadmultispace "|·" :multispace "·" :trail "·" :tab "→ "})
+(set vim.opt.listchars {:leadmultispace "|·"
+                        :multispace "·"
+                        :trail "·"
+                        :tab "→ "})
 
 (set vim.g.markdown_fenced_languages [:ts=typescript :js=javascript])
 

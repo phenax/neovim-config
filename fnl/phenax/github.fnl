@@ -1,4 +1,4 @@
-(import-macros {: key! : cmd! : aucmd! : augroup!} :phenax.macros)
+(import-macros {: key! : cmd!} :phenax.macros)
 (local core (require :nfnl.core))
 (local str (require :nfnl.string))
 (local qf (require :phenax.quickfix))
@@ -7,8 +7,24 @@
 (local github {})
 
 (fn github.initialize []
-  (cmd! :GHReviewComments github.show-gh-reviews {})
+  (cmd! :GhPRCreate (fn [opts] (github.create-pr opts.fargs)) {:nargs "*"})
+  (cmd! :GhPRComments github.show-gh-reviews {})
   (qf.add-item-previewer :gh-review-comments github.preview-qf-review-item))
+
+(fn github.create-pr [args]
+  (local cmd "echo \"Creating PR (args: $@)...\";
+    if [ -f '.github/pull_request_template.md' ]; then
+      gh pr create -e -a '@me' -T 'pull_request_template.md' \"$@\";
+    else
+      gh pr create -e -a '@me' \"$@\";
+    fi || true;
+    url=\"$(gh pr view --json url -q .url)\";
+    [ -z \"$url\" ] && xdg-open \"$url\";")
+  (Snacks.terminal.open (vim.list_extend [:sh :-c cmd :gh-create-pr] args)
+                        {:interactive false
+                         :win {:style :phenax_git_diff
+                               :position :bottom
+                               :height 35}}))
 
 (fn github.preview-qf-review-item [qfitem _index]
   (local review qfitem.user_data)
