@@ -1,15 +1,48 @@
-(import-macros {: key! : cmd!} :phenax.macros)
+(import-macros {: key! : cmd! : let*} :phenax.macros)
 (local core (require :nfnl.core))
 (local str (require :nfnl.string))
 (local qf (require :phenax.quickfix))
-(local {: slice_list : split_lines : join_lines} (require :phenax.utils.utils))
+(local {: slice_list : split_lines : join_lines : ++}
+       (require :phenax.utils.utils))
 
 (local github {})
 
 (fn github.initialize []
   (cmd! :GhPRCreate (fn [opts] (github.create-pr opts.fargs)) {:nargs "*"})
   (cmd! :GhPRComments github.show-gh-reviews {})
+  (cmd! :GhPRList github.pick-prs {})
   (qf.add-item-previewer :gh-review-comments github.preview-qf-review-item))
+
+(fn github.pick-prs []
+  (lambda confirm [picker item]
+    (picker:close)
+    (vim.notify (.. "Switching to #" item.number))
+    (vim.cmd (.. "!gh co " item.url)))
+  (lambda preview [ctx]
+    (ctx.preview:highlight {:ft :markdown})
+    (ctx.preview:set_lines [(.. "# " ctx.item.title) "" ctx.item.body]))
+  (lambda format [item]
+    (local {: align : truncate} Snacks.picker.util)
+    (local review-requested?
+           (core.some (fn [p] (= p.login :phenax)) item.reviewRequests))
+    [[(align (if review-requested? :R "") 2)]
+     [(align (if item.isDraft :D "") 2)]
+     [(align (.. "#" item.number) 7)]
+     [(align (truncate item.title 69) 70)]
+     [item.author.login]])
+  (lambda text [p] (.. p.number " " p.title " " p.author.login))
+  (lambda ->item [p]
+    (++ p {:text (text p)}))
+  (lambda show-picker [items]
+    (Snacks.picker.pick {: confirm
+                         : format
+                         : preview
+                         : items
+                         :title "Pull requests"}))
+  (let* [prs (github.fetch-open-prs)]
+        (vim.schedule (fn []
+                        (local items (vim.tbl_map ->item prs))
+                        (show-picker items)))))
 
 (fn github.create-pr [args]
   (local cmd "echo \"Creating PR (args: $@)...\";
@@ -87,14 +120,12 @@
         (local repo (.. pr.headRepositoryOwner.login :/ pr.headRepository.name))
         (local pr-number pr.number)
         (vim.notify (.. "Loading comments for PR " repo " #" pr-number) vim.log.levels.INFO)
-        (lambda with-results [comments comments-state]
-          (each [_ c (ipairs comments)]
-            (set c.state (. comments-state (tostring c.id))))
-          (github.populate-qflist comments))
         ;; TODO: Do these in parallel
-        (github.fetch-pr-review-comments repo pr-number (fn [comments]
-          (github.fetch-pr-review-comments-state repo pr-number
-            (fn [comments-state] (with-results comments comments-state))))))))
+        (let* [comments (github.fetch-pr-review-comments repo pr-number)]
+          (let* [comments-state (github.fetch-pr-review-comments-state repo pr-number)]
+            (each [_ c (ipairs comments)]
+              (set c.state (. comments-state (tostring c.id))))
+            (github.populate-qflist comments))))))
 
 (fn github.populate-qflist [review-comments]
   (lambda update-qflist []
@@ -116,14 +147,22 @@
    :type (if review_userdata.resolved? :I :E)
    :user_data review_userdata})
 
+;; fnlfmt: skip
+(fn github.fetch-open-prs [on-done]
+  (local cmd [:gh :pr :list :--json "title,url,author,number,body,isDraft,reviewRequests"])
+  (let* [result (vim.system cmd {:text true})]
+        (if (= result.code 0)
+            (on-done (vim.json.decode result.stdout))
+            (vim.notify (.. "Unable to fetch prs: " result.stderr) vim.log.levels.ERROR)))
+  )
+
 (fn github.fetch-pr-review-comments [repo pr on_done]
   (local api (.. :/repos/ repo :/pulls/ pr :/comments :?per_page=200))
-  (lambda on-exit [result]
-    (if (= result.code 0)
-        (on_done (vim.json.decode result.stdout {:luanil {:object true}}))
-        (vim.notify (.. "Unable to fetch reviews. Status:" result.code)
-                    vim.log.levels.ERROR)))
-  (vim.system [:gh :api api] {:text true} on-exit))
+  (let* [result (vim.system [:gh :api api] {:text true})]
+        (if (= result.code 0)
+            (on_done (vim.json.decode result.stdout {:luanil {:object true}}))
+            (vim.notify (.. "Unable to fetch reviews: " result.stderr)
+                        vim.log.levels.ERROR))))
 
 ;; fnlfmt: skip
 (fn github.current-pr []
@@ -142,16 +181,17 @@
 (fn github.fetch-pr-review-comments-state [repo pr on_done]
   (local q (pr-review-query repo pr))
   (lambda on-exit [result]
-    (if (not= result.code 0)
-        (on_done {})
-        (do
-          (local resp (vim.json.decode result.stdout {:luanil {:object true}}))
-          (local threads resp.data.repository.pullRequest.reviewThreads.nodes)
-          (local results {})
-          (each [_ thread (ipairs threads)]
-            (local id (. thread :comments :nodes 1 :fullDatabaseId))
-            (tset results (tostring id) thread))
-          (on_done results))))
-  (vim.system [:gh :api :graphql :--field (.. :query= q)] {:text true} on-exit))
+    (local resp (vim.json.decode result.stdout {:luanil {:object true}}))
+    (local threads resp.data.repository.pullRequest.reviewThreads.nodes)
+    (local results {})
+    (each [_ thread (ipairs threads)]
+      (local id (. thread :comments :nodes 1 :fullDatabaseId))
+      (tset results (tostring id) thread))
+    (on_done results))
+  (let* [result
+         (vim.system [:gh :api :graphql :--field (.. :query= q)] {:text true})]
+        (if (= result.code 0)
+            (on-exit result)
+            (on_done {}))))
 
 github

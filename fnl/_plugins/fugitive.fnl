@@ -42,20 +42,21 @@
   (m.open_files_in_commit rev))
 
 (fn m.setup_fugitive_buffer [buf]
-  (local opts {:buffer buf :remap true})
-  (vim.keymap.set :n :a "-" opts)
-  (vim.keymap.set :n :<Down> ")" opts)
-  (vim.keymap.set :n :<Up> "(" opts)
-  (vim.keymap.set :n :<Right> ">" opts)
-  (vim.keymap.set :n :<Left> "<" opts)
+  (local opts {:buffer buf :remap true :nowait true})
+  (key! :n :a "-" opts)
+  (key! :n :<Down> ")" opts)
+  (key! :n :<Up> "(" opts)
+  (key! :n :<Right> ">" opts)
+  (key! :n :<Left> "<" opts)
+  (key! :n :<c-f> ":echo 'git fetch' | G fetch<cr>" opts)
   (m.setup_git_buffer buf))
 
 (fn m.setup_git_buffer [buf]
   (local opts {:buffer buf :nowait true :remap true})
-  (vim.keymap.set :n :q :gq opts)
-  (vim.keymap.set :n :dc m.diffview_for_commit_under_cursor opts)
-  (vim.keymap.set :n :df m.diffview_for_file_under_cursor opts)
-  (vim.keymap.set :n :fl m.files_for_commit_under_cursor opts)
+  (key! :n :q :gq opts)
+  (key! :n :dc m.diffview_for_commit_under_cursor opts)
+  (key! :n :df m.diffview_for_file_under_cursor opts)
+  (key! :n :fl m.files_for_commit_under_cursor opts)
   (vim.api.nvim_set_option_value :bufhidden :delete {: buf})
   (vim.api.nvim_set_option_value :buflisted false {: buf}))
 

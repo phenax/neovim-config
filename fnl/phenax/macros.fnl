@@ -24,4 +24,7 @@
   `(let [_val_# ,obj]
      (and _val_# (: _val_# ,method ,...))))
 
-{: cmd! : aucmd! : key! : => : augroup! : ?call : bufcmd!}
+(fn let* [[ident value] & body]
+  `(->> (fn [,ident] ,body) ,value))
+
+{: cmd! : aucmd! : key! : => : augroup! : ?call : bufcmd! : let*}
