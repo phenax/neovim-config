@@ -21,7 +21,8 @@
                     :CursorLine {:bg (. colors.slate 200)}
                     :FloatBorder {:fg (. colors.accent 100)}
                     :Folded {:bg (. colors.bg 300) :fg (. colors.slate 600)}
-                    :LineNr {:bg :none :fg (. colors.slate 500)}
+                    :LineNr {:bg :none :fg (. colors.slate 600)}
+                    :CursorLineNr {:bg :none :fg colors.white}
                     :Normal {:bg :none :fg (. colors.slate 700)}
                     :NormalFloat {:bg (. colors.bg 200) :fg colors.white}
                     :NormalNC {:bg (. colors.bg 150)}

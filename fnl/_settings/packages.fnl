@@ -19,7 +19,6 @@
                {:src (gh :aaronik/treewalker.nvim)}
                {:src (gh :Olical/nfnl)}
                {:src (gh :saghen/blink.cmp) :version (version :1.*)}
-               {:src (gh :windwp/nvim-ts-autotag)}
-               {:src (gh :windwp/nvim-autopairs)}])
+               {:src (gh :windwp/nvim-ts-autotag)}])
 
 (cmd! :PackUpdate (fn [] (vim.pack.update)) {})

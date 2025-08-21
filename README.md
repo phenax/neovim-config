@@ -1,3 +1,3 @@
-# My neovim config in lua
+# My neovim config in fennel
 
 Iz cool

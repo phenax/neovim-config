@@ -3,9 +3,17 @@
 (vim.keymap.set :n :<localleader><tab> ":b#<CR>")
 (vim.cmd "command! CloseAll :%bd|e#|bd#|'\"")
 
-; Scroll
+;; Scroll
 (vim.keymap.set :n :<c-j> :<c-d>zz)
 (vim.keymap.set :n :<c-k> :<c-u>zz)
+
+;; Paired braces
+(vim.keymap.set :i "<a-(>" "()<Left>")
+(vim.keymap.set :i "<a-[>" "[]<Left>")
+(vim.keymap.set :i "<a-{>" "{}<Left>")
+(vim.keymap.set :i "<a-<>" "<><Left>")
+(vim.keymap.set :i "<a-'>" "''<Left>")
+(vim.keymap.set :i "<a-\">" "\"\"<Left>")
 
 ;; Window navigation
 (vim.keymap.set :n :<M-h> :<C-w>h)
